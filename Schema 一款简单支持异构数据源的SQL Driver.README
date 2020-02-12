@@ -46,7 +46,7 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 
 
-首先进入file-shema的resource 下， 其中有json和csv两个文件夹，表示支持json和csv两种文件格式， 每个目录下有.csv(.json)和.schema文件分别表为数据文件及schema文件，具体内容就不一一阐述，请参考其文件内容
+首先进入file-shema的resource目录下， 其中有json和csv两个文件夹，表示支持json和csv两种文件格式，每个目录下有.csv(.json)和.schema文件分别表为数据文件及schema文件，具体内容就不一一阐述，请参考其文件内容
 
 接着需要配置schema元数据，请参考file.json文件内容
 
@@ -56,7 +56,7 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 #### 3.2 MySQL 数据源
 
-首先需要一个可以访问的MySQL数据库， 接着在mysql-schema的resource 下有一个mysql.jsonschema元数据文件， 配置正确的mysql数据库相关配置即可
+首先需要一个可以访问的MySQL数据库， 接着在mysql-schema的resource下有一个mysql.json schema元数据文件， 配置正确的mysql数据库相关配置即可
 
 接着可以直接运行MysqlSelect 即可
 
@@ -64,22 +64,21 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 #### 3.3 File 与MySQL结合
 
-可以将File与MySQL数据源结合，做一些Join 操作，详情请参考test-schema中的FileAndMysqlScheamTest
-
+可以将File与MySQL数据源结合，做Join等关联操作，详情请参考test-schema中的FileAndMysqlScheamTest
 
 
 
 
 ## 4. TODO
 
-目前本项目属于刚开发阶段，有很多不足不处
+目前本项目属于刚开发阶段，有很多不足之处:
 
 - 代码规范
 - 测试
 - 功能
 - ...
 
-以上不足之处会在后期慢慢改善，欢迎感兴趣的小伙伴一起参与些项目
+以上不足之处会在后期慢慢改善，欢迎感兴趣的小伙伴一起参与此[项目](https://github.com/yuqi1129/schema)
 
 
 

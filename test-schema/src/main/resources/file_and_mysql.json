@@ -1,0 +1,33 @@
+{
+  "version": "1.0",
+  "defaultSchema": "CSV",
+  "schemas": [
+    {
+      "name": "CSV",
+      "type": "custom",
+      "factory": "com.yuqi.schema.file.csv.CsvFileSchemaFactory",
+      "operand": {
+        "directory": "csv"
+      }
+    },
+    {
+      "name": "JSON",
+      "type": "custom",
+      "factory": "com.yuqi.schema.file.json.JsonFileSchemaFactory",
+      "operand": {
+        "directory": "json"
+      }
+    },
+    {
+      "name": "YUQI",
+      "type": "custom",
+      "factory": "com.yuqi.schema.mysql.MysqlSchemaFactory",
+      "operand": {
+        "url": "jdbc:mysql://127.0.0.1/yuqi",
+        "username": "root",
+        "password": "123456",
+        "schema": "yuqi"
+      }
+    }
+  ]
+}

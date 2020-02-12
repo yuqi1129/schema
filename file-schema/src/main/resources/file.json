@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultSchema": "CSV",
+  "schemas": [
+    {
+      "name": "CSV",
+      "type": "custom",
+      "factory": "com.yuqi.schema.file.csv.CsvFileSchemaFactory",
+      "operand": {
+        "directory": "csv"
+      }
+    },
+    {
+      "name": "JSON",
+      "type": "custom",
+      "factory": "com.yuqi.schema.file.json.JsonFileSchemaFactory",
+      "operand": {
+        "directory": "json"
+      }
+    }
+  ]
+}

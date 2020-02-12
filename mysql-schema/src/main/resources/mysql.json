@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "defaultSchema": "YUQI",
+  "schemas": [
+    {
+      "name": "YUQI",
+      "type": "custom",
+      "factory": "com.yuqi.schema.mysql.MysqlSchemaFactory",
+      "operand": {
+        "url": "jdbc:mysql://127.0.0.1/yuqi",
+        "username": "root",
+        "password": "123456",
+        "schema": "yuqi"
+      }
+    }
+  ]
+}

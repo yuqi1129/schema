@@ -1,17 +1,16 @@
 package com.yuqi.schema.file.csv;
 
-import com.google.common.base.Splitter;
 import com.google.common.base.Throwables;
 import com.yuqi.schema.file.AbstractFileReader;
 import com.yuqi.schema.file.utils.TypeConvertionUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.QuoteMode;
 
-import java.io.FileInputStream;
-import java.nio.charset.Charset;
+import java.io.FileReader;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author yuqi
@@ -30,15 +29,19 @@ public class CsvFileReader extends AbstractFileReader {
     public Iterator<Object[]> readData() {
         try {
 
-            //try to use csv tools to read data...
-            List<String> datas = IOUtils.readLines(new FileInputStream(dataFilePath), Charset.defaultCharset());
+            final CSVFormat csvFormat = CSVFormat.DEFAULT
+                    .withQuoteMode(QuoteMode.NON_NUMERIC)
+                    .withQuote('\'')
+                    .withIgnoreSurroundingSpaces()
+                    .withTrailingDelimiter()
+                    .withNullString("null");
 
-            return datas.stream().map(s -> Splitter.on(",").splitToList(s)).map(list -> {
-                final int length = list.size();
-                final Object[] res = new Object[length];
-
-                for (int i = 0; i < length; i++) {
-                    res[i] = TypeConvertionUtils.toObject(fieldTypeEnums.get(i), list.get(i));
+            final CSVParser csvParser = new CSVParser(new FileReader(dataFilePath), csvFormat);
+            return csvParser.getRecords().stream().map(record -> {
+                final int columnSize = record.size();
+                final Object[] res = new Object[columnSize];
+                for (int i = 0; i < columnSize; i++) {
+                   res[i] = TypeConvertionUtils.toObject(fieldTypeEnums.get(i), record.get(i));
                 }
 
                 return res;

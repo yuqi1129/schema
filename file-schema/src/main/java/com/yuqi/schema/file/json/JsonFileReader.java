@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author yuqi
@@ -33,11 +32,10 @@ public class JsonFileReader extends AbstractFileReader {
 
     @Override
     public Iterator<Object[]> readData() {
-
         try {
-            List<String> stringList =
+            final List<String> stringList =
                     IOUtils.readLines(new FileInputStream(dataFilePath), Charset.defaultCharset());
-            List<Object[]> v = stringList.stream().map(json -> {
+            return stringList.stream().map(json -> {
                 try {
                     final JsonNode jsonNode = CommonConstant.OBJECT_MAPPER.readTree(json);
                     final List<String> c = new ArrayList<>(CommonConstant.OBJECT_MAPPER
@@ -54,9 +52,8 @@ public class JsonFileReader extends AbstractFileReader {
                     log.error(Throwables.getStackTraceAsString(e));
                     throw new RuntimeException(e);
                 }
-            }).collect(Collectors.toList());
+            }).iterator();
 
-            return v.iterator();
         } catch (Exception e) {
             log.error(Throwables.getStackTraceAsString(e));
             throw new RuntimeException(e);

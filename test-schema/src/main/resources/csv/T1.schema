@@ -1,2 +1,8 @@
-ID:Integer
-NAME:String
+tinyint_type:Byte
+smallint_type:Short
+int_type:Integer
+bigint_type:Long
+char_type:String
+varchar_type:String
+float_type:Float
+double_type:Double

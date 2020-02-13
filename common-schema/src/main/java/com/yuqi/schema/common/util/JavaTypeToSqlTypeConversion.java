@@ -33,9 +33,9 @@ public class JavaTypeToSqlTypeConversion {
                     .put(short.class, SqlTypeName.SMALLINT)
                     .put(Byte.class, SqlTypeName.TINYINT)
                     .put(byte.class, SqlTypeName.TINYINT)
-
-                    .put(Float.class, SqlTypeName.REAL)
-                    .put(float.class, SqlTypeName.REAL)
+                     //change from SqlTypeName.REAL to SqlTypeName.Float in float
+                    .put(Float.class, SqlTypeName.FLOAT)
+                    .put(float.class, SqlTypeName.FLOAT)
                     .put(Double.class, SqlTypeName.DOUBLE)
                     .put(double.class, SqlTypeName.DOUBLE)
                     .put(Boolean.class, SqlTypeName.BOOLEAN)

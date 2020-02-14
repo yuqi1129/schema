@@ -33,6 +33,7 @@
     <common-collection.version>4.3</common-collection.version>
     <mysql-driver.version>5.1.39</mysql-driver.version>
     <common-csv.version>1.8</common-csv.version>
+    <junit.version>4.12</junit.version>
 
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -87,8 +88,8 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>compile</scope>
+            <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

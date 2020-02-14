@@ -68,8 +68,16 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 
 
+### 4. 集成测试
 
-## 4. TODO
+你可以直接运行:
+```
+mvn verify 
+```
+来起动集成测试，该继集成主要用来测试SQL执行结果的正确性。全部的测试类都在test-schema的test目录中，当然你也可以直接运行`com.yuqi.schema.common.integrate`
+目录下的类文件来进行测试
+
+### 5. TODO
 
 目前本项目属于刚开发阶段，有很多不足之处:
 

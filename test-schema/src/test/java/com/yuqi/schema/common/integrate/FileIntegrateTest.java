@@ -24,7 +24,8 @@ public class FileIntegrateTest extends IntegrateTestBase {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"file/select/select1.sql", "file/select/select1.txt"}
+                {"file/select/select1.sql", "file/select/select1.txt"},
+                {"file/groupby/groupby1.sql", "file/groupby/groupby1.txt"}
         });
     }
 

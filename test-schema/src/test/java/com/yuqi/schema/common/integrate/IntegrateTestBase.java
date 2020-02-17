@@ -4,8 +4,8 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.calcite.avatica.InternalProperty;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,8 +53,8 @@ public abstract class IntegrateTestBase {
                 final InputStream inputSqlStream = IntegrateTestBase.class.getClassLoader().getResourceAsStream(inputFile);
                 final InputStream resultStream = IntegrateTestBase.class.getClassLoader().getResourceAsStream(resultFile)){
 
-            inputSql = IOUtils.readLines(inputSqlStream, Charset.defaultCharset());
-            results = IOUtils.readLines(resultStream, Charset.defaultCharset());
+            inputSql = IOUtils.readLines(inputSqlStream, Charset.defaultCharset()).stream().filter(this::isEmptyLineOrComment).collect(Collectors.toList());
+            results = IOUtils.readLines(resultStream, Charset.defaultCharset()).stream().filter(this::isEmptyLineOrComment).collect(Collectors.toList());
             statement = getStatement();
         } catch (Exception e) {
            log.error(e.toString());
@@ -125,7 +125,13 @@ public abstract class IntegrateTestBase {
     private List<List<String>> createExpectResult(String origin) {
         return Arrays.stream(origin.split(";")).map(string ->
             Arrays.stream(string.split(","))
-                    .map(String::trim)
+                    .map(String::trim).map(s -> {
+                        if (s.equals("null")) {
+                            return null;
+                        }
+
+                        return s;
+                    })
                     .collect(Collectors.toList()))
                 .collect(Collectors.toList());
     }
@@ -151,6 +157,15 @@ public abstract class IntegrateTestBase {
         return true;
     }
 
+
+    private boolean isEmptyLineOrComment(String line) {
+        if (Objects.isNull(line)) {
+            return false;
+        }
+
+        final String sql = line.trim();
+        return !(StringUtils.isEmpty(line) || sql.startsWith("--") || sql.startsWith("#"));
+    }
     private Statement getStatement() throws SQLException {
         Properties properties = getProperties();
         Connection connection =

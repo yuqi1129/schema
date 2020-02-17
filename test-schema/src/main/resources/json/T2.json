@@ -1,4 +1,1 @@
-{"id":1,"addr":"Wuhan"}
-{"id":2,"addr":"Nanjing"}
-{"id":3,"addr":"Beijing"}
-{"id":4,"addr":"Chengdu"}
+{"tinyint_type":1,"smallint_type":1,"int_type":2,"bigint_type":3,"char_type":"zhang","varchar_type":"lisi","float_type":0.5,"double_type":0.6}

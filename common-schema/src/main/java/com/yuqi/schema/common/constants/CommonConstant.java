@@ -15,4 +15,7 @@ public class CommonConstant {
     public static final String CSV_SUFFIX = ".csv";
     public static final String JSON_SUFFIX = ".json";
     public static final String SCHEMA_SUFFIX = ".schema";
+
+    public static final String DRIVER = "com.mysql.jdbc.Driver";
+
 }

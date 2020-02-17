@@ -1,0 +1,6 @@
+{
+  "url": "jdbc:mysql://127.0.0.1/yuqi",
+  "username": "root",
+  "password": "123456",
+  "schema": "yuqi"
+}

@@ -1,6 +1,6 @@
-package com.yuqi.schema.common.integrate.singlesource;
+package com.yuqi.schema.common.integrate.local.singlesource;
 
-import com.yuqi.schema.common.integrate.IntegrateTestBase;
+import com.yuqi.schema.common.integrate.local.IntegrateLocalTestBase;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
@@ -14,17 +14,17 @@ import java.util.Properties;
  * @description your description
  * @time 14/2/20 19:47
  **/
-public class FileIntegrateTest extends IntegrateTestBase {
+public class FileIntegrateLocalTest extends IntegrateLocalTestBase {
 
-    public FileIntegrateTest(String inputFile, String resultFile) {
+    public FileIntegrateLocalTest(String inputFile, String resultFile) {
         super(inputFile, resultFile);
     }
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"sql_and_result/file/select/select1.sql", "sql_and_result/file/select/select1.txt"},
-                {"sql_and_result/file/groupby/groupby1.sql", "sql_and_result/file/groupby/groupby1.txt"}
+                {"sql_and_result/local/file/select/select1.sql", "sql_and_result/local/file/select/select1.txt"},
+                {"sql_and_result/local/file/groupby/groupby1.sql", "sql_and_result/local/file/groupby/groupby1.txt"}
         });
     }
 

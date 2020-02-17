@@ -8,7 +8,7 @@ import java.util.Collection;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 17/2/20 10:45
  **/

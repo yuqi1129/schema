@@ -17,7 +17,7 @@ import static com.yuqi.schema.common.constants.CommonConstant.OBJECT_MAPPER;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 17/2/20 20:12
  **/

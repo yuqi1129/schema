@@ -1,9 +1,0 @@
-1, 1, 2, 3, zhang, lisi, 0.5, 0.6
-null, 1, 2, 3, zhang, lisi, 0.5, 0.6
-2, null, 2, 3, zhang, lisi, 0.5, 0.6
-1, 1, null, 3, zhang, lisi, 0.5, 0.6
-1, 1, 2, null, zhang, lisi, 0.5, 0.6
-1, 1, 2, 3, null, lisi, 0.5, 0.6
-1, 1, 4, 3, zhang, null, 0.5, 0.6
-1, 5, 2, 3, zhang, lisi, null, 0.6
-1, 1, 2, 3, zhang, lisi, 0.5, null

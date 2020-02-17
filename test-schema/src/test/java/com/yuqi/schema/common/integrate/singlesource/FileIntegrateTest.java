@@ -1,13 +1,12 @@
-package com.yuqi.schema.common.integrate;
+package com.yuqi.schema.common.integrate.singlesource;
 
-import org.apache.calcite.avatica.InternalProperty;
+import com.yuqi.schema.common.integrate.IntegrateTestBase;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
 
-import static com.yuqi.schema.common.constants.MetaConstants.META_MODEL;
 
 /**
  * @author yuqi
@@ -24,18 +23,13 @@ public class FileIntegrateTest extends IntegrateTestBase {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"file/select/select1.sql", "file/select/select1.txt"},
-                {"file/groupby/groupby1.sql", "file/groupby/groupby1.txt"}
+                {"sql_and_result/file/select/select1.sql", "sql_and_result/file/select/select1.txt"},
+                {"sql_and_result/file/groupby/groupby1.sql", "sql_and_result/file/groupby/groupby1.txt"}
         });
     }
 
     @Override
     public Properties getProperties() {
-        final Properties info = new Properties();
-        info.setProperty(META_MODEL,
-                "/Users/yuqi/project/" + "schema/test-schema/src/main/resources/file_and_mysql.json");
-
-        info.setProperty(InternalProperty.CASE_SENSITIVE.name(), "false");
-        return info;
+        return super.getProperties();
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.calcite.avatica.InternalProperty;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
@@ -51,7 +52,7 @@ public abstract class IntegrateTestBase {
         //todo
         try (
                 final InputStream inputSqlStream = IntegrateTestBase.class.getClassLoader().getResourceAsStream(inputFile);
-                final InputStream resultStream = IntegrateTestBase.class.getClassLoader().getResourceAsStream(resultFile)){
+                final InputStream resultStream = IntegrateTestBase.class.getClassLoader().getResourceAsStream(resultFile)) {
 
             inputSql = IOUtils.readLines(inputSqlStream, Charset.defaultCharset()).stream().filter(this::isEmptyLineOrComment).collect(Collectors.toList());
             results = IOUtils.readLines(resultStream, Charset.defaultCharset()).stream().filter(this::isEmptyLineOrComment).collect(Collectors.toList());
@@ -174,6 +175,13 @@ public abstract class IntegrateTestBase {
         return connection.createStatement();
     }
 
-    public abstract Properties getProperties();
+    public Properties getProperties() {
+        final Properties info = new Properties();
+        info.setProperty(META_MODEL,
+                "/Users/yuqi/project/" + "schema/test-schema/src/test/resources/schema.json");
+
+        info.setProperty(InternalProperty.CASE_SENSITIVE.name(), "false");
+        return info;
+    }
 
 }

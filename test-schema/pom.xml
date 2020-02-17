@@ -16,21 +16,21 @@
             <groupId>com.yuqi</groupId>
             <artifactId>common-schema</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+<!--            <scope>compile</scope>-->
         </dependency>
 
         <dependency>
             <groupId>com.yuqi</groupId>
             <artifactId>file-schema</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+<!--            <scope>compile</scope>-->
         </dependency>
 
         <dependency>
             <groupId>com.yuqi</groupId>
             <artifactId>mysql-schema</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+<!--            <scope>compile</scope>-->
         </dependency>
 
         <dependency>

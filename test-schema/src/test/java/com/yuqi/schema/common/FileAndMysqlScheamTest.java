@@ -43,7 +43,7 @@ public class FileAndMysqlScheamTest {
     private static Statement getStatement() throws SQLException {
         final Properties info = new Properties();
         info.setProperty(META_MODEL,
-                "/Users/yuqi/project/" + "schema/test-schema/src/main/resources/file_and_mysql.json");
+                "/Users/yuqi/project/" + "schema/test-schema/src/test/resources/schema.json");
 
         info.setProperty(InternalProperty.CASE_SENSITIVE.name(), "false");
         Connection connection =

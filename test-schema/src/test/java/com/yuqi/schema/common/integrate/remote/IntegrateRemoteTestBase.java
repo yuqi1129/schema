@@ -2,8 +2,6 @@ package com.yuqi.schema.common.integrate.remote;
 
 import com.yuqi.schema.common.integrate.IntegrateTestBase;
 import com.yuqi.schema.common.integrate.local.IntegrateLocalTestBase;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
@@ -15,10 +13,8 @@ import org.junit.runners.Parameterized;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**

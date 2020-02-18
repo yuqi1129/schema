@@ -1,6 +1,7 @@
 package com.yuqi.schema.mysql;
 
 import com.google.common.collect.Lists;
+import com.yuqi.schema.common.util.ResultSetUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,16 +62,16 @@ public class MySqlReaderImpl implements MysqlReader {
                 .collect(Collectors.toList());
 
 
-        List<Object[]> result = Lists.newArrayList();
-        int columnSize = typeClass.size();
+        final List<Object[]> result = Lists.newArrayList();
+        final int columnSize = typeClass.size();
 
         try {
+            final List<Class> columnTypes = ResultSetUtils.getClassFromResultSet(r);
+
             while (r.next()) {
-                Object[] objects = new Object[columnSize];
+                final Object[] objects = new Object[columnSize];
                 for (int i = 1; i <= columnSize; i++) {
-                    //Object object = TypeUtil.ObjectToClassData(r, i, typeClass.get(i));
-                    //objects[i - 1] = object;
-                    objects[i - 1] = r.getObject(i);
+                    objects[i - 1] = ResultSetUtils.javaTypeToObject(r, i, columnTypes.get(i - 1));
                 }
 
                 result.add(objects);

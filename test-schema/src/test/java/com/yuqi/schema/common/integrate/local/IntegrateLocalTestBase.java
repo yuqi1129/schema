@@ -1,13 +1,9 @@
 package com.yuqi.schema.common.integrate.local;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 import com.yuqi.schema.common.integrate.IntegrateTestBase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.calcite.avatica.InternalProperty;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +12,6 @@ import org.junit.runners.Parameterized;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.sql.Statement;
 import java.util.List;
 import java.util.stream.Collectors;
 

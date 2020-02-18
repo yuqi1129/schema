@@ -2,6 +2,7 @@ package com.yuqi.schema.common.integrate;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.yuqi.schema.common.util.ResultSetUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.InternalProperty;
 import org.apache.commons.lang3.StringUtils;
@@ -9,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -96,11 +96,13 @@ public abstract class IntegrateTestBase {
         try {
             final ResultSet r = statement.executeQuery(sql);
             final int columnCount = r.getMetaData().getColumnCount();
+            final List<Class> columnType = ResultSetUtils.getClassFromResultSet(r);
             while (r.next()) {
                 final List<String> value = Lists.newArrayListWithCapacity(columnCount);
                 for (int i = 1; i <= columnCount; i++) {
                     //FIXME r.getString is not exact
-                    value.add(r.getString(i));
+                    //value.add(r.getString(i));
+                    value.add(ResultSetUtils.javaTypeToString(r, i, columnType.get(i - 1)));
                 }
                 result.add(value);
             }
@@ -117,14 +119,65 @@ public abstract class IntegrateTestBase {
         return Arrays.stream(origin.split(";")).map(string ->
                 Arrays.stream(string.split(","))
                         .map(String::trim).map(s -> {
-                    if (s.equals("null")) {
+                    if (s.equalsIgnoreCase("null")) {
                         return null;
                     }
 
                     return s;
-                })
-                        .collect(Collectors.toList()))
+                }).collect(Collectors.toList()))
                 .collect(Collectors.toList());
     }
+
+    //get meta data from calcite result set, other source like mysql
+    //can overwrite
+//    public List<Class> getColumnType(ResultSet resultSet) throws NoSuchFieldException, IllegalAccessException {
+//        if (resultSet instanceof CalciteResultSet) {
+//            return handleCalciteResultSet((CalciteResultSet) resultSet);
+//        } else if (resultSet instanceof JDBC42ResultSet) {
+//            return handleMysqlResultSet((JDBC42ResultSet) resultSet);
+//        }
+//
+//        throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
+//    }
+//
+//    private List<Class> handleCalciteResultSet(CalciteResultSet calciteResultSet) throws NoSuchFieldException, IllegalAccessException {
+//
+//        final Field f = AvaticaResultSet.class.getDeclaredField("columnMetaDataList");
+//        f.setAccessible(true);
+//        final List<ColumnMetaData> columnMetaDataList = (List<ColumnMetaData>) f.get(calciteResultSet);
+//        return columnMetaDataList.stream().map(a -> a.type.rep.clazz).collect(Collectors.toList());
+//    }
+//
+//    //
+//    public List<Class> handleMysqlResultSet(JDBC42ResultSet jdbc42ResultSet) throws IllegalAccessException, NoSuchFieldException {
+//        throw new UnsupportedOperationException("Do not support JDBC42ResultSet now...");
+//    }
+
+    //default java class to string
+//    public String javaTypeToString(ResultSet rs, int index, Class<?> clzz) throws SQLException {
+//
+//        final String result = rs.getString(index);
+//        if (null == result) {
+//            return null;
+//        }
+//
+//        if (clzz == Byte.class) {
+//            return String.valueOf(rs.getByte(index));
+//        } else if (clzz == Short.class) {
+//            return String.valueOf(rs.getShort(index));
+//        } else if (clzz == Integer.class) {
+//            return String.valueOf(rs.getInt(index));
+//        } else if (clzz == Long.class) {
+//            return String.valueOf(rs.getLong(index));
+//        } else if (clzz == String.class) {
+//            return result;
+//        } else if (clzz == Float.class) {
+//            return String.valueOf(rs.getFloat(index));
+//        } else if (clzz == Double.class) {
+//            return String.valueOf(rs.getDouble(index));
+//        }
+//
+//        return result;
+//    }
 
 }

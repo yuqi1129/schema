@@ -23,4 +23,28 @@ public class TypeUtil {
 
         return null;
     }
+
+    public static Class mysqlTypeToClass(int jdbcType) {
+
+        switch (jdbcType) {
+            //see MysqlDefs
+            case 1:
+                return Byte.class;
+            case 2:
+                return Short.class;
+            case 3:
+                return Integer.class;
+            case 8:
+                return Long.class;
+            case 253:
+            case 254:
+                return String.class;
+            case 4:
+                return Float.class;
+            case 5:
+                return Double.class;
+            default:
+                throw new UnsupportedOperationException("do not support jdbc type: " + jdbcType);
+        }
+    }
 }

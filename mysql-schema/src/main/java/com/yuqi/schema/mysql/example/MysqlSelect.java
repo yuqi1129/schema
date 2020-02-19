@@ -30,8 +30,7 @@ public class MysqlSelect {
             //需要引进volcano模型的MPP模式
             for (int i = 0; i < 1; i++) {
                 //FIXME 支持中文条件查询
-                ResultSet r = statement.executeQuery("select NAME_CN from TB_EMPLOYEE_INFO where NAME_EN like '%wang%' limit 10");
-
+                ResultSet r = statement.executeQuery("select * from yuqi.t1 where varchar_type like '%cn%' limit 10");
 
                 while (r.next()) {
                     System.out.println(r.getString(1));

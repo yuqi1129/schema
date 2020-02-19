@@ -42,7 +42,7 @@ public class MysqlSchema extends AbstractSchema {
             return tableMap;
         }
 
-        Connection connection = null;
+        Connection connection;
         try {
             Class.forName(DRIVER);
             //should need
@@ -67,17 +67,6 @@ public class MysqlSchema extends AbstractSchema {
         } catch (Exception e1) {
             log.error("Close connection error:" + e1);
             throw new RuntimeException(e1);
-        } finally {
-            //should use pool
-//            if (null != connection) {
-//                try {
-//                    connection.close();
-//                } catch (SQLException e2) {
-//                     log.error("Close connection error:" + e2);
-//                }
-//            }
         }
     }
-
-
 }

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
     private List<String> sqls;
     private String filePath;
-    private Statement dbStatement;
+    protected Statement dbStatement;
 
 
     public IntegrateRemoteTestBase(String filePath) {
@@ -62,6 +62,7 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
             }
         } catch (Exception e) {
             //ignore
+            log.error(e.getMessage());
         }
     }
 

@@ -60,7 +60,7 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 接着可以直接运行MysqlSelect 即可
 
-
+**注意**: 如果要跑MySQL数据源时，一定要配置好MySQL数据库连接相关配置
 
 #### 3.3 File 与MySQL结合
 

@@ -5,6 +5,10 @@ import com.mysql.jdbc.ResultSetImpl;
 import org.apache.calcite.avatica.AvaticaResultSet;
 import org.apache.calcite.avatica.ColumnMetaData;
 import org.apache.calcite.jdbc.CalciteResultSet;
+import org.apache.derby.iapi.sql.ResultColumnDescriptor;
+import org.apache.derby.impl.jdbc.EmbedResultSet;
+import org.apache.derby.impl.jdbc.EmbedResultSet42;
+import org.apache.derby.impl.sql.GenericResultDescription;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -26,6 +30,8 @@ public class ResultSetUtils {
             return handleCalciteResultSet((CalciteResultSet) resultSet);
         } else if (resultSet instanceof JDBC42ResultSet) {
             return handleMysqlResultSet((JDBC42ResultSet) resultSet);
+        } else if (resultSet instanceof EmbedResultSet42) {
+            return handleEmbedResultSet((EmbedResultSet42) resultSet);
         }
 
         throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
@@ -49,6 +55,21 @@ public class ResultSetUtils {
         return Arrays.stream(columnMetaDataList)
                 .map(t -> t.getMysqlType())
                 .map(TypeUtil::mysqlTypeToClass)
+                .collect(Collectors.toList());
+    }
+
+
+    private static List<Class> handleEmbedResultSet(EmbedResultSet42 rs) throws NoSuchFieldException, IllegalAccessException {
+
+        final Field f = EmbedResultSet.class.getDeclaredField("resultDescription");
+        f.setAccessible(true);
+        final GenericResultDescription resultDesc = (GenericResultDescription) f.get(rs);
+
+        final ResultColumnDescriptor[] descriptors = resultDesc.getColumnInfo();
+
+        return Arrays.stream(descriptors)
+                .map(d -> d.getType().getTypeId().getSQLTypeName())
+                .map(JavaTypeToSqlTypeConversion::getJavaTypeBySqlType)
                 .collect(Collectors.toList());
     }
 

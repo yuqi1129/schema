@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
+import org.apache.commons.collections4.MapUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Map;
+
+import static com.yuqi.schema.common.constants.CommonConstant.MYSQL_DRIVER;
 
 /**
  * @author yuqi
@@ -31,26 +34,25 @@ public class MysqlSchema extends AbstractSchema {
     private final String password;
     private final String schema;
 
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
+    private static final String MYSQL_GET_SCHEMA_SENTENCE = "select table_name from information_schema.tables where table_type = ? and TABLE_SCHEMA = ?";
+    private static final String NORMAL_SCHEMA_TYPE = "BASE TABLE";
 
     private Map<String, Table> tableMap;
 
     @Override
     protected Map<String, Table> getTableMap() {
-        //ignore;
-        if (null != tableMap && tableMap.size() > 0) {
+        if (MapUtils.isNotEmpty(tableMap)) {
             return tableMap;
         }
 
         Connection connection;
         try {
-            Class.forName(DRIVER);
+            Class.forName(MYSQL_DRIVER);
             //should need
             connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "select table_name from information_schema.tables where table_type = ? and TABLE_SCHEMA = ?");
+            PreparedStatement preparedStatement = connection.prepareStatement(MYSQL_GET_SCHEMA_SENTENCE);
 
-            preparedStatement.setString(1, "BASE TABLE");
+            preparedStatement.setString(1, NORMAL_SCHEMA_TYPE);
             preparedStatement.setString(2, schema);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -63,7 +65,6 @@ public class MysqlSchema extends AbstractSchema {
             }
 
             return tableMap;
-
         } catch (Exception e1) {
             log.error("Close connection error:" + e1);
             throw new RuntimeException(e1);

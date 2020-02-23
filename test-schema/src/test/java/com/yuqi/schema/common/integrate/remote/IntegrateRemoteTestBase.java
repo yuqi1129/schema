@@ -51,7 +51,6 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
 
     @After
     public void after() {
-
         try {
             if (calciteStatement != null && !calciteStatement.isClosed()) {
                 calciteStatement.close();
@@ -77,7 +76,7 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
             List<List<String>> actualResult = runSql(sql, calciteStatement);
             List<List<String >> expectedResult = runSql(sql, dbStatement);
 
-            if(!compareResultIgnoreSequence(expectedResult, actualResult)) {
+            if(compareResultIgnoreSequence(expectedResult, actualResult)) {
                 String errorMessage = String.format(
                         "Error in Integrate test, detail:\n, File:'%s'\n SQL:'%s'\nExpected result:'%s'\n Actual Result:'%s'",
                         filePath, sql, expectedResult.toString(), actualResult.toString());

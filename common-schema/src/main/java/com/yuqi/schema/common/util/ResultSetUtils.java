@@ -2,10 +2,10 @@ package com.yuqi.schema.common.util;
 
 import com.mysql.jdbc.JDBC42ResultSet;
 import com.mysql.jdbc.ResultSetImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.AvaticaResultSet;
 import org.apache.calcite.avatica.ColumnMetaData;
 import org.apache.calcite.jdbc.CalciteResultSet;
-import org.apache.derby.iapi.sql.ResultColumnDescriptor;
 import org.apache.derby.impl.jdbc.EmbedResultSet;
 import org.apache.derby.impl.jdbc.EmbedResultSet42;
 import org.apache.derby.impl.sql.GenericResultDescription;
@@ -23,7 +23,39 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 18/2/20 22:17
  **/
+@Slf4j
 public class ResultSetUtils {
+
+    /**
+     * For calcite result set
+     */
+    private static final Field CALCITE_RESULT_SET_COLUMN_METADATA_LIST;
+
+    /**
+     * For JDBC result set
+     */
+    private static final Field JDBC42_RESULT_SET_FIELDS;
+
+    /**
+     * For derby result set
+     */
+    private static final Field EMBED_RESULT_SET42;
+
+    static {
+       try {
+           CALCITE_RESULT_SET_COLUMN_METADATA_LIST = AvaticaResultSet.class.getDeclaredField("columnMetaDataList");
+           CALCITE_RESULT_SET_COLUMN_METADATA_LIST.setAccessible(true);
+
+           JDBC42_RESULT_SET_FIELDS = ResultSetImpl.class.getDeclaredField("fields");
+           JDBC42_RESULT_SET_FIELDS.setAccessible(true);
+
+           EMBED_RESULT_SET42 = EmbedResultSet.class.getDeclaredField("resultDescription");
+           EMBED_RESULT_SET42.setAccessible(true);
+       } catch (Exception e) {
+           log.error("init refection get error:" + e.getMessage());
+           throw new RuntimeException(e.getMessage());
+       }
+    }
 
     public static List<Class> getClassFromResultSet(ResultSet resultSet) throws NoSuchFieldException, IllegalAccessException {
         if (resultSet instanceof CalciteResultSet) {
@@ -37,37 +69,23 @@ public class ResultSetUtils {
         throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
     }
 
-    private static List<Class> handleCalciteResultSet(CalciteResultSet calciteResultSet) throws NoSuchFieldException, IllegalAccessException {
-
-        final Field f = AvaticaResultSet.class.getDeclaredField("columnMetaDataList");
-        f.setAccessible(true);
-        final List<ColumnMetaData> columnMetaDataList = (List<ColumnMetaData>) f.get(calciteResultSet);
+    private static List<Class> handleCalciteResultSet(CalciteResultSet calciteResultSet) throws IllegalAccessException {
+        final List<ColumnMetaData> columnMetaDataList = (List<ColumnMetaData>) CALCITE_RESULT_SET_COLUMN_METADATA_LIST.get(calciteResultSet);
         return columnMetaDataList.stream().map(a -> a.type.rep.clazz).collect(Collectors.toList());
     }
 
-    //
-    private static List<Class> handleMysqlResultSet(JDBC42ResultSet rs) throws IllegalAccessException, NoSuchFieldException {
-        final Field f = ResultSetImpl.class.getDeclaredField("fields");
-        f.setAccessible(true);
-
-        final com.mysql.jdbc.Field[] columnMetaDataList = (com.mysql.jdbc.Field[]) f.get(rs);
+    private static List<Class> handleMysqlResultSet(JDBC42ResultSet rs) throws IllegalAccessException {
+        final com.mysql.jdbc.Field[] columnMetaDataList = (com.mysql.jdbc.Field[]) JDBC42_RESULT_SET_FIELDS.get(rs);
 
         return Arrays.stream(columnMetaDataList)
-                .map(t -> t.getMysqlType())
+                .map(com.mysql.jdbc.Field::getMysqlType)
                 .map(TypeUtil::mysqlTypeToClass)
                 .collect(Collectors.toList());
     }
 
-
     private static List<Class> handleEmbedResultSet(EmbedResultSet42 rs) throws NoSuchFieldException, IllegalAccessException {
-
-        final Field f = EmbedResultSet.class.getDeclaredField("resultDescription");
-        f.setAccessible(true);
-        final GenericResultDescription resultDesc = (GenericResultDescription) f.get(rs);
-
-        final ResultColumnDescriptor[] descriptors = resultDesc.getColumnInfo();
-
-        return Arrays.stream(descriptors)
+        final GenericResultDescription resultDesc = (GenericResultDescription) EMBED_RESULT_SET42.get(rs);
+        return Arrays.stream(resultDesc.getColumnInfo())
                 .map(d -> d.getType().getTypeId().getSQLTypeName())
                 .map(JavaTypeToSqlTypeConversion::getJavaTypeBySqlType)
                 .collect(Collectors.toList());

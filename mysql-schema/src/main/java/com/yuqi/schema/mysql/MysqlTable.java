@@ -1,6 +1,7 @@
 package com.yuqi.schema.mysql;
 
 import com.google.common.collect.Lists;
+import com.yuqi.schema.common.enumerator.BasicEnumerator;
 import com.yuqi.schema.common.util.JavaTypeToSqlTypeConversion;
 import lombok.Getter;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;
@@ -34,6 +35,9 @@ import java.util.List;
  **/
 public class MysqlTable extends AbstractQueryableTable implements TranslatableTable {
 
+    private static final String MYSQL_COLUMN_META_SQL =
+            "select COLUMN_NAME, DATA_TYPE from information_schema.columns where table_schema = ? and table_name = ?";
+
     private MysqlReader mysqlReader;
     private RelToSqlConverter relToSqlConverter;
     private String schema;
@@ -59,7 +63,7 @@ public class MysqlTable extends AbstractQueryableTable implements TranslatableTa
             @Override
             public Enumerator<T> enumerator() {
                 Iterator<Object[]> it = mysqlReader.readData();
-                return (Enumerator<T>) new MyqlEnumerator(it);
+                return (Enumerator<T>) new BasicEnumerator(it);
             }
         };
     }
@@ -89,7 +93,7 @@ public class MysqlTable extends AbstractQueryableTable implements TranslatableTa
         //try to get table meta data from db;
         try {
             PreparedStatement preparedStatement =
-                    connection.prepareStatement("select COLUMN_NAME, DATA_TYPE from information_schema.columns where table_schema = ? and table_name = ?");
+                    connection.prepareStatement(MYSQL_COLUMN_META_SQL);
 
             preparedStatement.setString(1, schema);
             preparedStatement.setString(2, tableName);

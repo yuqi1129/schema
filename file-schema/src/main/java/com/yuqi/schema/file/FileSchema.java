@@ -7,6 +7,7 @@ import com.yuqi.schema.file.csv.CsvFileTable;
 import com.yuqi.schema.file.enums.TableTypeEnum;
 import com.yuqi.schema.file.json.JsonFileReader;
 import com.yuqi.schema.file.json.JsonFileTable;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
@@ -21,6 +22,7 @@ import java.util.Objects;
  * @description your description
  * @time 14/1/20 15:46
  **/
+@Slf4j
 public class FileSchema extends AbstractSchema {
     private String dirPath;
     private String schema;
@@ -66,7 +68,8 @@ public class FileSchema extends AbstractSchema {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
             }
         });
 

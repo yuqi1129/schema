@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.base.Throwables;
 import com.yuqi.schema.common.constants.CommonConstant;
 import com.yuqi.schema.file.AbstractFileReader;
-import com.yuqi.schema.file.utils.TypeConvertionUtils;
+import com.yuqi.schema.common.util.TypeConvertionUtils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

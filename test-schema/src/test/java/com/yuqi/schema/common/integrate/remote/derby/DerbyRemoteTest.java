@@ -16,15 +16,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.yuqi.schema.common.constants.CommonConstant.DERBY_DRIVER;
+import static com.yuqi.schema.common.constants.CommonConstant.DERBY_URL;
+
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 19/2/20 14:44
  **/
 @Slf4j
 public class DerbyRemoteTest extends IntegrateRemoteTestBase {
     private final String metaFile;
+    private Connection connection;
 
     public DerbyRemoteTest(String filePath, String metaFile) {
         super(filePath);
@@ -36,6 +40,18 @@ public class DerbyRemoteTest extends IntegrateRemoteTestBase {
         return Arrays.asList(new Object[][]{
                 {"sql_and_result/remote/derby/select/select1.sql", "sql_and_result/remote/derby/derby.sql"}
         });
+    }
+
+    @Override
+    public void after() {
+        super.after();
+        if (null != connection) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                log.error("close derby connection:" + e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -62,11 +78,9 @@ public class DerbyRemoteTest extends IntegrateRemoteTestBase {
     @Override
     public Statement getStatement() {
 
-        String url = "jdbc:derby:memory:xxx;create=true";
-        Connection connection;
         try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-            connection = DriverManager.getConnection(url);
+            Class.forName(DERBY_DRIVER).newInstance();
+            connection = DriverManager.getConnection(DERBY_URL);
             return connection.createStatement();
         } catch (Exception e) {
             throw new RuntimeException(e);

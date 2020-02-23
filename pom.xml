@@ -14,6 +14,7 @@
         <module>mysql-schema</module>
         <module>common-schema</module>
         <module>test-schema</module>
+        <module>hive-schema</module>
     </modules>
 
 <properties>

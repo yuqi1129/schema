@@ -25,7 +25,6 @@ public enum TableTypeEnum {
     private final int index;
     private final String name;
 
-
     public static TableTypeEnum getTableTypeEnumByName(String name) {
         for (TableTypeEnum tableTypeEnum : TableTypeEnum.values()) {
             if (tableTypeEnum.name.equalsIgnoreCase(name)) {
@@ -35,6 +34,4 @@ public enum TableTypeEnum {
 
         throw new IllegalArgumentException(String.format("Unsupport table type '%s'", name));
     }
-
-
 }

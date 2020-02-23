@@ -1,6 +1,4 @@
-package com.yuqi.schema.file.utils;
-
-import com.yuqi.schema.common.util.FieldTypeEnum;
+package com.yuqi.schema.common.util;
 
 import java.text.NumberFormat;
 import java.text.ParseException;

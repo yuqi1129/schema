@@ -1,6 +1,5 @@
-package com.yuqi.schema.mysql;
+package com.yuqi.schema.common.enumerator;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.calcite.linq4j.Enumerator;
 
 import java.util.Iterator;
@@ -9,12 +8,16 @@ import java.util.Iterator;
  * @author yuqi
  * @mail yuqi4733@gmail.com
  * @description your description
- * @time 19/1/20 21:08
+ * @time 14/1/20 16:54
  **/
-@RequiredArgsConstructor
-public class MyqlEnumerator implements Enumerator<Object[]> {
+public class BasicEnumerator implements Enumerator<Object[]> {
 
-    private final Iterator<Object[]> iterator;
+    private Iterator<Object[]> iterator;
+
+    public BasicEnumerator(Iterator<Object[]> iterator) {
+        this.iterator = iterator;
+    }
+
     private Object[] current;
     @Override
     public Object[] current() {
@@ -26,19 +29,19 @@ public class MyqlEnumerator implements Enumerator<Object[]> {
         if (iterator.hasNext()) {
             current = iterator.next();
             return true;
+        } else {
+            current = null;
+            return false;
         }
-
-        current = null;
-        return false;
     }
 
     @Override
     public void reset() {
-
+        //do nothing
     }
 
     @Override
     public void close() {
-
+        //do nothing
     }
 }

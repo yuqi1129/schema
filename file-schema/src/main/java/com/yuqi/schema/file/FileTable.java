@@ -1,5 +1,6 @@
 package com.yuqi.schema.file;
 
+import com.yuqi.schema.common.enumerator.BasicEnumerator;
 import org.apache.calcite.adapter.enumerable.EnumerableConvention;
 import org.apache.calcite.adapter.enumerable.EnumerableTableScan;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
@@ -37,7 +38,7 @@ public abstract class FileTable extends AbstractQueryableTable implements Transl
             @Override
             public Enumerator<T> enumerator() {
                 Iterator<Object[]> it = fileReader.readData();
-                return (Enumerator<T>) new FileEnumerator(it);
+                return (Enumerator<T>) new BasicEnumerator(it);
             }
         };
     }

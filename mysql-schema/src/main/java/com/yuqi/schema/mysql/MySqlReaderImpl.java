@@ -58,7 +58,7 @@ public class MySqlReaderImpl implements MysqlReader {
         List<Class> typeClass = f.stream()
                 .map(RelDataTypeField::getType)
                 .map(a -> (RelDataTypeFactoryImpl.JavaType) a)
-                .map(a -> a.getJavaClass())
+                .map(RelDataTypeFactoryImpl.JavaType::getJavaClass)
                 .collect(Collectors.toList());
 
 

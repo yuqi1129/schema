@@ -35,7 +35,6 @@ public abstract class IntegrateLocalTestBase extends IntegrateTestBase {
 
     @Before
     public void before() {
-        //todo
         try (
                 final InputStream inputSqlStream = IntegrateLocalTestBase.class.getClassLoader().getResourceAsStream(inputFile);
                 final InputStream resultStream = IntegrateLocalTestBase.class.getClassLoader().getResourceAsStream(resultFile)) {
@@ -63,7 +62,6 @@ public abstract class IntegrateLocalTestBase extends IntegrateTestBase {
 
     @Test
     public void work() {
-        //do somethin
         runTest();
     }
 
@@ -75,7 +73,7 @@ public abstract class IntegrateLocalTestBase extends IntegrateTestBase {
             final List<List<String>> acutalResult = runSql(inputSql.get(i), calciteStatement);
             final List<List<String>> expectResult = createExpectResult(results.get(i));
 
-            if (!compareResultIgnoreSequence(expectResult, acutalResult)) {
+            if (compareResultIgnoreSequence(expectResult, acutalResult)) {
                 String errorMessage = String.format(
                         "Error in Integrate test, detail:\n, File:'%s'\n SQL:'%s'\nExpected result:'%s'\n Actual Result:'%s'",
                         inputFile, inputSql.get(i), expectResult.toString(), acutalResult.toString());

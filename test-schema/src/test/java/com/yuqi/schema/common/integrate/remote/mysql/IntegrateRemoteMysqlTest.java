@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.yuqi.schema.common.constants.CommonConstant.DRIVER;
+import static com.yuqi.schema.common.constants.CommonConstant.MYSQL_DRIVER;
 import static com.yuqi.schema.common.constants.CommonConstant.OBJECT_MAPPER;
 
 /**
@@ -50,7 +50,7 @@ public class IntegrateRemoteMysqlTest extends IntegrateRemoteTestBase {
             final String password = node.get("password").textValue();
             final String defaultSchema = node.get("schema").textValue();
 
-            Class.forName(DRIVER);
+            Class.forName(MYSQL_DRIVER);
             connection = DriverManager.getConnection(url, username, password);
             connection.setSchema(defaultSchema);
             return connection.createStatement();

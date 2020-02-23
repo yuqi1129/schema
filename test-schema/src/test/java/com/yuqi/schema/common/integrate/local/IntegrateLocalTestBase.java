@@ -75,7 +75,7 @@ public abstract class IntegrateLocalTestBase extends IntegrateTestBase {
 
             if (compareResultIgnoreSequence(expectResult, acutalResult)) {
                 String errorMessage = String.format(
-                        "Error in Integrate test, detail:\n, File:'%s'\n SQL:'%s'\nExpected result:'%s'\n Actual Result:'%s'",
+                        "Error in Integrate test, detail:%n, File:'%s'%n SQL:'%s' %nExpected result:'%s'\n Actual Result:'%s'",
                         inputFile, inputSql.get(i), expectResult.toString(), acutalResult.toString());
                 log.error(errorMessage);
                 throw new RuntimeException(errorMessage);

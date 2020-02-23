@@ -23,11 +23,11 @@ import java.util.Iterator;
  * @description your description
  * @time 14/1/20 15:56
  **/
-public abstract class FileTable extends AbstractQueryableTable implements TranslatableTable {
+public abstract class BaseFileTable extends AbstractQueryableTable implements TranslatableTable {
 
     private final AbstractFileReader fileReader;
 
-    public FileTable(AbstractFileReader fileReader) {
+    public BaseFileTable(AbstractFileReader fileReader) {
         super(Object[].class);
         this.fileReader = fileReader;
     }

@@ -3,10 +3,10 @@ package com.yuqi.schema.file;
 import com.google.common.collect.ImmutableMap;
 import com.yuqi.schema.common.constants.CommonConstant;
 import com.yuqi.schema.file.csv.CsvFileReader;
-import com.yuqi.schema.file.csv.CsvFileTable;
+import com.yuqi.schema.file.csv.CsvBaseFileTable;
 import com.yuqi.schema.file.enums.TableTypeEnum;
 import com.yuqi.schema.file.json.JsonFileReader;
-import com.yuqi.schema.file.json.JsonFileTable;
+import com.yuqi.schema.file.json.JsonBaseFileTable;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
@@ -51,16 +51,16 @@ public class FileSchema extends AbstractSchema {
                 final TableTypeEnum tableTypeEnum = TableTypeEnum.getTableTypeEnumByName(schema);
                 final String filePath = schemaDirPath + File.separator + fileName;
 
-                FileTable table = null;
+                BaseFileTable table = null;
                 if (TableTypeEnum.JSON == tableTypeEnum) {
                     final JsonFileReader jsonFileReader =
                             new JsonFileReader(filePath + CommonConstant.JSON_SUFFIX, filePath + CommonConstant.SCHEMA_SUFFIX);
-                    table = new JsonFileTable(jsonFileReader);
+                    table = new JsonBaseFileTable(jsonFileReader);
 
                 } else if (TableTypeEnum.CSV == tableTypeEnum) {
                     final CsvFileReader csvFileReader =
                             new CsvFileReader(filePath + CommonConstant.CSV_SUFFIX, filePath + CommonConstant.SCHEMA_SUFFIX);
-                    table = new CsvFileTable(csvFileReader);
+                    table = new CsvBaseFileTable(csvFileReader);
                 }
 
                 if (null != table) {

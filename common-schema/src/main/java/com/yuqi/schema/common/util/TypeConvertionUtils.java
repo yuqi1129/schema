@@ -33,10 +33,8 @@ public class TypeConvertionUtils {
             default:
             case STRING:
                 return string;
-
             case BOOLEAN:
                 return Boolean.parseBoolean(string);
-
             case BYTE:
                 return Byte.parseByte(string);
 

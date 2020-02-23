@@ -10,7 +10,7 @@ import java.sql.ResultSet;
  **/
 public class TypeUtil {
 
-    public static Object ObjectToClassData(ResultSet r, int i, Class c) {
+    public static Object objectToClassData(ResultSet r, int i, Class c) {
         try {
             if (c == String.class) {
                 return r.getString(i);

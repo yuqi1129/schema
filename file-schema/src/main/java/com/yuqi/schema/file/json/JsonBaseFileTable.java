@@ -1,7 +1,7 @@
 package com.yuqi.schema.file.json;
 
 import com.yuqi.schema.file.AbstractFileReader;
-import com.yuqi.schema.file.FileTable;
+import com.yuqi.schema.file.BaseFileTable;
 import org.apache.calcite.schema.Statistic;
 import org.apache.calcite.schema.Statistics;
 
@@ -11,8 +11,8 @@ import org.apache.calcite.schema.Statistics;
  * @description your description
  * @time 14/1/20 16:17
  **/
-public class JsonFileTable extends FileTable {
-    public JsonFileTable(AbstractFileReader fileReader) {
+public class JsonBaseFileTable extends BaseFileTable {
+    public JsonBaseFileTable(AbstractFileReader fileReader) {
         super(fileReader);
     }
 

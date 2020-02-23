@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import static com.yuqi.schema.common.constants.CommonConstant.CALCITE_URL;
 import static com.yuqi.schema.common.constants.MetaConstants.META_MODEL;
 
 /**
@@ -47,7 +48,7 @@ public class FileAndMysqlScheamTest {
 
         info.setProperty(InternalProperty.CASE_SENSITIVE.name(), "false");
         Connection connection =
-                DriverManager.getConnection("jdbc:calcite:", info);
+                DriverManager.getConnection(CALCITE_URL, info);
 
         return connection.createStatement();
     }

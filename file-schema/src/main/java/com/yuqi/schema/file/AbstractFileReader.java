@@ -29,8 +29,11 @@ public abstract class AbstractFileReader {
     protected RelDataType rowType;
     protected List<FieldTypeEnum> fieldTypeEnums = Lists.newArrayList();
 
+    /**
+     * Detail method to read data from file, csv/json
+     * @return
+     */
     public abstract Iterator<Object[]> readData();
-
 
     public RelDataType getRowType(RelDataTypeFactory typeFactory) {
         if (null != rowType) {

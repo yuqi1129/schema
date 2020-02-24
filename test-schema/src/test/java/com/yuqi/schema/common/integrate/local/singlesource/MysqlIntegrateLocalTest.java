@@ -25,9 +25,4 @@ public class MysqlIntegrateLocalTest extends IntegrateLocalTestBase {
                 {"sql_and_result/local/file/groupby/groupby1.sql", "sql_and_result/local/file/groupby/groupby1.txt"}
         });
     }
-
-    @Override
-    public Properties getProperties() {
-        return super.getProperties();
-    }
 }

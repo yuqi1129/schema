@@ -8,9 +8,11 @@ import org.junit.runners.Parameterized;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 import static com.yuqi.schema.common.constants.CommonConstant.MYSQL_DRIVER;
 import static com.yuqi.schema.common.constants.CommonConstant.OBJECT_MAPPER;
@@ -25,6 +27,7 @@ import static com.yuqi.schema.common.constants.CommonConstant.OBJECT_MAPPER;
 public class IntegrateRemoteMysqlTest extends IntegrateRemoteTestBase {
 
     private final String mysqlConf;
+    private Connection connection;
 
     public IntegrateRemoteMysqlTest(String filePath, String mysqlConf) {
         super(filePath);
@@ -39,9 +42,20 @@ public class IntegrateRemoteMysqlTest extends IntegrateRemoteTestBase {
     }
 
     @Override
+    public void after() {
+        super.after();
+        try {
+            if (Objects.nonNull(connection) && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            log.error(e.toString());
+        }
+    }
+
+    @Override
     public Statement getStatement() {
 
-        Connection connection = null;
         try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(mysqlConf)) {
             final JsonNode node = OBJECT_MAPPER.readTree(inputStream);
 
@@ -54,7 +68,6 @@ public class IntegrateRemoteMysqlTest extends IntegrateRemoteTestBase {
             connection = DriverManager.getConnection(url, username, password);
             connection.setSchema(defaultSchema);
             return connection.createStatement();
-
         } catch (Exception e) {
             log.error(e.toString());
             throw new RuntimeException(e);

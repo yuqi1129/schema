@@ -30,7 +30,6 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
     private String filePath;
     protected Statement dbStatement;
 
-
     public IntegrateRemoteTestBase(String filePath) {
         this.filePath = filePath;
     }

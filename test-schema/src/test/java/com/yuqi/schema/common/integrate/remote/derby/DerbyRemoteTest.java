@@ -59,6 +59,7 @@ public class DerbyRemoteTest extends IntegrateRemoteTestBase {
         super.init();
         try {
 
+            //create schema and table in memory
             final InputStream inputSqlStream = IntegrateLocalTestBase.class.getClassLoader().getResourceAsStream(metaFile);
             List<String> sqls = IOUtils.readLines(inputSqlStream, Charset.defaultCharset())
                     .stream()

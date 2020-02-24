@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t1`;
 CREATE TABLE `t1` (
-  `tiny_type` tinyint(4) DEFAULT NULL,
+  `tinyint_type` tinyint(4) DEFAULT NULL,
   `smallint_type` smallint(6) DEFAULT NULL,
   `int_type` int(11) DEFAULT NULL,
   `bigint_type` bigint(20) DEFAULT NULL,

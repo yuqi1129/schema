@@ -71,7 +71,10 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
             return;
         }
 
-        sqls.forEach(sql -> {
+        final int size = sqls.size();
+        for (int i = 0; i < size; i++) {
+            final String sql = sqls.get(i);
+
             List<List<String>> actualResult = runSql(sql, calciteStatement);
             List<List<String >> expectedResult = runSql(sql, dbStatement);
 
@@ -82,7 +85,9 @@ public abstract class IntegrateRemoteTestBase extends IntegrateTestBase {
                 log.error(errorMessage);
                 throw new RuntimeException(errorMessage);
             }
-        });
+
+            log.info("The {} sql: '{}' in '{}' passed...", i, sql, filePath);
+        }
 
     }
 

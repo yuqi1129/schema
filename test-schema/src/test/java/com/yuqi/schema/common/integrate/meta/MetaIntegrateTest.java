@@ -28,8 +28,10 @@ public class MetaIntegrateTest extends IntegrateRemoteSqlTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
+        //FIXME, currently, there existed bug in calcite result set column name
+        // 函数如count(*) 如果没有as就会挂
         return Arrays.asList(new Object[][]{
-                {"sql_and_result/remote/mysql/select/select1.sql", "sql_and_result/remote/mysql/mysql_config.json" }
+                {"sql_and_result/meta/select1.sql", "sql_and_result/remote/mysql/mysql_config.json" }
         });
     }
 

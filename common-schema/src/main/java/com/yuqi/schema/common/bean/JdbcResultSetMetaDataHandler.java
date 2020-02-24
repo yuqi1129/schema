@@ -7,8 +7,8 @@ import com.yuqi.schema.common.util.TypeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +43,16 @@ public class JdbcResultSetMetaDataHandler implements MetaDataHandler<JDBC42Resul
 
 
     @Override
-    public List<String> getColumnName(JDBC42ResultSet resultSet) {
-        return Collections.emptyList();
+    public List<String> getColumnName(JDBC42ResultSet resultSet) throws IllegalAccessException {
+        final com.mysql.jdbc.Field[] columnMetaDataList =
+                (com.mysql.jdbc.Field[]) JDBC42_RESULT_SET_FIELDS.get(resultSet);
+
+        return Arrays.stream(columnMetaDataList).map(f -> {
+            try {
+                return f.getName();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }).collect(Collectors.toList());
     }
 }

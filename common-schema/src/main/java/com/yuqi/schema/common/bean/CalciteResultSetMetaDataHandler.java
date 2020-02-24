@@ -7,7 +7,6 @@ import org.apache.calcite.avatica.ColumnMetaData;
 import org.apache.calcite.jdbc.CalciteResultSet;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +35,8 @@ public class CalciteResultSetMetaDataHandler implements MetaDataHandler<CalciteR
     }
 
     @Override
-    public List<String> getColumnName(CalciteResultSet resultSet) {
-        return Collections.emptyList();
+    public List<String> getColumnName(CalciteResultSet resultSet) throws IllegalAccessException {
+        final List<ColumnMetaData> columnMetaDataList = (List<ColumnMetaData>) CALCITE_RESULT_SET_COLUMN_METADATA_LIST.get(resultSet);
+        return columnMetaDataList.stream().map(a -> a.label).collect(Collectors.toList());
     }
 }

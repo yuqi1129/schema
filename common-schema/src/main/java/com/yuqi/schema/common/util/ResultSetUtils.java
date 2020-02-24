@@ -33,7 +33,7 @@ public class ResultSetUtils {
         META_DATA_HANDLER_MAP.put(EmbedResultSet42.class, new DerbyResultSetMetaDataHandler());
     }
 
-    public static List<Class> getColumnTypeFromResultSet(ResultSet resultSet) throws NoSuchFieldException, IllegalAccessException {
+    public static List<Class> getColumnTypeFromResultSet(ResultSet resultSet) throws IllegalAccessException {
 
         final MetaDataHandler<ResultSet> handler = META_DATA_HANDLER_MAP.get(resultSet.getClass());
         //unsupport yet
@@ -44,7 +44,7 @@ public class ResultSetUtils {
         return handler.getColumnType(resultSet);
     }
 
-    public static List<String> getColumnNameFromResultSet(ResultSet resultSet) {
+    public static List<String> getColumnNameFromResultSet(ResultSet resultSet) throws IllegalAccessException {
         final MetaDataHandler<ResultSet> handler = META_DATA_HANDLER_MAP.get(resultSet.getClass());
         //unsupport yet
         if (null == handler) {

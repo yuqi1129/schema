@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.yuqi.schema.common.util.ResultSetUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.InternalProperty;
+import org.apache.calcite.avatica.util.Casing;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.Connection;
@@ -68,6 +69,7 @@ public abstract class IntegrateTestBase {
                 "/Users/yuqi/project/" + "schema/test-schema/src/test/resources/schema.json");
 
         info.setProperty(InternalProperty.CASE_SENSITIVE.name(), "false");
+        info.setProperty(InternalProperty.UNQUOTED_CASING.name(), Casing.UNCHANGED.name());
         return info;
     }
 

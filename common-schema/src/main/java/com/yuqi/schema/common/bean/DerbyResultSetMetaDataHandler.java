@@ -8,7 +8,6 @@ import org.apache.derby.impl.sql.GenericResultDescription;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,8 @@ public class DerbyResultSetMetaDataHandler implements MetaDataHandler<EmbedResul
     }
 
     @Override
-    public List<String> getColumnName(EmbedResultSet42 resultSet) {
-        return Collections.emptyList();
+    public List<String> getColumnName(EmbedResultSet42 resultSet) throws IllegalAccessException {
+        final GenericResultDescription resultDesc = (GenericResultDescription) EMBED_RESULT_SET.get(resultSet);
+        return Arrays.stream(resultDesc.getColumnInfo()).map(d -> d.getName()).collect(Collectors.toList());
     }
 }

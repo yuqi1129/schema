@@ -18,8 +18,9 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 - [x] File(本地文件)
 - [x] MySQL
+- [x] Derby
+- [ ] Hive (doing)
 - [ ] HBase
-- [ ] Hive
 - [ ] ....
 
 
@@ -69,6 +70,8 @@ schema 项目是一个简单的union-sql工程， 即用一套SQL可以同时访
 
 
 ### 4. 集成测试
+
+**注意** : MySQL schema依赖本地MySQL, 如果要测试MySQL，请事先配置好MySQL, 详情请参考[集成测试](test-schema/src/test/resources/sql_and_result/README.md)
 
 你可以直接运行:
 ```

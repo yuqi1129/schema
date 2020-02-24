@@ -1,21 +1,19 @@
 package com.yuqi.schema.common.util;
 
+import com.google.common.collect.Maps;
 import com.mysql.jdbc.JDBC42ResultSet;
-import com.mysql.jdbc.ResultSetImpl;
+import com.yuqi.schema.common.bean.CalciteResultSetMetaDataHandler;
+import com.yuqi.schema.common.bean.DerbyResultSetMetaDataHandler;
+import com.yuqi.schema.common.bean.JdbcResultSetMetaDataHandler;
+import com.yuqi.schema.common.bean.MetaDataHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.calcite.avatica.AvaticaResultSet;
-import org.apache.calcite.avatica.ColumnMetaData;
 import org.apache.calcite.jdbc.CalciteResultSet;
-import org.apache.derby.impl.jdbc.EmbedResultSet;
 import org.apache.derby.impl.jdbc.EmbedResultSet42;
-import org.apache.derby.impl.sql.GenericResultDescription;
 
-import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 /**
  * @author yuqi
@@ -26,71 +24,35 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ResultSetUtils {
 
-    /**
-     * For calcite result set
-     */
-    private static final Field CALCITE_RESULT_SET_COLUMN_METADATA_LIST;
-
-    /**
-     * For JDBC result set
-     */
-    private static final Field JDBC42_RESULT_SET_FIELDS;
-
-    /**
-     * For derby result set
-     */
-    private static final Field EMBED_RESULT_SET42;
+    private static final Map<Class, MetaDataHandler> META_DATA_HANDLER_MAP
+            = Maps.newHashMap();
 
     static {
-       try {
-           CALCITE_RESULT_SET_COLUMN_METADATA_LIST = AvaticaResultSet.class.getDeclaredField("columnMetaDataList");
-           CALCITE_RESULT_SET_COLUMN_METADATA_LIST.setAccessible(true);
-
-           JDBC42_RESULT_SET_FIELDS = ResultSetImpl.class.getDeclaredField("fields");
-           JDBC42_RESULT_SET_FIELDS.setAccessible(true);
-
-           EMBED_RESULT_SET42 = EmbedResultSet.class.getDeclaredField("resultDescription");
-           EMBED_RESULT_SET42.setAccessible(true);
-       } catch (Exception e) {
-           log.error("init refection get error:" + e.getMessage());
-           throw new RuntimeException(e.getMessage());
-       }
+        META_DATA_HANDLER_MAP.put(CalciteResultSet.class, new CalciteResultSetMetaDataHandler());
+        META_DATA_HANDLER_MAP.put(JDBC42ResultSet.class, new JdbcResultSetMetaDataHandler());
+        META_DATA_HANDLER_MAP.put(EmbedResultSet42.class, new DerbyResultSetMetaDataHandler());
     }
 
-    public static List<Class> getClassFromResultSet(ResultSet resultSet) throws NoSuchFieldException, IllegalAccessException {
-        if (resultSet instanceof CalciteResultSet) {
-            return handleCalciteResultSet((CalciteResultSet) resultSet);
-        } else if (resultSet instanceof JDBC42ResultSet) {
-            return handleMysqlResultSet((JDBC42ResultSet) resultSet);
-        } else if (resultSet instanceof EmbedResultSet42) {
-            return handleEmbedResultSet((EmbedResultSet42) resultSet);
+    public static List<Class> getColumnTypeFromResultSet(ResultSet resultSet) throws NoSuchFieldException, IllegalAccessException {
+
+        final MetaDataHandler<ResultSet> handler = META_DATA_HANDLER_MAP.get(resultSet.getClass());
+        //unsupport yet
+        if (null == handler) {
+            throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
         }
 
-        throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
+        return handler.getColumnType(resultSet);
     }
 
-    private static List<Class> handleCalciteResultSet(CalciteResultSet calciteResultSet) throws IllegalAccessException {
-        final List<ColumnMetaData> columnMetaDataList = (List<ColumnMetaData>) CALCITE_RESULT_SET_COLUMN_METADATA_LIST.get(calciteResultSet);
-        return columnMetaDataList.stream().map(a -> a.type.rep.clazz).collect(Collectors.toList());
+    public static List<String> getColumnNameFromResultSet(ResultSet resultSet) {
+        final MetaDataHandler<ResultSet> handler = META_DATA_HANDLER_MAP.get(resultSet.getClass());
+        //unsupport yet
+        if (null == handler) {
+            throw new UnsupportedOperationException("Do not support " + resultSet.getClass().getSimpleName() + " now...");
+        }
+
+        return handler.getColumnName(resultSet);
     }
-
-    private static List<Class> handleMysqlResultSet(JDBC42ResultSet rs) throws IllegalAccessException {
-        final com.mysql.jdbc.Field[] columnMetaDataList = (com.mysql.jdbc.Field[]) JDBC42_RESULT_SET_FIELDS.get(rs);
-
-        return Arrays.stream(columnMetaDataList)
-                .map(com.mysql.jdbc.Field::getMysqlType)
-                .map(TypeUtil::mysqlTypeToClass)
-                .collect(Collectors.toList());
-    }
-
-    private static List<Class> handleEmbedResultSet(EmbedResultSet42 rs) throws NoSuchFieldException, IllegalAccessException {
-        final GenericResultDescription resultDesc = (GenericResultDescription) EMBED_RESULT_SET42.get(rs);
-        return Arrays.stream(resultDesc.getColumnInfo())
-                .map(d -> d.getType().getTypeId().getSQLTypeName())
-                .map(JavaTypeToSqlTypeConversion::getJavaTypeBySqlType)
-                .collect(Collectors.toList());
-    }
-
 
     public static String javaTypeToString(ResultSet rs, int index, Class<?> clzz) throws SQLException {
 

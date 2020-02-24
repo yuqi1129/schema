@@ -6,7 +6,6 @@ import com.yuqi.schema.common.util.ResultSetUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.InternalProperty;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.ClassRule;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -99,7 +98,7 @@ public abstract class IntegrateTestBase {
         try {
             final ResultSet r = statement.executeQuery(sql);
             final int columnCount = r.getMetaData().getColumnCount();
-            final List<Class> columnType = ResultSetUtils.getClassFromResultSet(r);
+            final List<Class> columnType = ResultSetUtils.getColumnTypeFromResultSet(r);
             while (r.next()) {
                 final List<String> value = Lists.newArrayListWithCapacity(columnCount);
                 for (int i = 1; i <= columnCount; i++) {

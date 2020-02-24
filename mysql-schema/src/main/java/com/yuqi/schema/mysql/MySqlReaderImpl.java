@@ -66,7 +66,7 @@ public class MySqlReaderImpl implements MysqlReader {
         final int columnSize = typeClass.size();
 
         try {
-            final List<Class> columnTypes = ResultSetUtils.getClassFromResultSet(r);
+            final List<Class> columnTypes = ResultSetUtils.getColumnTypeFromResultSet(r);
 
             while (r.next()) {
                 final Object[] objects = new Object[columnSize];

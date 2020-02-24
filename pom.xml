@@ -173,20 +173,6 @@
 </dependencyManagement>
 
 <distributionManagement>
-    <repository>
-        <id>central</id>
-        <name>central</name>
-        <url>http://nexus.d.xiaomi.net/nexus/content/repositories/releases/</url>
-    </repository>
-    <snapshotRepository>
-        <id>snapshots</id>
-        <name>snapshots</name>
-        <url>http://nexus.d.xiaomi.net/nexus/content/repositories/snapshots/</url>
-    </snapshotRepository>
-    <site>
-        <id>www.data.xiaomi.com</id>
-        <url>scp://www.data.xiaomi.com/www/docs/project/</url>
-    </site>
 </distributionManagement>
 
 

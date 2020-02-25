@@ -22,11 +22,8 @@ public class DerbyResultSetMetaDataHandler implements MetaDataHandler<EmbedResul
     /**
      * For derby result set
      */
-    private static final Field EMBED_RESULT_SET;
-
-    static {
-        EMBED_RESULT_SET = ReflectionUtils.getField(EmbedResultSet.class, "resultDescription");
-    }
+    private static final Field EMBED_RESULT_SET =
+            ReflectionUtils.getField(EmbedResultSet.class, "resultDescription");
 
     @Override
     public List<Class> getColumnType(EmbedResultSet42 resultSet) throws IllegalAccessException {

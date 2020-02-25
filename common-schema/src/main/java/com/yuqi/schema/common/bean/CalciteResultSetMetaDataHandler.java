@@ -22,11 +22,8 @@ public class CalciteResultSetMetaDataHandler implements MetaDataHandler<CalciteR
     /**
      * For calcite result set
      */
-    private static final Field CALCITE_RESULT_SET_COLUMN_METADATA_LIST;
-
-    static {
-        CALCITE_RESULT_SET_COLUMN_METADATA_LIST = ReflectionUtils.getField(AvaticaResultSet.class, "columnMetaDataList");
-    }
+    private static final Field CALCITE_RESULT_SET_COLUMN_METADATA_LIST =
+            ReflectionUtils.getField(AvaticaResultSet.class, "columnMetaDataList");
 
     @Override
     public List<Class> getColumnType(CalciteResultSet resultSet) throws IllegalAccessException {

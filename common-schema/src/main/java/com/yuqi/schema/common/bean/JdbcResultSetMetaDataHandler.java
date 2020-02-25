@@ -25,10 +25,8 @@ public class JdbcResultSetMetaDataHandler implements MetaDataHandler<JDBC42Resul
     /**
      * For JDBC result set
      */
-    private static final Field JDBC42_RESULT_SET_FIELDS;
-    static {
-        JDBC42_RESULT_SET_FIELDS = ReflectionUtils.getField(ResultSetImpl.class, "fields");
-    }
+    private static final Field JDBC42_RESULT_SET_FIELDS =
+            ReflectionUtils.getField(ResultSetImpl.class, "fields");
 
     @Override
     public List<Class> getColumnType(JDBC42ResultSet resultSet) throws IllegalAccessException {

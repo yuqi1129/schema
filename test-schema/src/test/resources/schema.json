@@ -1,9 +1,9 @@
 {
   "version": "1.0",
-  "defaultSchema": "CSV",
+  "defaultSchema": "csv",
   "schemas": [
     {
-      "name": "CSV",
+      "name": "csv",
       "type": "custom",
       "factory": "com.yuqi.schema.file.csv.CsvFileSchemaFactory",
       "operand": {
@@ -11,7 +11,7 @@
       }
     },
     {
-      "name": "JSON",
+      "name": "json",
       "type": "custom",
       "factory": "com.yuqi.schema.file.json.JsonFileSchemaFactory",
       "operand": {
@@ -19,7 +19,7 @@
       }
     },
     {
-      "name": "YUQI",
+      "name": "yuqi",
       "type": "custom",
       "factory": "com.yuqi.schema.mysql.MysqlSchemaFactory",
       "operand": {

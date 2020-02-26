@@ -51,7 +51,7 @@ public abstract class AbstractFileReader {
                 if (nameAndType.length != 2) {
                     throw new IllegalArgumentException(String.format("name and type string '%s' is invalid....", s));
                 }
-                columnsNames.add(nameAndType[0].toUpperCase());
+                columnsNames.add(nameAndType[0]);
                 final Class c = FieldTypeEnum.getByTypeName(nameAndType[1]);
                 columnTypes.add(typeFactory.createJavaType(c));
 

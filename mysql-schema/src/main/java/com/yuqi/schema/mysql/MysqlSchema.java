@@ -59,7 +59,7 @@ public class MysqlSchema extends AbstractSchema {
 
             tableMap = Maps.newHashMap();
             while (resultSet.next()) {
-                String tableName = resultSet.getString(1).toUpperCase();
+                String tableName = resultSet.getString(1);
                 Table mysqlTable = new MysqlTable(schema, tableName, connection);
                 tableMap.put(tableName, mysqlTable);
             }

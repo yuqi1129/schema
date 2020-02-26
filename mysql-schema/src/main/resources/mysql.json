@@ -1,9 +1,9 @@
 {
   "version": "1.0",
-  "defaultSchema": "YUQI",
+  "defaultSchema": "yuqi",
   "schemas": [
     {
-      "name": "YUQI",
+      "name": "yuqi",
       "type": "custom",
       "factory": "com.yuqi.schema.mysql.MysqlSchemaFactory",
       "operand": {

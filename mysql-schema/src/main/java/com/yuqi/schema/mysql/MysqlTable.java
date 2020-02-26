@@ -103,7 +103,7 @@ public class MysqlTable extends AbstractQueryableTable implements TranslatableTa
             colunmTypes = Lists.newArrayList();
             while (r.next()) {
                 //FIXME Ignore column case
-                columnNames.add(r.getString(1).toUpperCase());
+                columnNames.add(r.getString(1));
                 final String columnTypeString = r.getString(2);
                 final Class c = JavaTypeToSqlTypeConversion.getJavaTypeBySqlType(columnTypeString);
                 colunmTypes.add(typeFactory.createJavaType(c));

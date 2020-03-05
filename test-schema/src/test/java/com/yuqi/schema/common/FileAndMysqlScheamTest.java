@@ -22,9 +22,9 @@ public class FileAndMysqlScheamTest {
     public static void main(String[] args) {
         try {
             final Statement statement = getStatement();
-            final String query1 = "select tab1.bigint_type a, tab1.char_type b, tab2.varchar_type c from csv.t1 tab1 inner join yuqi.type tab2 on "
+            final String query1 = "select tab1.bigint_type a, tab1.varchar_type b, tab2.varchar_type c from csv.t1 tab1 inner join yuqi.t1 tab2 on "
                     + " tab1.int_type = tab2.int_type"
-                    + " where tab1.smallint_type < 4";
+                    + " where tab1.smallint_type < 10";
             final String query = "select smallint_type + 1, int_type from csv.t1 where tinyint_type is null";
 
             for (int i = 0; i < 1; i++) {

@@ -4,7 +4,6 @@ import com.mysql.jdbc.JDBC42ResultSet;
 import com.mysql.jdbc.ResultSetImpl;
 import com.yuqi.schema.common.util.ReflectionUtils;
 import com.yuqi.schema.common.util.TypeUtil;
-import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 24/2/20 17:18
  **/
-@Slf4j
 public class JdbcResultSetMetaDataHandler implements MetaDataHandler<JDBC42ResultSet> {
 
 

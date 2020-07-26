@@ -1,7 +1,6 @@
 package com.yuqi.schema.common.bean;
 
 import com.yuqi.schema.common.util.ReflectionUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.avatica.AvaticaResultSet;
 import org.apache.calcite.avatica.ColumnMetaData;
 import org.apache.calcite.jdbc.CalciteResultSet;
@@ -16,7 +15,6 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 24/2/20 17:12
  **/
-@Slf4j
 public class CalciteResultSetMetaDataHandler implements MetaDataHandler<CalciteResultSet>  {
 
     /**

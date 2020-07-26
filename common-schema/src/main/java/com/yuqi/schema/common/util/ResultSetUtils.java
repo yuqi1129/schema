@@ -6,7 +6,6 @@ import com.yuqi.schema.common.bean.CalciteResultSetMetaDataHandler;
 import com.yuqi.schema.common.bean.DerbyResultSetMetaDataHandler;
 import com.yuqi.schema.common.bean.JdbcResultSetMetaDataHandler;
 import com.yuqi.schema.common.bean.MetaDataHandler;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.jdbc.CalciteResultSet;
 import org.apache.derby.impl.jdbc.EmbedResultSet42;
 
@@ -21,7 +20,6 @@ import java.util.Map;
  * @description your description
  * @time 18/2/20 22:17
  **/
-@Slf4j
 public class ResultSetUtils {
 
     private static final Map<Class, MetaDataHandler> META_DATA_HANDLER_MAP

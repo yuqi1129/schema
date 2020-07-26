@@ -1,7 +1,5 @@
 package com.yuqi.schema.common.util;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.lang.reflect.Field;
 
 /**
@@ -10,7 +8,6 @@ import java.lang.reflect.Field;
  * @description your description
  * @time 24/2/20 17:26
  **/
-@Slf4j
 public class ReflectionUtils {
     public static Field getField(Class c, String fieldName) {
         try {
@@ -18,7 +15,6 @@ public class ReflectionUtils {
             f.setAccessible(true);
             return f;
         } catch (Exception e) {
-            log.error(e.toString());
             throw new RuntimeException(e);
         }
     }

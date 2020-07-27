@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.request;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 
@@ -10,7 +10,7 @@ import io.netty.buffer.ByteBuf;
  * @description your description
  * @time 4/7/20 20:36
  **/
-public class QueryPackage extends AbstractPackage {
+public class Query extends AbstractReaderAndWriter {
     private String query;
 
 

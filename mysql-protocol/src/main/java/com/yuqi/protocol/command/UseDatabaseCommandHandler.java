@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.request.UsePackage;
+import com.yuqi.protocol.pkg.request.Use;
 
 /**
  * @author yuqi
@@ -10,9 +10,9 @@ import com.yuqi.protocol.pkg.request.UsePackage;
  * @time 26/7/20 17:18
  **/
 public class UseDatabaseCommandHandler extends AbstractCommandHandler {
-    private UsePackage usePackage;
+    private Use usePackage;
 
-    public UseDatabaseCommandHandler(ConnectionContext connectionContext, UsePackage usePackage) {
+    public UseDatabaseCommandHandler(ConnectionContext connectionContext, Use usePackage) {
         super(connectionContext);
         this.usePackage = usePackage;
     }

@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.response;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
  * @description your description
  * @time 10/7/20 19:22
  **/
-public class QuitPackage extends AbstractPackage {
+public class Quit extends AbstractReaderAndWriter {
     @Override
     public void read(ByteBuf byteBuf) {
 

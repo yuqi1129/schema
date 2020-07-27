@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.request.ShowPackage;
+import com.yuqi.protocol.pkg.request.Show;
 
 /**
  * @author yuqi
@@ -11,9 +11,9 @@ import com.yuqi.protocol.pkg.request.ShowPackage;
  **/
 public class ShowCommandHandler extends AbstractCommandHandler {
 
-    private ShowPackage showPackage;
+    private Show showPackage;
 
-    public ShowCommandHandler(ConnectionContext connectionContext, ShowPackage showPackage) {
+    public ShowCommandHandler(ConnectionContext connectionContext, Show showPackage) {
         super(connectionContext);
         this.showPackage = showPackage;
     }

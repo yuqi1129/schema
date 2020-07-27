@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.auth;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.Builder;
  * @time 30/6/20 21:20
  **/
 @Builder
-public class ServerGreetingPackage extends AbstractPackage {
+public class ServerGreeting extends AbstractReaderAndWriter {
 
     /**
      * Protocol version

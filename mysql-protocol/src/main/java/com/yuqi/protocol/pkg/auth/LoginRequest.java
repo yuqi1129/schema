@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.auth;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.Data;
  * @time 4/7/20 10:26
  **/
 @Data
-public class LoginRequestPackage extends AbstractPackage {
+public class LoginRequest extends AbstractReaderAndWriter {
     /**
      * 客户端capabaility
      */

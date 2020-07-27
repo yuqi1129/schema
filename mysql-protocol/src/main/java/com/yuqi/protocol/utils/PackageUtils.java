@@ -1,9 +1,9 @@
 package com.yuqi.protocol.utils;
 
-import com.yuqi.protocol.io.PackageReaderAndWriter;
-import com.yuqi.protocol.pkg.MySQLPackage;
-import com.yuqi.protocol.pkg.auth.ServerGreetingPackage;
-import com.yuqi.protocol.pkg.response.OkPackage;
+import com.yuqi.protocol.io.ReaderAndWriter;
+import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.auth.ServerGreeting;
+import com.yuqi.protocol.pkg.response.Ok;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 
@@ -29,10 +29,10 @@ public class PackageUtils {
 
     public static byte[] salt1 = {1, 1, 1, 1, 1, 1, 1, 1};
     public static byte[] salt2 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-    public static ServerGreetingPackage buildInitAuthencatinPackage() {
+    public static ServerGreeting buildInitAuthencatinPackage() {
 
         int serverCapability = getServerCapality();
-        ServerGreetingPackage greetingPackage = ServerGreetingPackage.builder()
+        ServerGreeting greetingPackage = ServerGreeting.builder()
                 .serverThreadId((int) Thread.currentThread().getId())
                 .saltOne(salt1)
                 .protocalVeriosn((byte) 10)
@@ -69,35 +69,35 @@ public class PackageUtils {
     }
 
 
-    public static MySQLPackage buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
-        OkPackage okPackage = OkPackage.builder()
+    public static MySQL buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
+        Ok okPackage = Ok.builder()
                 .header((byte) 0x00)
                 .serverStatus(0x0002)
                 .affectedRows(affectedRows)
                 .lastInsertId(lastInsertId)
                 .build();
 
-        MySQLPackage mysqlPacakge = new MySQLPackage(okPackage);
+        MySQL mysqlPacakge = new MySQL(okPackage);
         mysqlPacakge.setSeqNumber((byte) seqNumber);
 
         return mysqlPacakge;
     }
 
-    public static MySQLPackage buildResultSetMysqlPackage() {
+    public static MySQL buildResultSetMysqlPackage() {
 
 
         return null;
     }
 
-    public static ByteBuf packageToBuf(PackageReaderAndWriter packageReaderAndWriter) {
+    public static ByteBuf packageToBuf(ReaderAndWriter readerAndWriter) {
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.buffer(128);
-        packageReaderAndWriter.write(byteBuf);
+        readerAndWriter.write(byteBuf);
 
         return byteBuf;
     }
 
-    public static ByteBuf packageToBuf(PackageReaderAndWriter packageReaderAndWriter, ByteBuf byteBuf) {
-        packageReaderAndWriter.write(byteBuf);
+    public static ByteBuf packageToBuf(ReaderAndWriter readerAndWriter, ByteBuf byteBuf) {
+        readerAndWriter.write(byteBuf);
         return byteBuf;
     }
 }

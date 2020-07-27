@@ -1,9 +1,9 @@
 package com.yuqi.protocol.handler;
 
 import com.google.common.base.Throwables;
-import com.yuqi.protocol.pkg.MySQLPackage;
-import com.yuqi.protocol.pkg.auth.LoginRequestPackage;
-import com.yuqi.protocol.pkg.request.CommandPackage;
+import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.auth.LoginRequest;
+import com.yuqi.protocol.pkg.request.Command;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
@@ -20,12 +20,12 @@ public class MessageToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        MySQLPackage mySQLPackage = new MySQLPackage();
+        MySQL mySQLPackage = new MySQL();
 
         if (NettyConnectionHandler.INSTANCE.channelHasAuthencation(channelHandlerContext.channel())) {
-            mySQLPackage.setAbstractPackage(new CommandPackage());
+            mySQLPackage.setAbstractReaderAndWriterPackage(new Command());
         } else {
-            mySQLPackage.setAbstractPackage(new LoginRequestPackage());
+            mySQLPackage.setAbstractReaderAndWriterPackage(new LoginRequest());
         }
 
         mySQLPackage.read(byteBuf);

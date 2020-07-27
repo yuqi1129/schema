@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.request.CreateDbPackage;
+import com.yuqi.protocol.pkg.request.CreateDb;
 
 /**
  * @author yuqi
@@ -11,9 +11,9 @@ import com.yuqi.protocol.pkg.request.CreateDbPackage;
  **/
 public class CreateDatabaseCommandHandler extends AbstractCommandHandler {
 
-    private CreateDbPackage createDbPackage;
+    private CreateDb createDbPackage;
 
-    public CreateDatabaseCommandHandler(ConnectionContext connectionContext, CreateDbPackage createDbPackage) {
+    public CreateDatabaseCommandHandler(ConnectionContext connectionContext, CreateDb createDbPackage) {
         super(connectionContext);
         this.createDbPackage = createDbPackage;
     }

@@ -1,11 +1,11 @@
 package com.yuqi.protocol.handler;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.AbstractPackage;
-import com.yuqi.protocol.pkg.auth.LoginRequestPackage;
-import com.yuqi.protocol.pkg.MySQLPackage;
-import com.yuqi.protocol.pkg.response.ErrPackage;
-import com.yuqi.protocol.pkg.response.OkPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
+import com.yuqi.protocol.pkg.auth.LoginRequest;
+import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.response.Err;
+import com.yuqi.protocol.pkg.response.Ok;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -38,15 +38,15 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
 
         } else {
             //do authentcaion
-            boolean res = doAuthencation((MySQLPackage) msg);
+            boolean res = doAuthencation((MySQL) msg);
 
-            AbstractPackage abstractPackage;
-            MySQLPackage mySQLPackage = new MySQLPackage();
+            AbstractReaderAndWriter abstractReaderAndWriterPackage;
+            MySQL mySQLPackage = new MySQL();
 
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(256);
             if (res) {
                 NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().put(channel, new ConnectionContext(ctx));
-                abstractPackage = OkPackage.builder()
+                abstractReaderAndWriterPackage = Ok.builder()
                         .header((byte) 0x00)
                         .serverStatus(0x0002)
                         .affectedRows(0)
@@ -54,13 +54,13 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
                         //.info("Welecome to mock server")
                         .build();
             } else {
-                abstractPackage = ErrPackage.builder()
+                abstractReaderAndWriterPackage = Err.builder()
                         .header((byte) 0xff)
                         .errorCode(PASSWORD_OR_USER_IS_WRONG)
                         .errorMessage("Wrong username or password").build();
             }
 
-            mySQLPackage.setAbstractPackage(abstractPackage);
+            mySQLPackage.setAbstractReaderAndWriterPackage(abstractReaderAndWriterPackage);
             //在认证过程中
             //server----->client 0x00
             //client----->server 0x01
@@ -78,9 +78,9 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private boolean doAuthencation(MySQLPackage mySQLPackage) {
-        final String userName = ((LoginRequestPackage) mySQLPackage.getAbstractPackage()).getUserName();
-        final String passwordHash = ((LoginRequestPackage) mySQLPackage.getAbstractPackage()).getPasswordHash();
+    private boolean doAuthencation(MySQL mySQLPackage) {
+        final String userName = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getUserName();
+        final String passwordHash = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getPasswordHash();
 
         return compareUsernameAndPassword(userName, passwordHash);
     }

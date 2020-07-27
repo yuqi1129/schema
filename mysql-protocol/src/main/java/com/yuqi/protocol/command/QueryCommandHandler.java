@@ -2,12 +2,12 @@ package com.yuqi.protocol.command;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
-import com.yuqi.protocol.pkg.request.QueryPackage;
-import com.yuqi.protocol.pkg.response.ColumnCountPackage;
-import com.yuqi.protocol.pkg.response.ColumnTypePackage;
-import com.yuqi.protocol.pkg.response.ColumnValuePackage;
-import com.yuqi.protocol.pkg.response.EofPackage;
+import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.request.Query;
+import com.yuqi.protocol.pkg.response.ColumnCount;
+import com.yuqi.protocol.pkg.response.ColumnType;
+import com.yuqi.protocol.pkg.response.ColumnValue;
+import com.yuqi.protocol.pkg.response.Eof;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
@@ -29,9 +29,9 @@ import java.util.List;
  * @time 4/7/20 21:28
  **/
 public class QueryCommandHandler extends AbstractCommandHandler {
-    private QueryPackage queryPackage;
+    private Query queryPackage;
 
-    public QueryCommandHandler(ConnectionContext connectionContext, QueryPackage queryPackage) {
+    public QueryCommandHandler(ConnectionContext connectionContext, Query queryPackage) {
         super(connectionContext);
         this.queryPackage = queryPackage;
     }
@@ -66,7 +66,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             final String db = createDb.getDbName();
             SlothSchemaHolder.INSTANCE.registerSchema(db);
 
-            MySQLPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
+            MySQL mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
             ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
             connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
 
@@ -76,7 +76,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             final String db = createDb.getDbName();
             SlothSchemaHolder.INSTANCE.removeSchema(db);
 
-            MySQLPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
+            MySQL mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
             ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
             connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
 
@@ -91,23 +91,23 @@ public class QueryCommandHandler extends AbstractCommandHandler {
                 schemas = SlothSchemaHolder.INSTANCE.getAllSchemas();
             }
 
-            final List<MySQLPackage> result = Lists.newArrayList();
+            final List<MySQL> result = Lists.newArrayList();
             int columnNum = 1;
             byte seqNumber = 1;
-            final MySQLPackage columnCount = new MySQLPackage(
-                    new ColumnCountPackage(columnNum));
+            final MySQL columnCount = new MySQL(
+                    new ColumnCount(columnNum));
             columnCount.setSeqNumber(seqNumber++);
 
             result.add(columnCount);
 
-            List<MySQLPackage> columnDetails = Lists.newArrayList();
+            List<MySQL> columnDetails = Lists.newArrayList();
 
             for (int i = 0; i < columnNum; i++) {
-                final MySQLPackage columnType = new MySQLPackage();
+                final MySQL columnType = new MySQL();
 
                 //todo file column type info
-                final ColumnTypePackage columnTypePackage =
-                        ColumnTypePackage.builder()
+                final ColumnType columnTypePackage =
+                        ColumnType.builder()
                                 .catalog("def")
                                 .schema("")
                                 .table("")
@@ -124,7 +124,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
                                 .dicimals((byte) 0x00)
                                 .build();
 
-                columnType.setAbstractPackage(columnTypePackage);
+                columnType.setAbstractReaderAndWriterPackage(columnTypePackage);
                 columnType.setSeqNumber(seqNumber++);
 
                 columnDetails.add(columnType);
@@ -132,22 +132,22 @@ public class QueryCommandHandler extends AbstractCommandHandler {
 
             result.addAll(columnDetails);
 
-            final MySQLPackage eofPackage = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+            final MySQL eofPackage = new MySQL(new Eof((byte) 0xfe, 0, 0x0002));
             eofPackage.setSeqNumber(seqNumber++);
 
             result.add(eofPackage);
 
             int rowCount = 10;
-            List<MySQLPackage> rows = Lists.newArrayList();
+            List<MySQL> rows = Lists.newArrayList();
             for (String db : schemas) {
-                MySQLPackage columnValue = new MySQLPackage(new ColumnValuePackage(Lists.newArrayList(db)));
+                MySQL columnValue = new MySQL(new ColumnValue(Lists.newArrayList(db)));
                 columnValue.setSeqNumber(seqNumber++);
                 rows.add(columnValue);
             }
 
             result.addAll(rows);
 
-            final MySQLPackage eofPackageLast = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+            final MySQL eofPackageLast = new MySQL(new Eof((byte) 0xfe, 0, 0x0002));
             eofPackageLast.setSeqNumber(seqNumber++);
             result.add(eofPackageLast);
 
@@ -167,25 +167,25 @@ public class QueryCommandHandler extends AbstractCommandHandler {
 
         } else {
             //sql select
-            final List<MySQLPackage> result = Lists.newArrayList();
+            final List<MySQL> result = Lists.newArrayList();
             int columnNum = 1;
             byte seqNumber = 1;
 
             //列count
-            final MySQLPackage columnCount = new MySQLPackage(
-                    new ColumnCountPackage(columnNum));
+            final MySQL columnCount = new MySQL(
+                    new ColumnCount(columnNum));
             columnCount.setSeqNumber(seqNumber++);
 
             result.add(columnCount);
 
             //列详情
-            List<MySQLPackage> columnDetails = Lists.newArrayList();
+            List<MySQL> columnDetails = Lists.newArrayList();
             for (int i = 0; i < columnNum; i++) {
-                final MySQLPackage columnType = new MySQLPackage();
+                final MySQL columnType = new MySQL();
 
                 //todo file column type info
-                final ColumnTypePackage columnTypePackage =
-                        ColumnTypePackage.builder()
+                final ColumnType columnTypePackage =
+                        ColumnType.builder()
                                 .catalog("def")
                                 .schema("")
                                 .table("")
@@ -202,7 +202,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
                                 .dicimals((byte) 0x00)
                                 .build();
 
-                columnType.setAbstractPackage(columnTypePackage);
+                columnType.setAbstractReaderAndWriterPackage(columnTypePackage);
                 columnType.setSeqNumber(seqNumber++);
 
                 columnDetails.add(columnType);
@@ -211,23 +211,23 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             result.addAll(columnDetails);
 
             //eof
-            final MySQLPackage eofPackage = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+            final MySQL eofPackage = new MySQL(new Eof((byte) 0xfe, 0, 0x0002));
             eofPackage.setSeqNumber(seqNumber++);
 
             result.add(eofPackage);
 
             //每一行数据
             int rowCount = 10;
-            List<MySQLPackage> rows = Lists.newArrayList();
+            List<MySQL> rows = Lists.newArrayList();
             for (int i = 0; i < rowCount; i++) {
-                MySQLPackage columnValue = new MySQLPackage(new ColumnValuePackage(Lists.newArrayList("Yuqi version")));
+                MySQL columnValue = new MySQL(new ColumnValue(Lists.newArrayList("Yuqi version")));
                 columnValue.setSeqNumber(seqNumber++);
                 rows.add(columnValue);
             }
 
             result.addAll(rows);
             //eof
-            final MySQLPackage eofPackageLast = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+            final MySQL eofPackageLast = new MySQL(new Eof((byte) 0xfe, 0, 0x0002));
             eofPackageLast.setSeqNumber(seqNumber++);
             result.add(eofPackageLast);
 

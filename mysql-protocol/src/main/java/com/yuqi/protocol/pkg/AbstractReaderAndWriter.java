@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg;
 
-import com.yuqi.protocol.io.PackageReaderAndWriter;
+import com.yuqi.protocol.io.ReaderAndWriter;
 
 /**
  * @author yuqi
@@ -8,6 +8,6 @@ import com.yuqi.protocol.io.PackageReaderAndWriter;
  * @description your description
  * @time 30/6/20 21:12
  **/
-public abstract class AbstractPackage implements PackageReaderAndWriter {
+public abstract class AbstractReaderAndWriter implements ReaderAndWriter {
     //todo add something
 }

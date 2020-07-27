@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg;
 
-import com.yuqi.protocol.io.PackageReaderAndWriter;
+import com.yuqi.protocol.io.ReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
  **/
 @Data
 @NoArgsConstructor
-public class MySQLPackage implements PackageReaderAndWriter {
+public class MySQL implements ReaderAndWriter {
     /**
      * Length of Message body
      */
@@ -29,11 +29,11 @@ public class MySQLPackage implements PackageReaderAndWriter {
     /**
      *
      */
-    private AbstractPackage abstractPackage;
+    private AbstractReaderAndWriter abstractReaderAndWriterPackage;
 
 
-    public MySQLPackage(AbstractPackage abstractPackage) {
-        this.abstractPackage = abstractPackage;
+    public MySQL(AbstractReaderAndWriter abstractReaderAndWriterPackage) {
+        this.abstractReaderAndWriterPackage = abstractReaderAndWriterPackage;
     }
 
     @Override
@@ -41,14 +41,14 @@ public class MySQLPackage implements PackageReaderAndWriter {
         //read and then
         this.lengthOfMessage = IOUtils.readInteger(byteBuf, 3);
         this.seqNumber = IOUtils.readByte(byteBuf);
-        abstractPackage.read(byteBuf);
+        abstractReaderAndWriterPackage.read(byteBuf);
     }
 
     @Override
     public void write(ByteBuf byteBuf) {
 
         ByteBuf tmp = PooledByteBufAllocator.DEFAULT.buffer(128);
-        abstractPackage.write(tmp);
+        abstractReaderAndWriterPackage.write(tmp);
 
         this.lengthOfMessage = tmp.readableBytes();
         IOUtils.writeInteger3(lengthOfMessage, byteBuf);

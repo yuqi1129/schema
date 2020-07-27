@@ -2,7 +2,7 @@ package com.yuqi.protocol.handler;
 
 import com.google.common.collect.Maps;
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.auth.ServerGreetingPackage;
+import com.yuqi.protocol.pkg.auth.ServerGreeting;
 import com.yuqi.protocol.utils.IOUtils;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
@@ -45,7 +45,7 @@ public class NettyConnectionHandler extends ChannelInboundHandlerAdapter {
     }
 
     private boolean sendAuthencationPackage(Channel channel) {
-        ServerGreetingPackage serverGreetingPackage = PackageUtils.buildInitAuthencatinPackage();
+        ServerGreeting serverGreetingPackage = PackageUtils.buildInitAuthencatinPackage();
         ByteBuf tmp = PooledByteBufAllocator.DEFAULT.buffer(128);
         serverGreetingPackage.write(tmp);
 

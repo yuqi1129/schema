@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.response;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.Builder;
  * @time 6/7/20 20:59
  **/
 @Builder
-public class ColumnTypePackage extends AbstractPackage {
+public class ColumnType extends AbstractReaderAndWriter {
 
     private String catalog;
 

@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.response;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 
@@ -10,11 +10,11 @@ import io.netty.buffer.ByteBuf;
  * @description your description
  * @time 6/7/20 20:57
  */
-public class ColumnCountPackage extends AbstractPackage {
+public class ColumnCount extends AbstractReaderAndWriter {
 
     private int columnCount;
 
-    public ColumnCountPackage(int columnCount) {
+    public ColumnCount(int columnCount) {
         this.columnCount = columnCount;
     }
 

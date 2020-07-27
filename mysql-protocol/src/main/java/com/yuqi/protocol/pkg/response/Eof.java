@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.response;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
@@ -14,7 +14,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
-public class EofPackage extends AbstractPackage {
+public class Eof extends AbstractReaderAndWriter {
     private byte eof = (byte) 0xfe;
 
     //2 byte

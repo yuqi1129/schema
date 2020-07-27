@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.request;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
@@ -16,10 +16,10 @@ import static com.yuqi.protocol.constants.CommandTypeConstants.COM_USE_DB;
  * @time 4/7/20 20:29
  **/
 @Data
-public class CommandPackage extends AbstractPackage {
+public class Command extends AbstractReaderAndWriter {
     private byte commandType;
 
-    private AbstractPackage abstractPackage;
+    private AbstractReaderAndWriter abstractReaderAndWriterPackage;
 
     @Override
     public void read(ByteBuf byteBuf) {
@@ -27,18 +27,18 @@ public class CommandPackage extends AbstractPackage {
 
         switch (commandType) {
             case COM_QUERY:
-                abstractPackage = new QueryPackage();
+                abstractReaderAndWriterPackage = new Query();
                 break;
             case COM_CREATE_DB:
-                abstractPackage = new CreateDbPackage();
+                abstractReaderAndWriterPackage = new CreateDb();
                 break;
             case COM_USE_DB:
-                abstractPackage = new UsePackage();
+                abstractReaderAndWriterPackage = new Use();
                 break;
             default:
-                abstractPackage = new ShowPackage();
+                abstractReaderAndWriterPackage = new Show();
         }
 
-        abstractPackage.read(byteBuf);
+        abstractReaderAndWriterPackage.read(byteBuf);
     }
 }

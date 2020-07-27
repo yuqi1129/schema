@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
  * @description your description
  * @time 30/6/20 21:15
  **/
-public interface PackageReaderAndWriter {
+public interface ReaderAndWriter {
     /**
      * Read content from {@link ByteBuf}
      * @param byteBuf

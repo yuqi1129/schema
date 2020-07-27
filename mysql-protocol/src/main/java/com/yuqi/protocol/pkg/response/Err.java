@@ -1,6 +1,6 @@
 package com.yuqi.protocol.pkg.response;
 
-import com.yuqi.protocol.pkg.AbstractPackage;
+import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.Data;
  **/
 @Data
 @Builder
-public class ErrPackage extends AbstractPackage {
+public class Err extends AbstractReaderAndWriter {
     private byte header;
 
     private short errorCode;

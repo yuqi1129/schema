@@ -1,6 +1,11 @@
 package com.yuqi.protocol.utils;
 
+import com.yuqi.protocol.io.PackageReaderAndWriter;
+import com.yuqi.protocol.pkg.MySQLPackage;
 import com.yuqi.protocol.pkg.auth.ServerGreetingPackage;
+import com.yuqi.protocol.pkg.response.OkPackage;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_CONNECT_WITH_DB;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_FOUND_ROWS;
@@ -61,5 +66,38 @@ public class PackageUtils {
         flags |= CLIENT_TRANSACTIONS;
         flags |= CLIENT_SECURE_CONNECTION;
         return flags;
+    }
+
+
+    public static MySQLPackage buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
+        OkPackage okPackage = OkPackage.builder()
+                .header((byte) 0x00)
+                .serverStatus(0x0002)
+                .affectedRows(affectedRows)
+                .lastInsertId(lastInsertId)
+                .build();
+
+        MySQLPackage mysqlPacakge = new MySQLPackage(okPackage);
+        mysqlPacakge.setSeqNumber((byte) seqNumber);
+
+        return mysqlPacakge;
+    }
+
+    public static MySQLPackage buildResultSetMysqlPackage() {
+
+
+        return null;
+    }
+
+    public static ByteBuf packageToBuf(PackageReaderAndWriter packageReaderAndWriter) {
+        ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.buffer(128);
+        packageReaderAndWriter.write(byteBuf);
+
+        return byteBuf;
+    }
+
+    public static ByteBuf packageToBuf(PackageReaderAndWriter packageReaderAndWriter, ByteBuf byteBuf) {
+        packageReaderAndWriter.write(byteBuf);
+        return byteBuf;
     }
 }

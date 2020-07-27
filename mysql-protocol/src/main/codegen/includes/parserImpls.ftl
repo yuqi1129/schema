@@ -32,3 +32,70 @@
     }
   }
 -->
+
+SqlCreateDb CreateDatabase() :
+{
+    final SqlIdentifier dbName;
+    final SqlNodeList columnList;
+    boolean isNotExist = false;
+    SqlParserPos pos;
+}
+{
+    {
+        pos = getPos();
+    }
+    <CREATE> <DATABASE>
+    (
+        <IF> <NOT> <EXISTS>
+        {
+            isNotExist = true;
+        }
+    )?
+
+    dbName = CompoundIdentifier()
+    {
+        return new SqlCreateDb(pos, false, isNotExist, dbName.toString());
+    }
+}
+
+SqlDropDb DropDatabase() :
+{
+    final SqlIdentifier dbName;
+    final SqlNodeList columnList;
+    boolean exist = false;
+    SqlParserPos pos;
+}
+{
+    {
+        pos = getPos();
+    }
+    <DROP> <DATABASE>
+    (
+        <IF> <EXISTS>
+        {
+            exist = true;
+        }
+    )?
+
+    dbName = CompoundIdentifier()
+    {
+        return new SqlDropDb(pos, exist, dbName.toString());
+    }
+}
+
+SqlShow SqlShow() :
+{
+    final SqlIdentifier command;
+    SqlParserPos pos;
+}
+{
+    {
+        pos = getPos();
+    }
+
+    <SHOW>
+    command  =  CompoundIdentifier()
+    {
+        return new SqlShow(pos, command.toString());
+    }
+}

@@ -2,6 +2,8 @@ package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,5 +30,24 @@ public class SlothSchemaHolder implements LifeCycle {
     @Override
     public void close() {
 
+    }
+
+    public void registerSchema(String schemaName) {
+        final SlothSchema slothSchema = new SlothSchema(schemaName);
+        schemaMap.put(schemaName, slothSchema);
+        ParserFactory.getCatalogReader().getRootSchema().add(schemaName, slothSchema);
+
+        //insert into db to store
+    }
+
+    public void removeSchema(String schemaName) {
+        schemaMap.remove(schemaName);
+        ParserFactory.getCatalogReader().getRootSchema().removeSubSchema(schemaName);
+
+        //delete schema in persistent store
+    }
+
+    public List<String> getAllSchemas() {
+        return new ArrayList<>(schemaMap.keySet());
     }
 }

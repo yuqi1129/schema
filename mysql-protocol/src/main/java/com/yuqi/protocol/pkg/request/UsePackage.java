@@ -8,18 +8,17 @@ import io.netty.buffer.ByteBuf;
  * @author yuqi
  * @mail yuqi5@xiaomi.com
  * @description your description
- * @time 4/7/20 20:36
+ * @time 26/7/20 17:15
  **/
-public class QueryPackage extends AbstractPackage {
-    private String query;
+public class UsePackage extends AbstractPackage {
+    private String db;
 
-
-    public String getQuery() {
-        return query;
+    public String getDb() {
+        return db;
     }
 
     @Override
     public void read(ByteBuf byteBuf) {
-        this.query = IOUtils.readString(byteBuf);
+        this.db = IOUtils.readString(byteBuf);
     }
 }

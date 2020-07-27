@@ -5,7 +5,9 @@ import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Data;
 
+import static com.yuqi.protocol.constants.CommandTypeConstants.COM_CREATE_DB;
 import static com.yuqi.protocol.constants.CommandTypeConstants.COM_QUERY;
+import static com.yuqi.protocol.constants.CommandTypeConstants.COM_USE_DB;
 
 /**
  * @author yuqi
@@ -27,7 +29,12 @@ public class CommandPackage extends AbstractPackage {
             case COM_QUERY:
                 abstractPackage = new QueryPackage();
                 break;
-
+            case COM_CREATE_DB:
+                abstractPackage = new CreateDbPackage();
+                break;
+            case COM_USE_DB:
+                abstractPackage = new UsePackage();
+                break;
             default:
                 abstractPackage = new ShowPackage();
         }

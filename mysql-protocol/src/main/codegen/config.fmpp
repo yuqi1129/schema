@@ -36,16 +36,20 @@ data: {
   parser: {
     # Generated parser implementation package and class name.
     package: "org.apache.calcite.sql.parser.impl",
-    class: "SqlParserImpl",
+    class: "SqlSchemaParserImpl",
 
     # List of additional classes and packages to import.
     # Example. "org.apache.calcite.sql.*", "java.util.List".
     imports: [
+        "com.yuqi.sql.ddl.SqlCreateDb",
+        "com.yuqi.sql.ddl.SqlDropDb",
+        "com.yuqi.sql.ddl.SqlShow"
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
     # keyword add it to 'nonReservedKeywords' section.
     keywords: [
+        "IF"
     ]
 
     # List of keywords from "keywords" section that are not reserved.
@@ -364,6 +368,9 @@ data: {
     # Return type of method implementation should be 'SqlNode'.
     # Example: SqlShowDatabases(), SqlShowTables().
     statementParserMethods: [
+        "CreateDatabase()",
+        "DropDatabase()",
+        "SqlShow()"
     ]
 
     # List of methods for parsing custom literals.

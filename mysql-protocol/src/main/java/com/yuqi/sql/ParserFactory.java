@@ -19,7 +19,7 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOperatorTable;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.parser.SqlParser;
-import org.apache.calcite.sql.parser.impl.SqlParserImpl;
+import org.apache.calcite.sql.parser.impl.SqlSchemaParserImpl;
 import org.apache.calcite.sql.util.ChainedSqlOperatorTable;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.apache.calcite.sql.validate.SqlValidator;
@@ -71,7 +71,7 @@ public class ParserFactory {
                 .setQuotedCasing(Casing.UNCHANGED)
                 .setUnquotedCasing(Casing.UNCHANGED)
                 .setCaseSensitive(false)
-                .setParserFactory(SqlParserImpl.FACTORY);
+                .setParserFactory(SqlSchemaParserImpl.FACTORY);
 
 
         SqlParser.Config config = sqlBuilder.build();
@@ -126,11 +126,11 @@ public class ParserFactory {
         });
 
 
-        String sql = "create database db1";
+        String sql = "create schema db1";
         final SlothParser parser = ParserFactory.getParser(sql);
 
         try {
-            SqlNode sqlNode = parser.getSqlNode(sql);
+            SqlNode sqlNode = parser.getSqlNode();
             System.out.println(sqlNode);
         } catch (Exception e) {
             e.printStackTrace();

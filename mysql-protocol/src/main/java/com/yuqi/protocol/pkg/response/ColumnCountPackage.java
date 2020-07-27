@@ -3,8 +3,6 @@ package com.yuqi.protocol.pkg.response;
 import com.yuqi.protocol.pkg.AbstractPackage;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 /**
  * @author yuqi
@@ -12,11 +10,17 @@ import lombok.NoArgsConstructor;
  * @description your description
  * @time 6/7/20 20:57
  */
-@AllArgsConstructor
-@NoArgsConstructor
 public class ColumnCountPackage extends AbstractPackage {
 
     private int columnCount;
+
+    public ColumnCountPackage(int columnCount) {
+        this.columnCount = columnCount;
+    }
+
+    public int getColumnCount() {
+        return columnCount;
+    }
 
     @Override
     public void read(ByteBuf byteBuf) {

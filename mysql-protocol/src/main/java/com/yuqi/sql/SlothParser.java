@@ -65,11 +65,11 @@ public class SlothParser implements RelOptTable.ViewExpander {
     //show databases;
 
     //db元数据存在mysql, 起动的时候再恢复
-    public SqlNode getSqlNode(String sql) throws SqlParseException {
+    public SqlNode getSqlNode() throws SqlParseException {
         return sqlParser.parseStmt();
     }
 
-    public RelNode getPlan(String sql) throws SqlParseException {
+    public RelNode getPlan() throws SqlParseException {
         //TODO we should this row name and row type from sqlNode
         sqlNode = sqlParser.parseStmt();
         final SqlToRelConverter sqlToRelConverter = getSqlToRelConverter();

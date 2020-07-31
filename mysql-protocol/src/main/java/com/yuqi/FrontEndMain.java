@@ -13,6 +13,6 @@ public class FrontEndMain {
         int port = 3016;
 
         //start netty pork
-        new Thread(new ProtocolMainThread(3016)).start();
+        new Thread(new ProtocolMainThread(port)).start();
     }
 }

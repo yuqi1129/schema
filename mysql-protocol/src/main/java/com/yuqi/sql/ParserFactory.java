@@ -13,8 +13,12 @@ import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.volcano.VolcanoPlanner;
 import org.apache.calcite.prepare.CalciteCatalogReader;
+import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
+import org.apache.calcite.rel.metadata.DefaultRelMetadataProvider;
+import org.apache.calcite.rel.metadata.RelMetadataProvider;
 import org.apache.calcite.rel.rules.ProjectTableScanRule;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
+import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlOperatorTable;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
@@ -52,14 +56,22 @@ public class ParserFactory {
     public static RelOptPlanner getOptPlanner() {
         final VolcanoPlanner volcanoPlanner = new VolcanoPlanner();
         volcanoPlanner.addRelTraitDef(ConventionTraitDef.INSTANCE);
-        RelOptUtil.registerAbstractRules(volcanoPlanner);
+        volcanoPlanner.setExecutor(RexUtil.EXECUTOR);
+        volcanoPlanner.setNoneConventionHasInfiniteCost(false);
 
-        for (RelOptRule relOptRule : SlothRules.DEFAULT_RULES) {
-            volcanoPlanner.addRule(relOptRule);
-        }
 
-        volcanoPlanner.addRule(ProjectTableScanRule.INSTANCE);
-        volcanoPlanner.addRule(ProjectTableScanRule.INTERPRETER);
+        //RelOptUtil.registerAbstractRules(volcanoPlanner);
+
+//        for (RelOptRule relOptRule : SlothRules.CONVERTER_RULE) {
+//            volcanoPlanner.addRule(relOptRule);
+//        }
+
+//        for (RelOptRule relOptRule : SlothRules.DEFAULT_RULES) {
+//            volcanoPlanner.addRule(relOptRule);
+//        }
+
+//        volcanoPlanner.addRule(ProjectTableScanRule.INSTANCE);
+//        volcanoPlanner.addRule(ProjectTableScanRule.INTERPRETER);
 
         return volcanoPlanner;
     }
@@ -97,9 +109,7 @@ public class ParserFactory {
         final SqlOperatorTable operatorTable2 = ChainedSqlOperatorTable.of(operatorTable1, calciteCatalogReader);
         final RelDataTypeFactory factory = calciteCatalogReader.getTypeFactory();
 
-        SqlConformanceEnum sqlConformanceEnum = SqlConformanceEnum.MYSQL_5;
-
-        return SqlValidatorUtil.newValidator(operatorTable2, calciteCatalogReader, factory, sqlConformanceEnum);
+        return SqlValidatorUtil.newValidator(operatorTable2, calciteCatalogReader, factory, SqlValidator.Config.DEFAULT);
     }
 
     public static void main(String[] args) {
@@ -130,7 +140,7 @@ public class ParserFactory {
         final SlothParser parser = ParserFactory.getParser(sql);
 
         try {
-            SqlNode sqlNode = parser.getSqlNode();
+            SqlNode sqlNode = parser.getSqlNode(sql);
             System.out.println(sqlNode);
         } catch (Exception e) {
             e.printStackTrace();

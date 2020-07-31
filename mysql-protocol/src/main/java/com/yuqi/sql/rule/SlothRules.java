@@ -38,6 +38,7 @@ public class SlothRules {
      */
     public static final List<RelOptRule> DEFAULT_RULES =
             ImmutableList.of(
+//                    ProjectValueReduceRule.INSTANCE,
                     AggregateStarTableRule.INSTANCE,
                     AggregateStarTableRule.INSTANCE2,
                     TableScanRule.INSTANCE,
@@ -60,4 +61,11 @@ public class SlothRules {
                     SortJoinTransposeRule.INSTANCE,
                     SortRemoveConstantKeysRule.INSTANCE,
                     SortUnionTransposeRule.INSTANCE);
+
+
+    public static final List<RelOptRule> CONVERTER_RULE = ImmutableList.of(
+            SlothProjectConvertRule.INSTANCE,
+            SlothValueConvertRule.INSTANCE
+
+    );
 }

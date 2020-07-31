@@ -17,6 +17,7 @@ import com.yuqi.sql.ddl.SqlDropDb;
 import com.yuqi.sql.ddl.SqlShow;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlNode;
 
 import java.util.Collections;
@@ -47,9 +48,11 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         //
 
         SqlNode sqlNode = null;
+        RelNode relNode = null;
         try {
             final SlothParser slothParser = ParserFactory.getParser(queryPackage.getQuery());
-            sqlNode = slothParser.getSqlNode();
+            sqlNode = slothParser.getSqlNode(queryPackage.getQuery());
+            relNode = slothParser.getPlan(queryPackage.getQuery());
         } catch (Exception e) {
             //TODO
             e.printStackTrace();

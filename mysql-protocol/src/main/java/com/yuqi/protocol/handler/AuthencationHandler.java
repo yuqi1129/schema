@@ -3,7 +3,7 @@ package com.yuqi.protocol.handler;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
-import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.MySQLPackage;
 import com.yuqi.protocol.pkg.response.Err;
 import com.yuqi.protocol.pkg.response.Ok;
 import io.netty.buffer.ByteBuf;
@@ -38,10 +38,10 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
 
         } else {
             //do authentcaion
-            boolean res = doAuthencation((MySQL) msg);
+            boolean res = doAuthencation((MySQLPackage) msg);
 
             AbstractReaderAndWriter abstractReaderAndWriterPackage;
-            MySQL mySQLPackage = new MySQL();
+            MySQLPackage mySQLPackage = new MySQLPackage();
 
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(256);
             if (res) {
@@ -78,7 +78,7 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private boolean doAuthencation(MySQL mySQLPackage) {
+    private boolean doAuthencation(MySQLPackage mySQLPackage) {
         final String userName = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getUserName();
         final String passwordHash = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getPasswordHash();
 

@@ -37,6 +37,7 @@
     <common-csv.version>1.8</common-csv.version>
     <junit.version>4.12</junit.version>
     <derby.version>10.14.2.0</derby.version>
+    <slf4j-api.version>1.7.25</slf4j-api.version>
 
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -167,6 +168,12 @@
             <groupId>org.apache.derby</groupId>
             <artifactId>derby</artifactId>
             <version>${derby.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-api.version}</version>
         </dependency>
 
     </dependencies>

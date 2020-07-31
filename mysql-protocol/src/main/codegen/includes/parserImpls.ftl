@@ -99,3 +99,19 @@ SqlShow SqlShow() :
         return new SqlShow(pos, command.toString());
     }
 }
+
+SqlUse SqlUseCommand() :
+{
+    final SqlIdentifier command;
+    SqlParserPos pos;
+}
+{
+    {
+        pos = getPos();
+    }
+    <USE>
+    command = CompoundIdentifier()
+    {
+        return new SqlUse(pos, command.toString());
+    }
+}

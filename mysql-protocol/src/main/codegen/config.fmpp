@@ -44,12 +44,14 @@ data: {
         "com.yuqi.sql.ddl.SqlCreateDb",
         "com.yuqi.sql.ddl.SqlDropDb",
         "com.yuqi.sql.ddl.SqlShow",
+        "com.yuqi.sql.ddl.SqlUse",
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
     # keyword add it to 'nonReservedKeywords' section.
     keywords: [
-        "IF"
+        "IF",
+        "USE"
     ]
 
     # List of keywords from "keywords" section that are not reserved.
@@ -388,7 +390,8 @@ data: {
     statementParserMethods: [
             "CreateDatabase()",
             "DropDatabase()",
-            "SqlShow()"
+            "SqlShow()",
+            "SqlUseCommand()"
     ]
 
     # List of methods for parsing custom literals.

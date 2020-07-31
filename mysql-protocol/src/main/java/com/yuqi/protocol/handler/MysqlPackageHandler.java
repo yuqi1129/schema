@@ -5,7 +5,7 @@ import com.yuqi.protocol.command.CreateDatabaseCommandHandler;
 import com.yuqi.protocol.command.QueryCommandHandler;
 import com.yuqi.protocol.command.ShowCommandHandler;
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQL;
+import com.yuqi.protocol.pkg.MySQLPackage;
 import com.yuqi.protocol.pkg.request.Command;
 import com.yuqi.protocol.pkg.request.CreateDb;
 import com.yuqi.protocol.pkg.request.Query;
@@ -26,7 +26,7 @@ public class MysqlPackageHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        final MySQL mySQLPackage = (MySQL) msg;
+        final MySQLPackage mySQLPackage = (MySQLPackage) msg;
         final ConnectionContext connectionContext = NettyConnectionHandler.INSTANCE
                 .getAlreadyAuthenChannels().get(ctx.channel());
 

@@ -2,8 +2,6 @@ package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
 import com.yuqi.sql.rule.LogicalValueToLogicalValueRule;
-import com.yuqi.sql.rule.SlothProjectConvertRule;
-import com.yuqi.sql.rule.SlothValueConvertRule;
 import com.yuqi.sql.trait.SlothConvention;
 import com.yuqi.sql.trait.TestConvention;
 import org.apache.calcite.plan.RelOptCluster;
@@ -16,7 +14,6 @@ import org.apache.calcite.plan.hep.HepProgramBuilder;
 import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.RelRoot;
-import org.apache.calcite.rel.logical.LogicalValues;
 import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
 import org.apache.calcite.rel.metadata.DefaultRelMetadataProvider;
 import org.apache.calcite.rel.metadata.RelMetadataProvider;

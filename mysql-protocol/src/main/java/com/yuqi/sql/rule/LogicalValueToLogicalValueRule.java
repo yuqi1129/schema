@@ -2,7 +2,6 @@ package com.yuqi.sql.rule;
 
 import com.yuqi.sql.rel.SlothLogicalValues;
 import com.yuqi.sql.trait.SlothConvention;
-import com.yuqi.sql.trait.TestConvention;
 import org.apache.calcite.plan.Convention;
 import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.rel.RelNode;
@@ -32,6 +31,7 @@ public class LogicalValueToLogicalValueRule extends ConverterRule {
     @Override
     public RelNode convert(RelNode rel) {
         LogicalValues logicalValues = (LogicalValues) rel;
-        return new SlothLogicalValues(rel.getCluster(), rel.getRowType(), logicalValues.tuples, logicalValues.getTraitSet().replace(SlothConvention.SLOTH_CONVENTION));
+        return new SlothLogicalValues(rel.getCluster(), rel.getRowType(),
+                logicalValues.tuples, logicalValues.getTraitSet().replace(SlothConvention.SLOTH_CONVENTION));
     }
 }

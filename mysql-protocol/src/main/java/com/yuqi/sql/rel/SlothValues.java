@@ -1,11 +1,8 @@
 package com.yuqi.sql.rel;
 
 import com.google.common.collect.ImmutableList;
-import com.yuqi.sql.rule.SlothProjectConvertRule;
-import com.yuqi.sql.rule.SlothValueConvertRule;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptCost;
-import org.apache.calcite.plan.RelOptCostImpl;
 import org.apache.calcite.plan.RelOptPlanner;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.core.Values;

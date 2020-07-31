@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
  **/
 @Data
 @NoArgsConstructor
-public class MySQL implements ReaderAndWriter {
+public class MySQLPackage implements ReaderAndWriter {
     /**
      * Length of Message body
      */
@@ -32,7 +32,7 @@ public class MySQL implements ReaderAndWriter {
     private AbstractReaderAndWriter abstractReaderAndWriterPackage;
 
 
-    public MySQL(AbstractReaderAndWriter abstractReaderAndWriterPackage) {
+    public MySQLPackage(AbstractReaderAndWriter abstractReaderAndWriterPackage) {
         this.abstractReaderAndWriterPackage = abstractReaderAndWriterPackage;
     }
 

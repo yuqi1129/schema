@@ -2,7 +2,6 @@ package com.yuqi.sql.rule;
 
 import com.yuqi.sql.rel.SlothProject;
 import com.yuqi.sql.trait.SlothConvention;
-import com.yuqi.sql.trait.TestConvention;
 import org.apache.calcite.plan.Convention;
 import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.rel.RelNode;

@@ -8,13 +8,11 @@ package com.yuqi.protocol.constants;
  **/
 public class CommandTypeConstants {
 
+    public static final byte COM_USE_DB = 0x02;
+
     public static final byte COM_QUERY = 0x03;
 
     public static final byte COM_CREATE_DB = 0x05;
+
     public static final byte COM_DROP_DB = 0x06;
-
-
-    public static final byte COM_USE_DB = 0x11;
-
-
 }

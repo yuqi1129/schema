@@ -1,12 +1,11 @@
-package com.yuqi.protocol.command.sqlnode;
+package com.yuqi.protocol.command.sepcial;
+
 
 import com.google.common.collect.Lists;
-import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
-import org.apache.calcite.sql.SqlSelect;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -15,27 +14,20 @@ import java.util.List;
  * @author yuqi
  * @mail yuqi5@xiaomi.com
  * @description your description
- * @time 31/7/20 17:03
+ * @time 31/7/20 18:46
  **/
-public class SqlSelectHandler implements Handler<SqlSelect> {
-
-    public static final SqlSelectHandler INSTANCE = new SqlSelectHandler();
+public class CurrentDatabaseHandler extends AbstractHandler {
+    public static final CurrentDatabaseHandler INSTANCE = new CurrentDatabaseHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlSelect sqlNode) {
+    public void handle(ConnectionContext connectionContext, String sqlNode) {
+        String db = connectionContext.getDb();
 
-        String s = sqlNode.toString();
-        Handler handler;
-        if ((handler = SpecialSelectHolder.SPECIAL_HANDLER.get(s)) != null) {
-            handler.handle(connectionContext, s);
-            return;
-        }
-
-        List<List<String>> data = Lists.newArrayListWithCapacity(1);
-        data.add(Lists.newArrayList("Yuqi version"));
+        final List<List<String>> data = Lists.newArrayList();
+        data.add(Lists.newArrayList(db));
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
-                .columnName(new String[] {"@@VERSION_COMMENT"})
+                .columnName(new String[] {"database()"})
                 .columnType(new int[] {0xfd})
                 .data(data)
                 .schema(StringUtils.EMPTY)
@@ -48,5 +40,4 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
                 .writeAndFlush(byteBuf);
         byteBuf.clear();
     }
-
 }

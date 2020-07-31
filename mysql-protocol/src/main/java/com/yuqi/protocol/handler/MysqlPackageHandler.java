@@ -1,20 +1,16 @@
 package com.yuqi.protocol.handler;
 
 import com.yuqi.protocol.command.CommandHandler;
-import com.yuqi.protocol.command.CreateDatabaseCommandHandler;
 import com.yuqi.protocol.command.QueryCommandHandler;
-import com.yuqi.protocol.command.ShowCommandHandler;
+import com.yuqi.protocol.command.UseDatabaseCommandHandler;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MySQLPackage;
 import com.yuqi.protocol.pkg.request.Command;
-import com.yuqi.protocol.pkg.request.CreateDb;
-import com.yuqi.protocol.pkg.request.Query;
-import com.yuqi.protocol.pkg.request.Show;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import static com.yuqi.protocol.constants.CommandTypeConstants.COM_CREATE_DB;
 import static com.yuqi.protocol.constants.CommandTypeConstants.COM_QUERY;
+import static com.yuqi.protocol.constants.CommandTypeConstants.COM_USE_DB;
 
 /**
  * @author yuqi
@@ -38,14 +34,15 @@ public class MysqlPackageHandler extends ChannelInboundHandlerAdapter {
         CommandHandler handler;
         switch (type) {
             case COM_QUERY:
-                handler = new QueryCommandHandler(connectionContext, (Query) commandPackage.getAbstractReaderAndWriterPackage());
+                handler = new QueryCommandHandler(connectionContext, commandPackage.getCommand());
                 break;
-            case COM_CREATE_DB:
-                handler = new CreateDatabaseCommandHandler(connectionContext, (CreateDb) commandPackage.getAbstractReaderAndWriterPackage());
+            case COM_USE_DB:
+                handler = new UseDatabaseCommandHandler(connectionContext, commandPackage.getCommand());
                 break;
             default:
                 //todo
-                handler = new ShowCommandHandler(connectionContext, (Show) commandPackage.getAbstractReaderAndWriterPackage());
+                //handler = new ShowCommandHandler(connectionContext, (Show) commandPackage.getAbstractReaderAndWriterPackage());
+                handler = new QueryCommandHandler(connectionContext, commandPackage.getCommand());
         }
 
         handler.execute();

@@ -14,7 +14,7 @@ import lombok.Data;
  **/
 @Data
 @Builder
-public class Ok extends AbstractReaderAndWriter {
+public class OkPackage extends AbstractReaderAndWriter {
 
     /**
      * 0x00 is ok

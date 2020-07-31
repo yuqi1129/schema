@@ -8,8 +8,9 @@ import com.yuqi.protocol.pkg.auth.ServerGreeting;
 import com.yuqi.protocol.pkg.response.ColumnCount;
 import com.yuqi.protocol.pkg.response.ColumnType;
 import com.yuqi.protocol.pkg.response.ColumnValue;
-import com.yuqi.protocol.pkg.response.Eof;
-import com.yuqi.protocol.pkg.response.Ok;
+import com.yuqi.protocol.pkg.response.EofPackage;
+import com.yuqi.protocol.pkg.response.ErrPackage;
+import com.yuqi.protocol.pkg.response.OkPackage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 
@@ -78,7 +79,7 @@ public class PackageUtils {
 
 
     public static MySQLPackage buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
-        Ok okPackage = Ok.builder()
+        OkPackage okPackage = OkPackage.builder()
                 .header((byte) 0x00)
                 .serverStatus(0x0002)
                 .affectedRows(affectedRows)
@@ -88,6 +89,18 @@ public class PackageUtils {
         MySQLPackage mysqlPacakge = new MySQLPackage(okPackage);
         mysqlPacakge.setSeqNumber((byte) seqNumber);
 
+        return mysqlPacakge;
+    }
+
+    public static MySQLPackage buildErrPackage(int errorCode, String errorMessage, int seqNumber) {
+        ErrPackage errPackage = ErrPackage.builder()
+                .header((byte) 0xff)
+                .errorCode((short) errorCode)
+                .errorMessage(errorMessage)
+                .build();
+
+        MySQLPackage mysqlPacakge = new MySQLPackage(errPackage);
+        mysqlPacakge.setSeqNumber((byte) seqNumber);
         return mysqlPacakge;
     }
 
@@ -156,7 +169,7 @@ public class PackageUtils {
         result.addAll(columnDetails);
 
         //third is end of package
-        final MySQLPackage eofPackage = new MySQLPackage(new Eof((byte) 0xfe, 0, 0x0002));
+        final MySQLPackage eofPackage = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
         eofPackage.setSeqNumber(seqNumber++);
         result.add(eofPackage);
 
@@ -170,7 +183,7 @@ public class PackageUtils {
         result.addAll(rows);
 
         //eof package again
-        final MySQLPackage eofPackageLast = new MySQLPackage(new Eof((byte) 0xfe, 0, 0x0002));
+        final MySQLPackage eofPackageLast = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
         eofPackageLast.setSeqNumber(seqNumber++);
         result.add(eofPackageLast);
 

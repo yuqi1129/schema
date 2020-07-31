@@ -14,7 +14,7 @@ import lombok.Data;
  **/
 @Data
 @Builder
-public class Err extends AbstractReaderAndWriter {
+public class ErrPackage extends AbstractReaderAndWriter {
     private byte header;
 
     private short errorCode;

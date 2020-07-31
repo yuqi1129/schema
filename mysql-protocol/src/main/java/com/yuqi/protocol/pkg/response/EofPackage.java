@@ -14,7 +14,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
-public class Eof extends AbstractReaderAndWriter {
+public class EofPackage extends AbstractReaderAndWriter {
     private byte eof = (byte) 0xfe;
 
     //2 byte

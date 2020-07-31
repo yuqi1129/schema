@@ -4,8 +4,8 @@ import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.MySQLPackage;
-import com.yuqi.protocol.pkg.response.Err;
-import com.yuqi.protocol.pkg.response.Ok;
+import com.yuqi.protocol.pkg.response.ErrPackage;
+import com.yuqi.protocol.pkg.response.OkPackage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
@@ -46,7 +46,7 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(256);
             if (res) {
                 NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().put(channel, new ConnectionContext(ctx));
-                abstractReaderAndWriterPackage = Ok.builder()
+                abstractReaderAndWriterPackage = OkPackage.builder()
                         .header((byte) 0x00)
                         .serverStatus(0x0002)
                         .affectedRows(0)
@@ -54,7 +54,7 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
                         //.info("Welecome to mock server")
                         .build();
             } else {
-                abstractReaderAndWriterPackage = Err.builder()
+                abstractReaderAndWriterPackage = ErrPackage.builder()
                         .header((byte) 0xff)
                         .errorCode(PASSWORD_OR_USER_IS_WRONG)
                         .errorMessage("Wrong username or password").build();

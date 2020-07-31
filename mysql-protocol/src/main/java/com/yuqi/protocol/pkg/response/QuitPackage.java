@@ -9,7 +9,7 @@ import io.netty.buffer.ByteBuf;
  * @description your description
  * @time 10/7/20 19:22
  **/
-public class Quit extends AbstractReaderAndWriter {
+public class QuitPackage extends AbstractReaderAndWriter {
     @Override
     public void read(ByteBuf byteBuf) {
 

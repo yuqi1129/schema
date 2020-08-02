@@ -1,11 +1,16 @@
 package com.yuqi.sql;
 
+import com.google.common.collect.Lists;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.SchemaPlus;
+import org.apache.calcite.sql.type.SqlTypeName;
+
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -20,7 +25,17 @@ public class SlothTable extends AbstractQueryableTable {
 
     private SlothSchema schema;
 
-    protected SlothTable() {
+    private String createTableString;
+
+    private List<SlothColumn> columns;
+
+    private RelDataType resultType;
+
+    public void setColumns(List<SlothColumn> columns) {
+        this.columns = columns;
+    }
+
+    public SlothTable() {
         super(Object[].class);
     }
 
@@ -52,6 +67,25 @@ public class SlothTable extends AbstractQueryableTable {
 
     @Override
     public RelDataType getRowType(RelDataTypeFactory typeFactory) {
-        return null;
+
+        if (Objects.nonNull(resultType)) {
+            return resultType;
+        }
+
+        List<RelDataType> relDataTypes = Lists.newArrayListWithCapacity(columns.size());
+        List<String> columnNames = Lists.newArrayList();
+
+        columns.forEach(cl -> {
+            final String sqlTypeNameString = cl.getColumnType().getTypeName().toString();
+            final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
+            RelDataType relDataType = typeFactory.createSqlType(sqlTypeName);
+            typeFactory.createTypeWithNullability(relDataType, cl.getColumnType().getNullable());
+
+            relDataTypes.add(relDataType);
+            columnNames.add(cl.getColumnName());
+        });
+
+        resultType = typeFactory.createStructType(relDataTypes, columnNames);
+        return resultType;
     }
 }

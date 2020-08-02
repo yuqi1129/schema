@@ -1,5 +1,8 @@
 package com.yuqi.protocol.connection;
 
+import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.utils.PackageUtils;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Properties;
@@ -19,6 +22,8 @@ public class ConnectionContext {
     private String db;
 
     private Properties properties = new Properties();
+
+    private ThreadLocal<String> queryString = new ThreadLocal<>();
 
     public ConnectionContext(ChannelHandlerContext channelHandlerContext) {
         this.channelHandlerContext = channelHandlerContext;
@@ -43,4 +48,23 @@ public class ConnectionContext {
     public ChannelHandlerContext getChannelHandlerContext() {
         return channelHandlerContext;
     }
+
+    public void write(ByteBuf byteBuf) {
+        channelHandlerContext.writeAndFlush(byteBuf);
+        byteBuf.clear();
+    }
+
+    public void write(MySQLPackage result) {
+        final ByteBuf byteBuf = PackageUtils.packageToBuf(result);
+        write(byteBuf);
+    }
+
+    public void setQueryString(String sql) {
+        queryString.set(sql);
+    }
+
+    public String getQueryString() {
+        return queryString.get();
+    }
+
 }

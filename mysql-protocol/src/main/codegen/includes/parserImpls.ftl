@@ -121,15 +121,12 @@ SqlCreateTable CreateTable() :
 {
     final SqlIdentifier schemaAndTableName;
     boolean isNotExist = false;
-    SqlIdentifier columnName;
-    SqlIdentifier columnType;
     SqlParserPos pos;
-    Map<String, String> columnNameAndTypeMap;
+    SqlNodeList sqlNodeList;
 }
 {
     {
         pos = getPos();
-        columnNameAndTypeMap = new HashMap<String, String>();
     }
 
     <CREATE> <TABLE>
@@ -140,27 +137,8 @@ SqlCreateTable CreateTable() :
             }
     )?
     schemaAndTableName = CompoundIdentifier()
-
-    <LPAREN>
-    (
-        columnName = SimpleIdentifier()
-        #SqlTypeName1
-        columnType = SimpleIdentifier()
-        {
-            columnNameAndTypeMap.put(columnName.toString(), columnType.toString());
-        }
-    )
-    (
-        <COMMA>
-        columnName = SimpleIdentifier()
-        columnType = SimpleIdentifier()
-        {
-            columnNameAndTypeMap.put(columnName.toString(), columnType.toString());
-        }
-    )*
-
-    <RPAREN>
+    sqlNodeList = ExtendList()
     {
-        return new SqlCreateTable(pos, schemaAndTableName.toString(), columnNameAndTypeMap, isNotExist);
+        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist);
     }
 }

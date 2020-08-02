@@ -5,7 +5,10 @@ import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
+import com.yuqi.sql.ParserFactory;
+import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,6 +33,9 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
             handler.handle(connectionContext, s);
             return;
         }
+
+        SlothParser slothParser = ParserFactory.getParser(connectionContext.getQueryString());
+        final RelNode relNode = slothParser.getPlan(sqlNode);
 
         List<List<String>> data = Lists.newArrayListWithCapacity(1);
         data.add(Lists.newArrayList("Yuqi version"));

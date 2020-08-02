@@ -50,4 +50,12 @@ public class SlothSchemaHolder implements LifeCycle {
     public List<String> getAllSchemas() {
         return new ArrayList<>(schemaMap.keySet());
     }
+
+    public boolean contains(String db) {
+        return schemaMap.containsKey(db);
+    }
+
+    public SlothSchema getSlothSchema(String dbName) {
+        return schemaMap.get(dbName);
+    }
 }

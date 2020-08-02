@@ -86,12 +86,7 @@ public class ParserFactory {
     }
 
     public static CalciteCatalogReader getCatalogReader() {
-        CalciteSchema calciteSchema = CalciteSchema.createRootSchema(false);
-        return new CalciteCatalogReader(
-                calciteSchema,
-                ImmutableList.of(),
-                new JavaTypeFactoryImpl(),
-                new CalciteConnectionConfigImpl(new Properties()));
+        return CALCITE_CATALOG_READER;
     }
 
     public static SqlValidator createSqlValidator(CalciteCatalogReader calciteCatalogReader) {
@@ -130,7 +125,7 @@ public class ParserFactory {
         });
 
 
-        String sql = "select `id` from t";
+        String sql = "create table `db1`.`t1` (id int, name double)";
         final SlothParser parser = ParserFactory.getParser(sql);
 
         try {

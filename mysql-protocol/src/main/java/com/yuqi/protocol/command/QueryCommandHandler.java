@@ -36,10 +36,13 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         //RelNode relNode = null;
         try {
             final SlothParser slothParser = ParserFactory.getParser(query);
+            connectionContext.setQueryString(query);
+
             sqlNode = slothParser.getSqlNode();
             handleSqlNode(sqlNode);
         } catch (Exception e) {
             //TODO
+            System.out.println(e);
             handleSqlString(query);
         }
     }

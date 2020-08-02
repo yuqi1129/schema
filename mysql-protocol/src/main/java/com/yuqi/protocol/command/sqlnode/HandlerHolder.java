@@ -2,6 +2,7 @@ package com.yuqi.protocol.command.sqlnode;
 
 
 import com.yuqi.sql.ddl.SqlCreateDb;
+import com.yuqi.sql.ddl.SqlCreateTable;
 import com.yuqi.sql.ddl.SqlDropDb;
 import com.yuqi.sql.ddl.SqlShow;
 import com.yuqi.sql.ddl.SqlUse;
@@ -26,5 +27,6 @@ public class HandlerHolder {
         SQL_TYPE_TO_HANDLER_MAP.put(SqlSelect.class, SqlSelectHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlDropDb.class, SqlDropDbHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlCreateDb.class, SqlCreateDbHandler.INSTANCE);
+        SQL_TYPE_TO_HANDLER_MAP.put(SqlCreateTable.class, SqlCreateTableHandler.INSTANCE);
     }
 }

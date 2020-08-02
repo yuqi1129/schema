@@ -1,6 +1,7 @@
 package com.yuqi.protocol.handler;
 
 import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.constants.ErrorCodeAndMessageEnum;
 import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.MySQLPackage;
@@ -12,7 +13,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-import static com.yuqi.protocol.constants.ErrorCodeConstants.PASSWORD_OR_USER_IS_WRONG;
 
 /**
  * @author yuqi
@@ -56,8 +56,8 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
             } else {
                 abstractReaderAndWriterPackage = ErrPackage.builder()
                         .header((byte) 0xff)
-                        .errorCode(PASSWORD_OR_USER_IS_WRONG)
-                        .errorMessage("Wrong username or password").build();
+                        .errorCode((short) ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getCode())
+                        .errorMessage(ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getMessage()).build();
             }
 
             mySQLPackage.setAbstractReaderAndWriterPackage(abstractReaderAndWriterPackage);

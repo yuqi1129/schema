@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
+import org.apache.calcite.jdbc.CalciteSchema;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
@@ -26,7 +27,6 @@ public class SlothSchema extends AbstractSchema {
         return tables;
     }
 
-
     private boolean dropTable(String tableName) {
         tables.remove(tableName);
 
@@ -40,7 +40,17 @@ public class SlothSchema extends AbstractSchema {
 
     public boolean addTable(String tableName, SlothTable slothTable) {
         tables.put(tableName, slothTable);
+        final CalciteSchema calciteSchema = ParserFactory.getCatalogReader()
+                .getRootSchema()
+                .getSubSchema(schemaName, false);
+
+        calciteSchema.add(tableName, slothTable);
         return true;
+    }
+
+
+    public boolean containsTable(String tableName) {
+        return tables.containsKey(tableName);
     }
 
 }

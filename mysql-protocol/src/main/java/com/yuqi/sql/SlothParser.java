@@ -88,9 +88,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
         return sqlParser.parseStmt();
     }
 
-    public RelNode getPlan(String sql) throws SqlParseException {
-        //TODO we should this row name and row type from sqlNode
-        sqlNode = sqlParser.parseQuery(sql);
+    public RelNode getPlan(SqlNode sqlNode) {
         final SqlToRelConverter sqlToRelConverter = getSqlToRelConverter();
         RelRoot relRoot = sqlToRelConverter.convertQuery(sqlNode, true, true);
 
@@ -104,6 +102,12 @@ public class SlothParser implements RelOptTable.ViewExpander {
 
         relNode.getTraitSet().plus(SlothConvention.SLOTH_CONVENTION);
         return optimize(relNode);
+    }
+
+
+    public RelNode getPlan(String sql) throws SqlParseException {
+        final SqlNode sqlNode = sqlParser.parseQuery(sql);
+        return getPlan(sqlNode);
     }
 
 

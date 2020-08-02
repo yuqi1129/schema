@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.yuqi.protocol.command.sqlnode.Handler;
 import com.yuqi.protocol.command.sqlnode.HandlerHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
@@ -58,7 +58,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         final Handler handler = HandlerHolder.SQL_TYPE_TO_HANDLER_MAP.get(sqlType);
         if (Objects.isNull(handler)) {
             //
-            final MySQLPackage result = PackageUtils.buildErrPackage(1, "Do not support: " + sqlType, 1);
+            final MysqlPackage result = PackageUtils.buildErrPackage(1, "Do not support: " + sqlType, 1);
             connectionContext.getChannelHandlerContext().writeAndFlush(PackageUtils.packageToBuf(result));
             return;
         }

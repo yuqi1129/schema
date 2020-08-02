@@ -1,11 +1,12 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.ddl.SqlCreateDb;
-import io.netty.buffer.ByteBuf;
+
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.DATABASE_EXISTS_ERROR;
 
 /**
  * @author yuqi
@@ -16,14 +17,23 @@ import io.netty.buffer.ByteBuf;
 public class SqlCreateDbHandler implements Handler<SqlCreateDb> {
 
     public static final SqlCreateDbHandler INSTANCE = new SqlCreateDbHandler();
-    //todo add more show syntax support
+
     @Override
     public void handle(ConnectionContext connectionContext, SqlCreateDb sqlNode) {
         final String db = sqlNode.getDbName();
-        SlothSchemaHolder.INSTANCE.registerSchema(db);
 
-        MySQLPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
-        ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
-        connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
+        //db already exists
+        if (SlothSchemaHolder.INSTANCE.contains(db)) {
+            MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
+                    DATABASE_EXISTS_ERROR.getCode(),
+                    String.format(DATABASE_EXISTS_ERROR.getMessage(), db),
+                    1);
+            connectionContext.write(mysqlPackage);
+            return;
+        }
+
+        SlothSchemaHolder.INSTANCE.registerSchema(db);
+        final MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(1, 1, 0);
+        connectionContext.write(mysqlPackage);
     }
 }

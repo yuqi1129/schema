@@ -5,6 +5,8 @@ import org.apache.calcite.jdbc.CalciteSchema;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,6 +53,10 @@ public class SlothSchema extends AbstractSchema {
 
     public boolean containsTable(String tableName) {
         return tables.containsKey(tableName);
+    }
+
+    public List<String> getTables() {
+        return new ArrayList<>(tables.keySet());
     }
 
 }

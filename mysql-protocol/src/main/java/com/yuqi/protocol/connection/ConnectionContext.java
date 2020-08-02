@@ -1,6 +1,6 @@
 package com.yuqi.protocol.connection;
 
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -54,7 +54,7 @@ public class ConnectionContext {
         byteBuf.clear();
     }
 
-    public void write(MySQLPackage result) {
+    public void write(MysqlPackage result) {
         final ByteBuf byteBuf = PackageUtils.packageToBuf(result);
         write(byteBuf);
     }

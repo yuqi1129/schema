@@ -2,7 +2,7 @@ package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.result.ErrorMessage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothColumn;
@@ -39,7 +39,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
         final ErrorMessage errorMessage = checkDbAndTableName(tableName, db, isNotExist);
         if (ErrorMessage.OK_MESSAGE != errorMessage) {
-            MySQLPackage mySQLPackage = PackageUtils.buildErrPackage(errorMessage.getErrorCode(), errorMessage.getDetailMessage(), 1);
+            MysqlPackage mySQLPackage = PackageUtils.buildErrPackage(errorMessage.getErrorCode(), errorMessage.getDetailMessage(), 1);
             connectionContext.write(mySQLPackage);
             return;
         }
@@ -83,7 +83,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
         slothSchema.addTable(tableName, slothTable);
 
-        MySQLPackage mySQLPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
+        MysqlPackage mySQLPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
         connectionContext.write(mySQLPackage);
     }
 

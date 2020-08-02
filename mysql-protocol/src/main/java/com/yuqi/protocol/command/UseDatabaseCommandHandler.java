@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchemaHolder;
 import io.netty.buffer.ByteBuf;
@@ -24,12 +24,12 @@ public class UseDatabaseCommandHandler extends AbstractCommandHandler {
     public void execute() {
         if (SlothSchemaHolder.INSTANCE.getAllSchemas().contains(command)) {
             connectionContext.setDb(command);
-            MySQLPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
+            MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
             ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
             connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
         } else {
             final String errMsg = String.format("database '%s' does not existed", command);
-            final MySQLPackage mySQLPackage = PackageUtils.buildErrPackage(12, errMsg, 1);
+            final MysqlPackage mySQLPackage = PackageUtils.buildErrPackage(12, errMsg, 1);
             connectionContext.getChannelHandlerContext().writeAndFlush(PackageUtils.packageToBuf(mySQLPackage));
         }
     }

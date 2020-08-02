@@ -2,7 +2,7 @@ package com.yuqi.protocol.utils;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.io.ReaderAndWriter;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.pkg.auth.ServerGreeting;
 import com.yuqi.protocol.pkg.response.ColumnCount;
@@ -78,7 +78,7 @@ public class PackageUtils {
     }
 
 
-    public static MySQLPackage buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
+    public static MysqlPackage buildOkMySqlPackage(int affectedRows, int seqNumber, int lastInsertId) {
         OkPackage okPackage = OkPackage.builder()
                 .header((byte) 0x00)
                 .serverStatus(0x0002)
@@ -86,20 +86,20 @@ public class PackageUtils {
                 .lastInsertId(lastInsertId)
                 .build();
 
-        MySQLPackage mysqlPacakge = new MySQLPackage(okPackage);
+        MysqlPackage mysqlPacakge = new MysqlPackage(okPackage);
         mysqlPacakge.setSeqNumber((byte) seqNumber);
 
         return mysqlPacakge;
     }
 
-    public static MySQLPackage buildErrPackage(int errorCode, String errorMessage, int seqNumber) {
+    public static MysqlPackage buildErrPackage(int errorCode, String errorMessage, int seqNumber) {
         ErrPackage errPackage = ErrPackage.builder()
                 .header((byte) 0xff)
                 .errorCode((short) errorCode)
                 .errorMessage(errorMessage)
                 .build();
 
-        MySQLPackage mysqlPacakge = new MySQLPackage(errPackage);
+        MysqlPackage mysqlPacakge = new MysqlPackage(errPackage);
         mysqlPacakge.setSeqNumber((byte) seqNumber);
         return mysqlPacakge;
     }
@@ -122,7 +122,7 @@ public class PackageUtils {
      * @return
      */
     public static ByteBuf buildResultSet(ResultSetHolder resultSetHolder) {
-        final List<MySQLPackage> result = Lists.newArrayList();
+        final List<MysqlPackage> result = Lists.newArrayList();
 
         final List<List<String>> data = resultSetHolder.getData();
         final int[] columnType = resultSetHolder.getColumnType();
@@ -134,16 +134,16 @@ public class PackageUtils {
         byte seqNumber = 1;
 
         //first is the column count
-        final MySQLPackage columnCountPackage = new MySQLPackage(
+        final MysqlPackage columnCountPackage = new MysqlPackage(
                 new ColumnCount(columnNum));
         columnCountPackage.setSeqNumber(seqNumber++);
         result.add(columnCountPackage);
 
         //second is the column detail
-        List<MySQLPackage> columnDetails = Lists.newArrayList();
+        List<MysqlPackage> columnDetails = Lists.newArrayList();
 
         for (int i = 0; i < columnNum; i++) {
-            final MySQLPackage columnTypeMySqlPackage = new MySQLPackage();
+            final MysqlPackage columnTypeMysqlPackage = new MysqlPackage();
             final ColumnType columnTypePackage =
                     ColumnType.builder()
                             .catalog("def")
@@ -162,28 +162,28 @@ public class PackageUtils {
                             .dicimals((byte) 0x00)
                             .build();
 
-            columnTypeMySqlPackage.setAbstractReaderAndWriterPackage(columnTypePackage);
-            columnTypeMySqlPackage.setSeqNumber(seqNumber++);
-            columnDetails.add(columnTypeMySqlPackage);
+            columnTypeMysqlPackage.setAbstractReaderAndWriterPackage(columnTypePackage);
+            columnTypeMysqlPackage.setSeqNumber(seqNumber++);
+            columnDetails.add(columnTypeMysqlPackage);
         }
         result.addAll(columnDetails);
 
         //third is end of package
-        final MySQLPackage eofPackage = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+        final MysqlPackage eofPackage = new MysqlPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
         eofPackage.setSeqNumber(seqNumber++);
         result.add(eofPackage);
 
         //fourth is row value
-        List<MySQLPackage> rows = Lists.newArrayList();
+        List<MysqlPackage> rows = Lists.newArrayList();
         for (List<String> row : data) {
-            MySQLPackage columnValue = new MySQLPackage(new ColumnValue(row));
+            MysqlPackage columnValue = new MysqlPackage(new ColumnValue(row));
             columnValue.setSeqNumber(seqNumber++);
             rows.add(columnValue);
         }
         result.addAll(rows);
 
         //eof package again
-        final MySQLPackage eofPackageLast = new MySQLPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
+        final MysqlPackage eofPackageLast = new MysqlPackage(new EofPackage((byte) 0xfe, 0, 0x0002));
         eofPackageLast.setSeqNumber(seqNumber++);
         result.add(eofPackageLast);
 

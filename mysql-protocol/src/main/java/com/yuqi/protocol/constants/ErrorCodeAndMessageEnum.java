@@ -30,7 +30,13 @@ public enum ErrorCodeAndMessageEnum {
     /**
      * when create table t and t has already existed
      */
-    TABLE_ALREADY_EXISTS(1050, "Table '%' already exists");
+    TABLE_ALREADY_EXISTS(1050, "Table '%' already exists"),
+
+    /**
+     * database exists when create database exists
+     */
+    DATABASE_EXISTS_ERROR(1007, "Can't create database '%s'; database exists");
+
 
 
     private final int code;

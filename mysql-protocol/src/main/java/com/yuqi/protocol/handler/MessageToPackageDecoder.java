@@ -1,7 +1,7 @@
 package com.yuqi.protocol.handler;
 
 import com.google.common.base.Throwables;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.request.Command;
 import io.netty.buffer.ByteBuf;
@@ -20,7 +20,7 @@ public class MessageToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        MySQLPackage mySQLPackage = new MySQLPackage();
+        MysqlPackage mySQLPackage = new MysqlPackage();
 
         if (NettyConnectionHandler.INSTANCE.channelHasAuthencation(channelHandlerContext.channel())) {
             mySQLPackage.setAbstractReaderAndWriterPackage(new Command());

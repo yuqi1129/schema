@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.yuqi.protocol.connection.ConnectionContext;
-import com.yuqi.protocol.pkg.MySQLPackage;
+import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ddl.SqlUse;
 import io.netty.buffer.ByteBuf;
@@ -23,7 +23,7 @@ public class SqlUseHandler implements Handler<SqlUse> {
         //check if schema contains db name;
         connectionContext.setDb(db);
 
-        MySQLPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
+        MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
         ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
         connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
     }

@@ -3,8 +3,13 @@ package com.yuqi.protocol.command.sqlnode;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
+import com.yuqi.sql.SlothSchema;
+import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.ddl.SqlUse;
-import io.netty.buffer.ByteBuf;
+
+import java.util.Objects;
+
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.UNKNOWN_DB_NAME;
 
 /**
  * @author yuqi
@@ -21,10 +26,18 @@ public class SqlUseHandler implements Handler<SqlUse> {
         final String db = sqlNode.getDb();
 
         //check if schema contains db name;
-        connectionContext.setDb(db);
+        final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
+        if (Objects.isNull(slothSchema)) {
+            final MysqlPackage error = PackageUtils.buildErrPackage(
+                    UNKNOWN_DB_NAME.getCode(),
+                    String.format(UNKNOWN_DB_NAME.getMessage(), db), 1);
+            connectionContext.write(error);
+            return;
+        }
 
-        MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
-        ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
-        connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
+        connectionContext.setDb(db);
+        final MysqlPackage result =
+                PackageUtils.buildOkMySqlPackage(0, 1, 0);
+        connectionContext.write(result);
     }
 }

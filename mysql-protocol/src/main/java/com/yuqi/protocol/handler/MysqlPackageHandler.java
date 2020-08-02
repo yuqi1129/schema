@@ -41,7 +41,6 @@ public class MysqlPackageHandler extends ChannelInboundHandlerAdapter {
                 break;
             default:
                 //todo
-                //handler = new ShowCommandHandler(connectionContext, (Show) commandPackage.getAbstractReaderAndWriterPackage());
                 handler = new QueryCommandHandler(connectionContext, commandPackage.getCommand());
         }
 

@@ -69,7 +69,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         final List<SqlNode> nodes = sqlNodes.getList();
         final int size = nodes.size();
 
-        List<SlothColumn> slothColumns = Lists.newArrayList();
+        final List<SlothColumn> slothColumns = Lists.newArrayList();
         for (int i = 0; i < size / 2; i++) {
             final String columnName = nodes.get(2 * i).toString();
             final SqlDataTypeSpec sqlTypeName = (SqlDataTypeSpec) nodes.get(2 * i + 1);
@@ -83,8 +83,9 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
         slothSchema.addTable(tableName, slothTable);
 
-        MysqlPackage mySQLPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
-        connectionContext.write(mySQLPackage);
+        final MysqlPackage result =
+                PackageUtils.buildOkMySqlPackage(0, 1, 0);
+        connectionContext.write(result);
     }
 
 

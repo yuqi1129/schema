@@ -55,10 +55,7 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
                 .build();
 
         final ByteBuf byteBuf = PackageUtils.buildResultSet(resultSetHolder);
-
-        connectionContext.getChannelHandlerContext().channel()
-                .writeAndFlush(byteBuf);
-        byteBuf.clear();
+        connectionContext.write(byteBuf);
     }
 
 }

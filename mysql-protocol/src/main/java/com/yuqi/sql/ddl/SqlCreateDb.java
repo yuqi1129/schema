@@ -19,7 +19,7 @@ import java.util.List;
 public class SqlCreateDb extends SqlCreate {
 
     public static final SqlSpecialOperator CREATE_DATABASE =
-            new SqlSpecialOperator("CREATE_DATABASE", SqlKind.INSERT);
+            new SqlSpecialOperator("CREATE DATABASE", SqlKind.OTHER_DDL);
 
     private String dbName;
 

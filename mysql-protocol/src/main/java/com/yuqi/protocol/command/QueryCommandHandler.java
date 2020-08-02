@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.yuqi.protocol.command.sqlnode.Handler;
 import com.yuqi.protocol.command.sqlnode.HandlerHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.pkg.MySQLPackage;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
@@ -13,6 +14,7 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author yuqi
@@ -34,12 +36,10 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         //RelNode relNode = null;
         try {
             final SlothParser slothParser = ParserFactory.getParser(query);
-            sqlNode = slothParser.getSqlNode(query);
-            //relNode = slothParser.getPlan(queryPackage.getQuery());
+            sqlNode = slothParser.getSqlNode();
             handleSqlNode(sqlNode);
         } catch (Exception e) {
             //TODO
-            e.printStackTrace();
             handleSqlString(query);
         }
     }
@@ -53,6 +53,12 @@ public class QueryCommandHandler extends AbstractCommandHandler {
     private void handleSqlNode(SqlNode sqlNode) {
         final Class<?> sqlType = sqlNode.getClass();
         final Handler handler = HandlerHolder.SQL_TYPE_TO_HANDLER_MAP.get(sqlType);
+        if (Objects.isNull(handler)) {
+            //
+            final MySQLPackage result = PackageUtils.buildErrPackage(1, "Do not support: " + sqlType, 1);
+            connectionContext.getChannelHandlerContext().writeAndFlush(PackageUtils.packageToBuf(result));
+            return;
+        }
         handler.handle(connectionContext, sqlNode);
     }
 

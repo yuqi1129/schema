@@ -115,3 +115,52 @@ SqlUse SqlUseCommand() :
         return new SqlUse(pos, command.toString());
     }
 }
+
+
+SqlCreateTable CreateTable() :
+{
+    final SqlIdentifier schemaAndTableName;
+    boolean isNotExist = false;
+    SqlIdentifier columnName;
+    SqlIdentifier columnType;
+    SqlParserPos pos;
+    Map<String, String> columnNameAndTypeMap;
+}
+{
+    {
+        pos = getPos();
+        columnNameAndTypeMap = new HashMap<String, String>();
+    }
+
+    <CREATE> <TABLE>
+    (
+        <IF> <NOT> <EXISTS>
+            {
+                isNotExist = true;
+            }
+    )?
+    schemaAndTableName = CompoundIdentifier()
+
+    <LPAREN>
+    (
+        columnName = SimpleIdentifier()
+        #SqlTypeName1
+        columnType = SimpleIdentifier()
+        {
+            columnNameAndTypeMap.put(columnName.toString(), columnType.toString());
+        }
+    )
+    (
+        <COMMA>
+        columnName = SimpleIdentifier()
+        columnType = SimpleIdentifier()
+        {
+            columnNameAndTypeMap.put(columnName.toString(), columnType.toString());
+        }
+    )*
+
+    <RPAREN>
+    {
+        return new SqlCreateTable(pos, schemaAndTableName.toString(), columnNameAndTypeMap, isNotExist);
+    }
+}

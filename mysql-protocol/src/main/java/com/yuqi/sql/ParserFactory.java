@@ -2,6 +2,7 @@ package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.calcite.avatica.util.Casing;
+import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.config.CalciteConnectionConfigImpl;
 import org.apache.calcite.config.Lex;
 import org.apache.calcite.jdbc.CalciteSchema;
@@ -72,6 +73,7 @@ public class ParserFactory {
     public static SqlParser getSqlParser(String sql) {
         final SqlParser.ConfigBuilder sqlBuilder = SqlParser.configBuilder()
                 .setLex(Lex.MYSQL)
+                .setQuoting(Quoting.BACK_TICK)
                 .setQuotedCasing(Casing.UNCHANGED)
                 .setUnquotedCasing(Casing.UNCHANGED)
                 .setCaseSensitive(false)
@@ -128,11 +130,11 @@ public class ParserFactory {
         });
 
 
-        String sql = "create schema db1";
+        String sql = "select `id` from t";
         final SlothParser parser = ParserFactory.getParser(sql);
 
         try {
-            SqlNode sqlNode = parser.getSqlNode(sql);
+            SqlNode sqlNode = parser.getSqlNode();
             System.out.println(sqlNode);
         } catch (Exception e) {
             e.printStackTrace();

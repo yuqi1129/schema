@@ -45,6 +45,9 @@ data: {
         "com.yuqi.sql.ddl.SqlDropDb",
         "com.yuqi.sql.ddl.SqlShow",
         "com.yuqi.sql.ddl.SqlUse",
+        "com.yuqi.sql.ddl.SqlCreateTable",
+        "java.util.Map",
+        "java.util.HashMap"
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
@@ -391,7 +394,8 @@ data: {
             "CreateDatabase()",
             "DropDatabase()",
             "SqlShow()",
-            "SqlUseCommand()"
+            "SqlUseCommand()",
+            "CreateTable()"
     ]
 
     # List of methods for parsing custom literals.

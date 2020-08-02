@@ -83,6 +83,11 @@ public class SlothParser implements RelOptTable.ViewExpander {
         return sqlParser.parseQuery(sql);
     }
 
+
+    public SqlNode getSqlNode() throws SqlParseException {
+        return sqlParser.parseStmt();
+    }
+
     public RelNode getPlan(String sql) throws SqlParseException {
         //TODO we should this row name and row type from sqlNode
         sqlNode = sqlParser.parseQuery(sql);

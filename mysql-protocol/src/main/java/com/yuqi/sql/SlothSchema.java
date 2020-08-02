@@ -19,9 +19,14 @@ public class SlothSchema extends AbstractSchema {
 
     private Map<String, Table> tables = Maps.newHashMap();
     private String schemaName;
+    private CalciteSchema calciteSchema;
 
     public SlothSchema(String schemaName) {
         this.schemaName = schemaName;
+    }
+
+    public void setSchema(CalciteSchema schema) {
+        this.calciteSchema = schema;
     }
 
     @Override
@@ -29,25 +34,24 @@ public class SlothSchema extends AbstractSchema {
         return tables;
     }
 
-    private boolean dropTable(String tableName) {
+    public boolean dropTable(String tableName) {
         tables.remove(tableName);
+        calciteSchema.removeTable(tableName);
 
         return true;
 
+        //todo
         //flush to db in case machine is crash
-
         //notify other frontEnd that another table is add
         //another front end
     }
 
     public boolean addTable(String tableName, SlothTable slothTable) {
         tables.put(tableName, slothTable);
-        final CalciteSchema calciteSchema = ParserFactory.getCatalogReader()
-                .getRootSchema()
-                .getSubSchema(schemaName, false);
-
         calciteSchema.add(tableName, slothTable);
         return true;
+
+        //todo
     }
 
 

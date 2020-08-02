@@ -58,18 +58,28 @@ SqlCreateDb CreateDatabase() :
     }
 }
 
-SqlDropDb DropDatabase() :
+SqlDrop Drop() :
 {
     final SqlIdentifier dbName;
     final SqlNodeList columnList;
     boolean exist = false;
+    boolean isDb = true;
     SqlParserPos pos;
 }
 {
     {
         pos = getPos();
     }
-    <DROP> <DATABASE>
+    <DROP>
+    (
+        <DATABASE>
+        |
+        <TABLE>
+        {
+            isDb = false;
+        }
+    )
+
     (
         <IF> <EXISTS>
         {
@@ -79,7 +89,7 @@ SqlDropDb DropDatabase() :
 
     dbName = CompoundIdentifier()
     {
-        return new SqlDropDb(pos, exist, dbName.toString());
+        return new SqlDrop(pos, exist, dbName.toString(), isDb);
     }
 }
 

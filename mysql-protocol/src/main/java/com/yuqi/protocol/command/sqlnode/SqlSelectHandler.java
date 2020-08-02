@@ -8,6 +8,7 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
+import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,12 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
             return;
         }
 
-        SlothParser slothParser = ParserFactory.getParser(connectionContext.getQueryString());
+        //create a new calciteCatalogReader;
+        final CalciteCatalogReader calciteCatalogReader =
+                ParserFactory.getCatalogReader().withSchemaPath(Lists.newArrayList(connectionContext.getDb()));
+        SlothParser slothParser = ParserFactory.getParserWithCatalogReader(
+                connectionContext.getQueryString(), calciteCatalogReader);
+
         final RelNode relNode = slothParser.getPlan(sqlNode);
 
         List<List<String>> data = Lists.newArrayListWithCapacity(1);

@@ -13,11 +13,21 @@ public enum ErrorCodeAndMessageEnum {
      */
     PASSWORD_OR_USER_IS_WRONG(1, "Wrong username or password"),
 
+    /**
+     * drop database xxx and xxx does not exsits
+     */
+    DATABASE_NOT_EXIST_IN_DROP(1007, "Can't drop database '%s'; database doesn't exist"),
+
+    /**
+     * database exists when create database exists
+     */
+    DATABASE_EXISTS_ERROR(1007, "Can't create database '%s'; database exists"),
 
     /**
      * When create table, no db select
      */
     NO_DATABASE_SELECTED(1046, "No database selected"),
+
 
     /**
      * When create table
@@ -30,13 +40,13 @@ public enum ErrorCodeAndMessageEnum {
     /**
      * when create table t and t has already existed
      */
-    TABLE_ALREADY_EXISTS(1050, "Table '%' already exists"),
+    TABLE_ALREADY_EXISTS(1050, "Table '%s' already exists"),
+
 
     /**
-     * database exists when create database exists
+     * Drop table 'yuqi.test', if yuqi or test does not exists
      */
-    DATABASE_EXISTS_ERROR(1007, "Can't create database '%s'; database exists");
-
+    UNKNOWN_TABLE_NAME(10051, "Unknown table '%s'");
 
 
     private final int code;

@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
+import org.apache.calcite.jdbc.CalciteSchema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +33,21 @@ public class SlothSchemaHolder implements LifeCycle {
 
     }
 
-    public void registerSchema(String schemaName) {
+    public CalciteSchema registerSchema(String schemaName) {
         final SlothSchema slothSchema = new SlothSchema(schemaName);
         schemaMap.put(schemaName, slothSchema);
-        ParserFactory.getCatalogReader().getRootSchema().add(schemaName, slothSchema);
-
-        //insert into db to store
+        CalciteSchema schema =
+                ParserFactory.getCatalogReader().getRootSchema().add(schemaName, slothSchema);
+        slothSchema.setSchema(schema);
+        return schema;
+        //todo insert into db to store
     }
 
-    public void removeSchema(String schemaName) {
+    public boolean removeSchema(String schemaName) {
         schemaMap.remove(schemaName);
-        ParserFactory.getCatalogReader().getRootSchema().removeSubSchema(schemaName);
+        return ParserFactory.getCatalogReader().getRootSchema().removeSubSchema(schemaName);
 
-        //delete schema in persistent store
+        //todo delete schema in persistent store
     }
 
     public List<String> getAllSchemas() {

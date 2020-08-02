@@ -45,6 +45,10 @@ public class ParserFactory {
         return new SlothParser(getSqlParser(sql), getOptPlanner(), calciteCatalogReader, createSqlValidator(calciteCatalogReader));
     }
 
+    public static SlothParser getParserWithCatalogReader(String sql, CalciteCatalogReader calciteCatalogReader) {
+        return new SlothParser(getSqlParser(sql), getOptPlanner(), calciteCatalogReader, createSqlValidator(calciteCatalogReader));
+    }
+
 
     public static RelOptPlanner getOptPlanner() {
         final VolcanoPlanner volcanoPlanner = new VolcanoPlanner();

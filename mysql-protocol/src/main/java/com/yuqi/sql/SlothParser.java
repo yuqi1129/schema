@@ -47,6 +47,9 @@ public class SlothParser implements RelOptTable.ViewExpander {
     private RelDataType relDataType;
     List<List<String>> fieldOrigins;
 
+    public CalciteCatalogReader getCalciteCatalogReader() {
+        return calciteCatalogReader;
+    }
 
     public SlothParser(SqlParser sqlParser, RelOptPlanner relOptPlanner,
                        CalciteCatalogReader calciteCatalogReader, SqlValidator sqlValidator) {
@@ -70,13 +73,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
         return new SqlToRelConverter(this, sqlValidator, calciteCatalogReader,
                 relOptCluster, StandardConvertletTable.INSTANCE, builder.build());
     }
-
-    //明天把add table/add db 搞完
-    //use db
-    //create database
-    //create table
-    //show tables;
-    //show databases;
 
     //db元数据存在mysql, 起动的时候再恢复
     public SqlNode getSqlNode(String sql) throws SqlParseException {

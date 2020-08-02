@@ -16,25 +16,35 @@ import java.util.List;
  * @description your description
  * @time 26/7/20 21:37
  **/
-public class SqlDropDb extends SqlDdl {
-    private String dbName;
+public class SqlDrop extends SqlDdl {
+    private String name;
     private boolean exist;
 
-    public String getDbName() {
-        return dbName;
+    //true is drop db, false is drop table
+    private boolean dropDb;
+
+    public String getName() {
+        return name;
     }
 
     public boolean isExist() {
         return exist;
     }
 
-    public static final SqlOperator DROP_DATABASE =
-            new SqlSpecialOperator("DROP_DATABASE", SqlKind.OTHER_DDL);
+    public boolean isDropDb() {
+        return dropDb;
+    }
 
-    public SqlDropDb(SqlParserPos pos, boolean exist, String dbName) {
-        super(DROP_DATABASE, pos);
-        this.dbName = dbName;
+    //should split drop table and drop db;
+    public static final SqlOperator DROP =
+            new SqlSpecialOperator("DROP", SqlKind.OTHER_DDL);
+
+
+    public SqlDrop(SqlParserPos pos, boolean exist, String name, boolean dropDb) {
+        super(DROP, pos);
+        this.name = name;
         this.exist = exist;
+        this.dropDb = dropDb;
     }
 
     @Nonnull

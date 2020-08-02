@@ -1,5 +1,6 @@
 package com.yuqi.protocol.command;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.command.sqlnode.Handler;
 import com.yuqi.protocol.command.sqlnode.HandlerHolder;
@@ -42,7 +43,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             handleSqlNode(sqlNode);
         } catch (Exception e) {
             //TODO
-            System.out.println(e);
+            System.out.println(Throwables.getStackTraceAsString(e));
             handleSqlString(query);
         }
     }

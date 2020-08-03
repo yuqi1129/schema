@@ -11,6 +11,7 @@ import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
+import org.apache.calcite.sql.SqlExplainLevel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,9 @@ public class ExplainHandler implements Handler<String> {
         ByteBuf result;
         try {
             final RelNode relNode = slothParser.getPlan(query);
-            List<List<String>> data = Lists.newArrayList();
-            data.add(Lists.newArrayList(RelOptUtil.toString(relNode)));
+            final String planString = "\n" + RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES);
+            final List<List<String>> data = Lists.newArrayList();
+            data.add(Lists.newArrayList(planString));
 
             final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                     .table(StringUtils.EMPTY)

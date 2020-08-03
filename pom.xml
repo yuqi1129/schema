@@ -176,6 +176,13 @@
             <version>${slf4j-api.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.calcite</groupId>
+            <artifactId>calcite-linq4j</artifactId>
+            <version>${calcite.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
 
 </dependencyManagement>

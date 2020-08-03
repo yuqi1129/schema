@@ -46,7 +46,15 @@ public enum ErrorCodeAndMessageEnum {
     /**
      * Drop table 'yuqi.test', if yuqi or test does not exists
      */
-    UNKNOWN_TABLE_NAME(10051, "Unknown table '%s'");
+    UNKNOWN_TABLE_NAME(1051, "Unknown table '%s'"),
+
+
+    /**
+     * Do not support this syntax
+     */
+    SYNTAX_ERROR(1064,
+            "You have an error in your SQL syntax; check the manual"
+                    + " that corresponds to your MySQL server version for the right syntax to use near '%s'");
 
 
     private final int code;

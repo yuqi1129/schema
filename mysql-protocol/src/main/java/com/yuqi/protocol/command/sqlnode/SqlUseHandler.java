@@ -22,8 +22,8 @@ public class SqlUseHandler implements Handler<SqlUse> {
     public static final SqlUseHandler INSTANCE = new SqlUseHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlUse sqlNode) {
-        final String db = sqlNode.getDb();
+    public void handle(ConnectionContext connectionContext, SqlUse type) {
+        final String db = type.getDb();
 
         //check if schema contains db name;
         final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);

@@ -8,13 +8,11 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
-import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author yuqi
@@ -27,23 +25,19 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
     public static final SqlSelectHandler INSTANCE = new SqlSelectHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlSelect sqlNode) {
+    public void handle(ConnectionContext connectionContext, SqlSelect type) {
 
-        String s = sqlNode.toString();
+        String s = type.toString();
         Handler handler;
         if ((handler = SpecialSelectHolder.SPECIAL_HANDLER.get(s)) != null) {
             handler.handle(connectionContext, s);
             return;
         }
 
-        //create a new calciteCatalogReader;
-        final CalciteCatalogReader calciteCatalogReader = Objects.isNull(connectionContext.getDb())
-                ? ParserFactory.getCatalogReader()
-                : ParserFactory.getCatalogReader().withSchemaPath(Lists.newArrayList(connectionContext.getDb()));
-        SlothParser slothParser = ParserFactory.getParserWithCatalogReader(
-                connectionContext.getQueryString(), calciteCatalogReader);
+        SlothParser slothParser = ParserFactory.getParser(connectionContext.getQueryString(),
+                connectionContext.getDb());
 
-        final RelNode relNode = slothParser.getPlan(sqlNode);
+        final RelNode relNode = slothParser.getPlan(type);
 
         List<List<String>> data = Lists.newArrayListWithCapacity(1);
         data.add(Lists.newArrayList("Yuqi version"));

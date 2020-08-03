@@ -11,12 +11,12 @@ import com.yuqi.sql.ddl.SqlShow;
 import io.netty.buffer.ByteBuf;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.NO_DATABASE_SELECTED;
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.SYNTAX_ERROR;
 
 /**
  * @author yuqi
@@ -29,10 +29,11 @@ public class SqlShowHandler implements Handler<SqlShow> {
     public static final SqlShowHandler INSTANCE = new SqlShowHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlShow sqlNode) {
-        final String command = sqlNode.getCommand();
+    public void handle(ConnectionContext connectionContext, SqlShow type) {
+        final String command = type.getCommand();
         //todo
-        List<String> data = Collections.EMPTY_LIST;
+        List<String> data;
+        String columnName = "Database";
         if ("databases".equalsIgnoreCase(command)) {
             data = SlothSchemaHolder.INSTANCE.getAllSchemas();
         } else if ("tables".equalsIgnoreCase(command)) {
@@ -47,12 +48,22 @@ public class SqlShowHandler implements Handler<SqlShow> {
                 return;
             }
 
+            columnName = String.join("_", Lists.newArrayList("Tables", "In", db));
+
             final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
             data = slothSchema.getTables();
+        } else {
+            final MysqlPackage r = PackageUtils.buildErrPackage(
+                    SYNTAX_ERROR.getCode(),
+                    String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()),
+                    1);
+
+            connectionContext.write(r);
+            return;
         }
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
-                .columnName(new String[] {"Database"})
+                .columnName(new String[] {columnName})
                 .columnType(new int[] {0xfd})
                 .data(data.stream().map(Lists::newArrayList).collect(Collectors.toList()))
                 .schema(StringUtils.EMPTY)

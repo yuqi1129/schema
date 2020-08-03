@@ -13,7 +13,7 @@ import java.lang.reflect.ParameterizedType;
  **/
 public interface Handler<T> {
 
-    void handle(ConnectionContext connectionContext, T sqlNode);
+    void handle(ConnectionContext connectionContext, T type);
 
     /**
      * Get Class of T

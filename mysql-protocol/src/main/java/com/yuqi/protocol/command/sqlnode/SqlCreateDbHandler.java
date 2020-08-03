@@ -19,8 +19,8 @@ public class SqlCreateDbHandler implements Handler<SqlCreateDb> {
     public static final SqlCreateDbHandler INSTANCE = new SqlCreateDbHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlCreateDb sqlNode) {
-        final String db = sqlNode.getDbName();
+    public void handle(ConnectionContext connectionContext, SqlCreateDb type) {
+        final String db = type.getDbName();
 
         //db already exists
         if (SlothSchemaHolder.INSTANCE.contains(db)) {

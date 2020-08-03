@@ -20,7 +20,7 @@ public class CurrentDatabaseHandler extends AbstractHandler {
     public static final CurrentDatabaseHandler INSTANCE = new CurrentDatabaseHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, String sqlNode) {
+    public void handle(ConnectionContext connectionContext, String type) {
         String db = connectionContext.getDb();
 
         final List<List<String>> data = Lists.newArrayList();

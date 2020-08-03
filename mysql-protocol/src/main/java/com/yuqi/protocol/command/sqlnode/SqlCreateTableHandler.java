@@ -31,10 +31,10 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
     public static final SqlCreateTableHandler INSTANCE = new SqlCreateTableHandler();
     @Override
-    public void handle(ConnectionContext connectionContext, SqlCreateTable sqlNode) {
-        final SqlNodeList sqlNodes = sqlNode.getNameAndType();
-        final String tableName = sqlNode.getTableName();
-        final boolean isNotExist = sqlNode.isNotExisted();
+    public void handle(ConnectionContext connectionContext, SqlCreateTable type) {
+        final SqlNodeList sqlNodes = type.getNameAndType();
+        final String tableName = type.getTableName();
+        final boolean isNotExist = type.isNotExisted();
         String db = connectionContext.getDb();
 
         final ErrorMessage errorMessage = checkDbAndTableName(tableName, db, isNotExist);

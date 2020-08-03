@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.yuqi.sql.rule.SlothRules;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
@@ -14,6 +15,7 @@ import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.volcano.VolcanoPlanner;
 import org.apache.calcite.prepare.CalciteCatalogReader;
+import org.apache.calcite.rel.rules.CoreRules;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.SqlNode;
@@ -25,7 +27,11 @@ import org.apache.calcite.sql.util.ChainedSqlOperatorTable;
 import org.apache.calcite.sql.validate.SqlValidator;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
 
+import java.util.Objects;
 import java.util.Properties;
+
+import static com.yuqi.sql.rule.SlothRules.BASE_RULES;
+import static com.yuqi.sql.rule.SlothRules.CONSTANT_REDUCTION_RULES;
 
 /**
  * @author yuqi
@@ -43,13 +49,19 @@ public class ParserFactory {
     );
 
 
-    public static SlothParser getParser(String sql) {
-        final CalciteCatalogReader calciteCatalogReader = getCatalogReader();
-        return new SlothParser(getSqlParser(sql), getOptPlanner(), calciteCatalogReader, createSqlValidator(calciteCatalogReader));
+    public static SlothParser getParser(String sql, String currentDb) {
+        CalciteCatalogReader calciteCatalogReader = getCatalogReader();
+
+        if (Objects.nonNull(currentDb)) {
+            calciteCatalogReader = calciteCatalogReader.withSchemaPath(Lists.newArrayList(currentDb));
+        }
+        return new SlothParser(getSqlParser(sql), getOptPlanner(),
+                calciteCatalogReader, createSqlValidator(calciteCatalogReader));
     }
 
     public static SlothParser getParserWithCatalogReader(String sql, CalciteCatalogReader calciteCatalogReader) {
-        return new SlothParser(getSqlParser(sql), getOptPlanner(), calciteCatalogReader, createSqlValidator(calciteCatalogReader));
+        return new SlothParser(getSqlParser(sql), getOptPlanner(),
+                calciteCatalogReader, createSqlValidator(calciteCatalogReader));
     }
 
 
@@ -59,15 +71,30 @@ public class ParserFactory {
         volcanoPlanner.setExecutor(RexUtil.EXECUTOR);
         volcanoPlanner.setNoneConventionHasInfiniteCost(false);
 
-        //volcano planner should register as little rule as possible
-        RelOptUtil.registerDefaultRules(volcanoPlanner, false, false);
-        RelOptUtil.registerAbstractRules(volcanoPlanner);
+        registerRules(volcanoPlanner);
 
         for (RelOptRule relOptRule : SlothRules.CONVERTER_RULE) {
             volcanoPlanner.addRule(relOptRule);
         }
 
         return volcanoPlanner;
+    }
+
+    public static void registerRules(RelOptPlanner relOptPlanner) {
+        for (RelOptRule relOptRule : CONSTANT_REDUCTION_RULES) {
+            relOptPlanner.addRule(relOptRule);
+        }
+
+        RelOptUtil.registerAbstractRelationalRules(relOptPlanner);
+        RelOptUtil.registerAbstractRules(relOptPlanner);
+
+        for (RelOptRule relOptRule : BASE_RULES) {
+            relOptPlanner.addRule(relOptRule);
+        }
+
+        relOptPlanner.addRule(CoreRules.PROJECT_TABLE_SCAN);
+        relOptPlanner.addRule(CoreRules.PROJECT_INTERPRETER_TABLE_SCAN);
+        relOptPlanner.addRule(CoreRules.FILTER_REDUCE_EXPRESSIONS);
     }
 
 
@@ -127,7 +154,7 @@ public class ParserFactory {
 
 
         String sql = "create table `db1`.`t1` (id int, name double)";
-        final SlothParser parser = ParserFactory.getParser(sql);
+        final SlothParser parser = ParserFactory.getParser(sql, null);
 
         try {
             SqlNode sqlNode = parser.getSqlNode();

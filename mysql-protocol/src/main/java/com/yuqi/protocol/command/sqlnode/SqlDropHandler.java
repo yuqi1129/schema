@@ -24,10 +24,10 @@ public class SqlDropHandler implements Handler<SqlDrop> {
     public static final SqlDropHandler INSTANCE = new SqlDropHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlDrop sqlNode) {
+    public void handle(ConnectionContext connectionContext, SqlDrop type) {
         //handle sql create db;
-        final String name = sqlNode.getName();
-        final boolean isDb = sqlNode.isDropDb();
+        final String name = type.getName();
+        final boolean isDb = type.isDropDb();
 
         if (isDb) {
             dropDb(name, connectionContext);

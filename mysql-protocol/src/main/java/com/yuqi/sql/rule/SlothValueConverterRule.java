@@ -6,7 +6,6 @@ import org.apache.calcite.plan.Convention;
 import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelNode;
-import org.apache.calcite.rel.convert.ConverterRule;
 import org.apache.calcite.rel.logical.LogicalValues;
 
 /**
@@ -15,20 +14,16 @@ import org.apache.calcite.rel.logical.LogicalValues;
  * @description your description
  * @time 27/7/20 21:27
  **/
-public class SlothValueConvertRule extends ConverterRule {
-
-    private final Convention out;
-
-    public static final SlothValueConvertRule INSTANCE =
-            new SlothValueConvertRule(
+public class SlothValueConverterRule extends AbstactSlothConverter {
+    public static final SlothValueConverterRule INSTANCE =
+            new SlothValueConverterRule(
                     LogicalValues.class,
                     Convention.NONE,
                     SlothConvention.INSTANCE,
                     "SlothValueConverter"
             );
-    public SlothValueConvertRule(Class<? extends RelNode> clazz, RelTrait in, Convention out, String descriptionPrefix) {
+    public SlothValueConverterRule(Class<? extends RelNode> clazz, RelTrait in, Convention out, String descriptionPrefix) {
         super(clazz, in, out, descriptionPrefix);
-        this.out = out;
     }
 
     @Override

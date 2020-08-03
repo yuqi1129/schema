@@ -16,6 +16,7 @@ import io.netty.buffer.PooledByteBufAllocator;
 
 import java.util.List;
 
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.SYNTAX_ERROR;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_CONNECT_WITH_DB;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_FOUND_ROWS;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_IGNORE_SIGPIPE;
@@ -102,6 +103,11 @@ public class PackageUtils {
         MysqlPackage mysqlPacakge = new MysqlPackage(errPackage);
         mysqlPacakge.setSeqNumber((byte) seqNumber);
         return mysqlPacakge;
+    }
+
+
+    public static MysqlPackage buildSyntaxErrPackage(String query) {
+        return buildErrPackage(SYNTAX_ERROR.getCode(), String.format(SYNTAX_ERROR.getMessage(), query), 1);
     }
 
     public static ByteBuf packageToBuf(ReaderAndWriter readerAndWriter) {

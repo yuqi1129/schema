@@ -13,9 +13,13 @@ import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Objects;
+
+import static com.yuqi.protocol.command.sepcial.RawHandlerHolder.getRawHandler;
 
 /**
  * @author yuqi
@@ -24,6 +28,9 @@ import java.util.Objects;
  * @time 4/7/20 21:28
  **/
 public class QueryCommandHandler extends AbstractCommandHandler {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(QueryCommandHandler.class);
+
     private String query;
 
     public QueryCommandHandler(ConnectionContext connectionContext, String query) {
@@ -33,18 +40,30 @@ public class QueryCommandHandler extends AbstractCommandHandler {
 
     @Override
     public void execute() {
-        SqlNode sqlNode = null;
-        //RelNode relNode = null;
+        SqlNode sqlNode;
         try {
-            final SlothParser slothParser = ParserFactory.getParser(query);
+            final SlothParser slothParser = ParserFactory.getParser(query, connectionContext.getDb());
             connectionContext.setQueryString(query);
 
+            //first use raw, for example 'explain'
+            Handler handler = getRawHandler(query);
+            if (Objects.nonNull(handler)) {
+                handler.handle(connectionContext, query);
+                return;
+            }
+
+            //then parser and use sqlnode
             sqlNode = slothParser.getSqlNode();
             handleSqlNode(sqlNode);
         } catch (Exception e) {
-            //TODO
-            System.out.println(Throwables.getStackTraceAsString(e));
-            handleSqlString(query);
+            //TODO 这里异常需要分类处理一下
+            LOGGER.error(Throwables.getStackTraceAsString(e));
+            if (query.contains("@@")) {
+                handleSqlString(query);
+                return;
+            }
+
+            connectionContext.write(PackageUtils.buildSyntaxErrPackage(e.getMessage()));
         }
     }
 

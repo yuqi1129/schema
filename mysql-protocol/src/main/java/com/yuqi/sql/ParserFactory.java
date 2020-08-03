@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
+import com.yuqi.sql.rule.SlothRules;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.config.CalciteConnectionConfigImpl;
@@ -9,6 +10,8 @@ import org.apache.calcite.jdbc.CalciteSchema;
 import org.apache.calcite.jdbc.JavaTypeFactoryImpl;
 import org.apache.calcite.plan.ConventionTraitDef;
 import org.apache.calcite.plan.RelOptPlanner;
+import org.apache.calcite.plan.RelOptRule;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.volcano.VolcanoPlanner;
 import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
@@ -57,18 +60,11 @@ public class ParserFactory {
         volcanoPlanner.setNoneConventionHasInfiniteCost(false);
 
 
-        //RelOptUtil.registerAbstractRules(volcanoPlanner);
+        RelOptUtil.registerAbstractRules(volcanoPlanner);
 
-//        for (RelOptRule relOptRule : SlothRules.CONVERTER_RULE) {
-//            volcanoPlanner.addRule(relOptRule);
-//        }
-
-//        for (RelOptRule relOptRule : SlothRules.DEFAULT_RULES) {
-//            volcanoPlanner.addRule(relOptRule);
-//        }
-
-//        volcanoPlanner.addRule(ProjectTableScanRule.INSTANCE);
-//        volcanoPlanner.addRule(ProjectTableScanRule.INTERPRETER);
+        for (RelOptRule relOptRule : SlothRules.CONVERTER_RULE) {
+            volcanoPlanner.addRule(relOptRule);
+        }
 
         return volcanoPlanner;
     }

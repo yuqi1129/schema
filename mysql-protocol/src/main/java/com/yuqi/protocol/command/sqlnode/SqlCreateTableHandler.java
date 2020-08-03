@@ -45,7 +45,6 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         }
 
         //now handle
-
         createTable(tableName, sqlNodes, connectionContext);
     }
 

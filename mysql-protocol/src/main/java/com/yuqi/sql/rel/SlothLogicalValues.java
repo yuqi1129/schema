@@ -24,15 +24,11 @@ public class SlothLogicalValues extends Values implements SlothRel {
         super(cluster, rowType, tuples, traits);
     }
 
-
     @Override
     public void register(RelOptPlanner planner) {
         //super.register(planner);
-
         planner.addRule(SlothToTestConverterRule.INSTANCE);
         planner.addRule(SlothProjectConvertRule.INSTANCE);
-
-        System.out.println(planner);
         //planner.addRule(SlothValueConvertRule.INSTANCE);
     }
 

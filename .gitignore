@@ -90,3 +90,6 @@ buildNumber.properties
 .classpath
 .settings
 .metadata
+/test-schema/derby.log
+/hive-schema/hive-schema.iml
+test-schema/.DS_Store

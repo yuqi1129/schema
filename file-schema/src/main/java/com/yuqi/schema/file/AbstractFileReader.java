@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
@@ -23,6 +25,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractFileReader {
+
+    public static final Logger log = LoggerFactory.getLogger(AbstractFileReader.class);
     protected final String dataFilePath;
     protected final String typeFilePath;
 

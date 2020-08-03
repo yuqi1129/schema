@@ -4,10 +4,11 @@ import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 import org.apache.commons.collections4.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,8 +28,8 @@ import static com.yuqi.schema.common.constants.CommonConstant.MYSQL_DRIVER;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
-@Slf4j
 public class MysqlSchema extends AbstractSchema {
+    public static final Logger log = LoggerFactory.getLogger(MysqlSchema.class);
     private final String url;
     private final String username;
     private final String password;

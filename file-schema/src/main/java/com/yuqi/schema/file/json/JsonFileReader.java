@@ -7,8 +7,9 @@ import com.yuqi.schema.common.constants.CommonConstant;
 import com.yuqi.schema.file.AbstractFileReader;
 import com.yuqi.schema.common.util.TypeConvertionUtils;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
@@ -24,8 +25,9 @@ import java.util.Map;
  * @time 14/1/20 16:22
  **/
 @Getter
-@Slf4j
 public class JsonFileReader extends AbstractFileReader {
+
+    public static final Logger log = LoggerFactory.getLogger(JsonFileReader.class);
     public JsonFileReader(String dataFilePath, String typeFilePath) {
         super(dataFilePath, typeFilePath);
     }

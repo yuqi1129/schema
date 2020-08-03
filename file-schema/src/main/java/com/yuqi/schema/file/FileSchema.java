@@ -7,9 +7,10 @@ import com.yuqi.schema.file.csv.CsvBaseFileTable;
 import com.yuqi.schema.file.enums.TableTypeEnum;
 import com.yuqi.schema.file.json.JsonFileReader;
 import com.yuqi.schema.file.json.JsonBaseFileTable;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Arrays;
@@ -22,8 +23,9 @@ import java.util.Objects;
  * @description your description
  * @time 14/1/20 15:46
  **/
-@Slf4j
 public class FileSchema extends AbstractSchema {
+
+    public static final Logger log = LoggerFactory.getLogger(FileSchema.class);
     private String dirPath;
     private String schema;
 

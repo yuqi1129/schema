@@ -31,7 +31,5 @@ public class SlothProject extends Project implements SlothRel {
     @Override
     public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
         return super.computeSelfCost(planner, mq).multiplyBy(0.1);
-
-        //return new RelOptCostImpl(0.5);
     }
 }

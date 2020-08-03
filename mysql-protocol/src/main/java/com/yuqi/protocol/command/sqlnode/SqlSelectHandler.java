@@ -14,6 +14,7 @@ import org.apache.calcite.sql.SqlSelect;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author yuqi
@@ -36,8 +37,9 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
         }
 
         //create a new calciteCatalogReader;
-        final CalciteCatalogReader calciteCatalogReader =
-                ParserFactory.getCatalogReader().withSchemaPath(Lists.newArrayList(connectionContext.getDb()));
+        final CalciteCatalogReader calciteCatalogReader = Objects.isNull(connectionContext.getDb())
+                ? ParserFactory.getCatalogReader()
+                : ParserFactory.getCatalogReader().withSchemaPath(Lists.newArrayList(connectionContext.getDb()));
         SlothParser slothParser = ParserFactory.getParserWithCatalogReader(
                 connectionContext.getQueryString(), calciteCatalogReader);
 

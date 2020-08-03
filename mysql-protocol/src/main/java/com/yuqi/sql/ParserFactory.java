@@ -59,7 +59,8 @@ public class ParserFactory {
         volcanoPlanner.setExecutor(RexUtil.EXECUTOR);
         volcanoPlanner.setNoneConventionHasInfiniteCost(false);
 
-
+        //volcano planner should register as little rule as possible
+        RelOptUtil.registerDefaultRules(volcanoPlanner, false, false);
         RelOptUtil.registerAbstractRules(volcanoPlanner);
 
         for (RelOptRule relOptRule : SlothRules.CONVERTER_RULE) {

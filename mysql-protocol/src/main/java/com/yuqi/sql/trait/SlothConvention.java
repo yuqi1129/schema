@@ -16,7 +16,7 @@ import org.apache.calcite.plan.RelTraitSet;
  **/
 public class SlothConvention implements Convention {
 
-    public static final SlothConvention SLOTH_CONVENTION = new SlothConvention();
+    public static final SlothConvention INSTANCE = new SlothConvention();
     @Override
     public Class getInterface() {
         return SlothRel.class;

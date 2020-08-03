@@ -22,7 +22,7 @@ public class SlothProjectConvertRule extends ConverterRule {
             new SlothProjectConvertRule(
                     LogicalProject.class,
                     Convention.NONE,
-                    SlothConvention.SLOTH_CONVENTION,
+                    SlothConvention.INSTANCE,
                     "SlothProjectConverter");
 
 

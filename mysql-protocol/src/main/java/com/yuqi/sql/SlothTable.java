@@ -1,12 +1,18 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Lists;
+import com.yuqi.sql.rel.SlothTableScan;
+import com.yuqi.sql.trait.SlothConvention;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
+import org.apache.calcite.plan.RelOptTable;
+import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.SchemaPlus;
+import org.apache.calcite.schema.TranslatableTable;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.util.List;
@@ -19,7 +25,7 @@ import java.util.Objects;
  * @description your description
  * @time 10/7/20 19:55
  **/
-public class SlothTable extends AbstractQueryableTable {
+public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
 
     private String tableName;
 
@@ -87,5 +93,12 @@ public class SlothTable extends AbstractQueryableTable {
 
         resultType = typeFactory.createStructType(relDataTypes, columnNames);
         return resultType;
+    }
+
+    @Override
+    public RelNode toRel(RelOptTable.ToRelContext context, RelOptTable relOptTable) {
+        return new SlothTableScan(
+                context.getCluster(),
+                RelTraitSet.createEmpty().plus(SlothConvention.INSTANCE), relOptTable);
     }
 }

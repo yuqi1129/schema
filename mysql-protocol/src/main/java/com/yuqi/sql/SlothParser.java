@@ -1,12 +1,12 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
-import com.yuqi.sql.rule.LogicalValueToLogicalValueRule;
 import com.yuqi.sql.trait.SlothConvention;
-import com.yuqi.sql.trait.TestConvention;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptPlanner;
+import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptTable;
+import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.plan.hep.HepPlanner;
 import org.apache.calcite.plan.hep.HepProgram;
@@ -28,6 +28,9 @@ import org.apache.calcite.sql2rel.SqlToRelConverter;
 import org.apache.calcite.sql2rel.StandardConvertletTable;
 
 import java.util.List;
+
+import static com.yuqi.sql.rule.SlothRules.CONSTANT_REDUCTION_RULES;
+
 
 /**
  * @author yuqi
@@ -96,7 +99,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
         relNode = sqlToRelConverter.flattenTypes(relRoot.rel, true);
         relNode = sqlToRelConverter.decorrelate(sqlNode, relNode);
 
-        relNode.getTraitSet().plus(SlothConvention.SLOTH_CONVENTION);
+        relNode.getTraitSet().plus(SlothConvention.INSTANCE);
         return optimize(relNode);
     }
 
@@ -138,28 +141,34 @@ public class SlothParser implements RelOptTable.ViewExpander {
 
 
     private RelNode optimize(RelNode relNode) {
-        //remember to change trait set
-        //relOptPlanner.setExecutor(new RexExecutorImpl());
 
-
-        //first use hub
-        HepProgram hepProgram = new HepProgramBuilder()
-                .addRuleInstance(LogicalValueToLogicalValueRule.INSTANCE)
-                //.addRuleInstance(SlothValueConvertRule.INSTANCE)
-                //.addRuleInstance(SlothProjectConvertRule.INSTANCE)
-                .build();
-
-        HepPlanner hepPlanner = new HepPlanner(hepProgram);
+        final HepPlanner hepPlanner = buildHepPlanner();
         hepPlanner.setRoot(relNode);
         relNode = hepPlanner.findBestExp();
 
+
         relOptPlanner.setRoot(relNode);
-        RelTraitSet reqiredTraitSet = relNode.getTraitSet().replace(TestConvention.INSTANCE).simplify();
+        RelTraitSet reqiredTraitSet = relNode.getTraitSet().replace(SlothConvention.INSTANCE).simplify();
 
         RelNode relNode1 = relNode.getTraitSet().equals(reqiredTraitSet)
                 ? relNode : relOptPlanner.changeTraits(relNode, reqiredTraitSet);
 
         relOptPlanner.setRoot(relNode1);
         return relOptPlanner.chooseDelegate().findBestExp();
+    }
+
+
+    private HepPlanner buildHepPlanner() {
+        final HepProgram hepProgram = new HepProgramBuilder().build();
+        final HepPlanner hepPlanner = new HepPlanner(hepProgram);
+
+        for (RelOptRule relOptRule : CONSTANT_REDUCTION_RULES) {
+            hepPlanner.addRule(relOptRule);
+        }
+
+        RelOptUtil.registerDefaultRules(hepPlanner, false, false);
+        RelOptUtil.registerAbstractRelationalRules(hepPlanner);
+
+        return hepPlanner;
     }
 }

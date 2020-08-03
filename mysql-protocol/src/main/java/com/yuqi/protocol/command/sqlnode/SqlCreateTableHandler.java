@@ -97,20 +97,26 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
                 return new ErrorMessage(NO_DATABASE_SELECTED.getCode(), NO_DATABASE_SELECTED.getMessage());
             }
 
+            final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
+            if (slothSchema.containsTable(tableNameAndDB) && !isNotExist) {
+                return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
+                        String.format(TABLE_ALREADY_EXISTS.getMessage(), tableNameAndDB));
+            }
+
             return ErrorMessage.OK_MESSAGE;
         }
 
         final String realDb = tableAndDb[0];
         final String tableName = tableAndDb[1];
 
-        SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(realDb);
+        final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(realDb);
         if (Objects.isNull(slothSchema)) {
             return new ErrorMessage(UNKNOWN_DB_NAME.getCode(), String.format(UNKNOWN_DB_NAME.getMessage(), realDb));
         }
 
         if (slothSchema.containsTable(tableName) && !isNotExist) {
-            return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(), String.format(TABLE_ALREADY_EXISTS.getMessage(), tableName));
-
+            return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
+                    String.format(TABLE_ALREADY_EXISTS.getMessage(), tableName));
         }
 
         return ErrorMessage.OK_MESSAGE;

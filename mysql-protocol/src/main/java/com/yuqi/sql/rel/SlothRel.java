@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.operator.Operator;
 import org.apache.calcite.rel.RelNode;
 
 /**
@@ -11,4 +12,8 @@ import org.apache.calcite.rel.RelNode;
 public interface SlothRel extends RelNode {
 
     //add some implement method
+
+    default Operator implement() {
+        return null;
+    }
 }

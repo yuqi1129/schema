@@ -24,7 +24,6 @@ public class NettyConnectionHandler extends ChannelInboundHandlerAdapter {
 
     public static final NettyConnectionHandler INSTANCE = new NettyConnectionHandler();
 
-
     private Map<Channel, ConnectionContext> alreadyAuthenChannels = Maps.newConcurrentMap();
 
     public Map<Channel, ConnectionContext> getAlreadyAuthenChannels() {

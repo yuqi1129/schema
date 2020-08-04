@@ -1,4 +1,4 @@
-package com.yuqi.protocol.handler;
+package com.yuqi.protocol.connection.netty;
 
 import com.google.common.base.Throwables;
 import com.yuqi.protocol.pkg.MysqlPackage;
@@ -16,20 +16,20 @@ import java.util.List;
  * @description your description
  * @time 30/6/20 22:21
  **/
-public class MessageToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
+public class ByteBufToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        MysqlPackage mySQLPackage = new MysqlPackage();
+        final MysqlPackage result = new MysqlPackage();
 
         if (NettyConnectionHandler.INSTANCE.channelHasAuthencation(channelHandlerContext.channel())) {
-            mySQLPackage.setAbstractReaderAndWriterPackage(new Command());
+            result.setAbstractReaderAndWriterPackage(new Command());
         } else {
-            mySQLPackage.setAbstractReaderAndWriterPackage(new LoginRequest());
+            result.setAbstractReaderAndWriterPackage(new LoginRequest());
         }
 
-        mySQLPackage.read(byteBuf);
-        list.add(mySQLPackage);
+        result.read(byteBuf);
+        list.add(result);
     }
 
     @Override

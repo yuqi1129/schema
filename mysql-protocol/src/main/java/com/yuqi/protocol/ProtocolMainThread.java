@@ -1,10 +1,10 @@
 package com.yuqi.protocol;
 
 import com.yuqi.protocol.config.ConnectionConfig;
-import com.yuqi.protocol.handler.AuthencationHandler;
-import com.yuqi.protocol.handler.MessageToPackageDecoder;
-import com.yuqi.protocol.handler.MysqlPackageHandler;
-import com.yuqi.protocol.handler.NettyConnectionHandler;
+import com.yuqi.protocol.connection.netty.AuthencationHandler;
+import com.yuqi.protocol.connection.netty.ByteBufToPackageDecoder;
+import com.yuqi.protocol.connection.netty.MysqlPackageHandler;
+import com.yuqi.protocol.connection.netty.NettyConnectionHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -61,7 +61,8 @@ public class ProtocolMainThread implements Runnable {
                             ConnectionConfig.writeTimeout,
                             ConnectionConfig.readTimeOut));
 
-                    pipeline.addLast("decoder", new MessageToPackageDecoder());
+                    pipeline.addLast("decoder", new ByteBufToPackageDecoder());
+                    //pipeline.addLast("encoder", new MysqlPackageToByteBufEncoder());
                     pipeline.addLast("authencatin", new AuthencationHandler());
 
                     pipeline.addLast("handler", new MysqlPackageHandler());

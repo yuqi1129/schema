@@ -4,8 +4,6 @@ import com.yuqi.protocol.io.ReaderAndWriter;
 import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author yuqi
@@ -13,8 +11,6 @@ import lombok.NoArgsConstructor;
  * @description your description
  * @time 30/6/20 21:28
  **/
-@Data
-@NoArgsConstructor
 public class MysqlPackage implements ReaderAndWriter {
     /**
      * Length of Message body
@@ -32,7 +28,34 @@ public class MysqlPackage implements ReaderAndWriter {
     private AbstractReaderAndWriter abstractReaderAndWriterPackage;
 
 
+    public MysqlPackage() {
+    }
+
     public MysqlPackage(AbstractReaderAndWriter abstractReaderAndWriterPackage) {
+        this.abstractReaderAndWriterPackage = abstractReaderAndWriterPackage;
+    }
+
+    public int getLengthOfMessage() {
+        return lengthOfMessage;
+    }
+
+    public byte getSeqNumber() {
+        return seqNumber;
+    }
+
+    public AbstractReaderAndWriter getAbstractReaderAndWriterPackage() {
+        return abstractReaderAndWriterPackage;
+    }
+
+    public void setLengthOfMessage(int lengthOfMessage) {
+        this.lengthOfMessage = lengthOfMessage;
+    }
+
+    public void setSeqNumber(byte seqNumber) {
+        this.seqNumber = seqNumber;
+    }
+
+    public void setAbstractReaderAndWriterPackage(AbstractReaderAndWriter abstractReaderAndWriterPackage) {
         this.abstractReaderAndWriterPackage = abstractReaderAndWriterPackage;
     }
 

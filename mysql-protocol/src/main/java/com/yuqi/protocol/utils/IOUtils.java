@@ -2,6 +2,7 @@ package com.yuqi.protocol.utils;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.PooledByteBufAllocator;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
@@ -225,5 +226,17 @@ public class IOUtils {
         } else {
             return new String(readBytes(byteBuf, IOUtils.readInteger(byteBuf, 8)));
         }
+    }
+
+    public static ByteBuf copyByteBuf(ByteBuf buf) {
+        ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.buffer(128);
+
+        int i = 0;
+        int length = buf.readableBytes();
+        while (i++ < length) {
+            byteBuf.writeByte(buf.readByte());
+        }
+
+        return byteBuf;
     }
 }

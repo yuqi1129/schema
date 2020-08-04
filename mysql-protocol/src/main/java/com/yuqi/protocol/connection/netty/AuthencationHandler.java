@@ -1,10 +1,10 @@
-package com.yuqi.protocol.handler;
+package com.yuqi.protocol.connection.netty;
 
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.constants.ErrorCodeAndMessageEnum;
 import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
-import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.MysqlPackage;
+import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.response.ErrPackage;
 import com.yuqi.protocol.pkg.response.OkPackage;
 import io.netty.buffer.ByteBuf;
@@ -13,15 +13,13 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-
 /**
  * @author yuqi
  * @mail yuqi5@xiaomi.com
  * @description your description
- * @time 30/6/20 22:57
+ * @time 4/8/20 09:34
  **/
 public class AuthencationHandler extends ChannelInboundHandlerAdapter {
-
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //???

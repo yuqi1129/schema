@@ -1,5 +1,6 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.io.IO;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @description your description
  * @time 5/7/20 16:38
  **/
-public class AggregateOperator implements Operator, IO {
+public class SlothAggregateOperator implements Operator, IO {
 
     private Operator child;
 
@@ -20,7 +21,7 @@ public class AggregateOperator implements Operator, IO {
     }
 
     @Override
-    public List<Object> next() {
+    public List<Value> next() {
         //block, util we handle all row from child
         return null;
     }

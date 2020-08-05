@@ -1,5 +1,6 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.io.IO;
 import com.yuqi.engine.plan.JoinType;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @description your description
  * @time 5/7/20 16:22
  **/
-public class JoinOperator implements Operator, IO {
+public class SlothJoinOperator implements Operator, IO {
 
     private JoinType joinType;
     private List<String> joinCondition;
@@ -28,7 +29,7 @@ public class JoinOperator implements Operator, IO {
     }
 
     @Override
-    public List<Object> next() {
+    public List<Value> next() {
         return null;
     }
 

@@ -1,5 +1,9 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.data.expr.Symbol;
+import com.yuqi.engine.operator.Operator;
+import com.yuqi.engine.operator.SlothProjectOperator;
+import com.yuqi.sql.util.RexShuttleUtils;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
@@ -31,5 +35,15 @@ public class SlothProject extends Project implements SlothRel {
     @Override
     public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
         return super.computeSelfCost(planner, mq).multiplyBy(0.1);
+    }
+
+
+    @Override
+    public Operator implement() {
+        final Operator child = ((SlothRel) input).implement();
+
+        //todo
+        List<Symbol> symbols = RexShuttleUtils.rexToSymbox(this.exps);
+        return new SlothProjectOperator(child, symbols);
     }
 }

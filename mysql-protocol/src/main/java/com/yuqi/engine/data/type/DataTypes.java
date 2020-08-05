@@ -67,6 +67,17 @@ public final class DataTypes {
         LONG
     );
 
+    public static final Set<DataType> INTEGER_TYPES = Sets.newHashSet(
+            BYTE,
+            SHORT,
+            INTEGER,
+            LONG);
+
+    public static final Set<DataType> DECIMAL_TYPES = Sets.newHashSet(
+            FLOAT,
+            DOUBLE);
+
+
     private static final Set<Integer> NUMBER_CONVERSIONS = Stream.concat(
         Stream.of(BOOLEAN, STRING, TIMESTAMPZ, TIMESTAMP),
         NUMERIC_PRIMITIVE_TYPES.stream()

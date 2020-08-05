@@ -1,0 +1,220 @@
+package com.yuqi.engine.data.value;
+
+
+import com.yuqi.engine.data.type.DataType;
+
+import java.math.BigDecimal;
+
+import static com.yuqi.engine.data.type.DataTypes.BOOLEAN;
+import static com.yuqi.engine.data.type.DataTypes.BYTE;
+import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
+import static com.yuqi.engine.data.type.DataTypes.FLOAT;
+import static com.yuqi.engine.data.type.DataTypes.INTEGER;
+import static com.yuqi.engine.data.type.DataTypes.LONG;
+import static com.yuqi.engine.data.type.DataTypes.SHORT;
+
+/**
+ * @author yuqi
+ * @mail yuqi5@xiaomi.com
+ * @description your description
+ * @time 5/8/20 16:29
+ **/
+public class Value {
+    protected Object value;
+
+    //最终的控制输出格式是由dataType确定的，可能value与DataType不一致
+    //比如说 value = Integer, DataType为Long, 最终需要
+    protected DataType dataType;
+
+    public Value(Object value) {
+        this.value = value;
+    }
+
+    public Value(Object value, DataType dataType) {
+        this.value = value;
+        this.dataType = dataType;
+    }
+
+    public DataType<?> getType() {
+        return dataType;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public boolean isNull() {
+        return null == value;
+    }
+
+    public Integer intValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Integer.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? 1 : 0;
+        }
+
+        if (cl == String.class) {
+            return 0;
+        }
+
+        return 0;
+    }
+
+    public Byte byteValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Byte.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? (byte) 1 : (byte) 0;
+        }
+
+        if (cl == String.class) {
+            return (byte) 0;
+        }
+
+        return (byte) 0;
+    }
+
+    public Short shortValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Short.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? (short) 1 : (short) 0;
+        }
+
+        if (cl == String.class) {
+            return (short) 0;
+        }
+
+        return (short) 0;
+    }
+
+    public Long longValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Long.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? 1L : 0L;
+        }
+
+        if (cl == String.class) {
+            return 0L;
+        }
+
+        return 0L;
+    }
+
+    public Float floatValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Float.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? 1f : 0f;
+        }
+
+        if (cl == String.class) {
+            return 0f;
+        }
+
+        return 0f;
+    }
+
+    public Double doubleValue() {
+        final Class cl = value.getClass();
+
+        if (value instanceof Number) {
+            //TODO 溢出判断
+            return Double.valueOf(value.toString());
+        }
+
+        if (cl == Boolean.class) {
+            return ((Boolean) value) ? (double) 1 : (double) 0;
+        }
+
+        if (cl == String.class) {
+            return (double) 0;
+        }
+
+        return (double) 0;
+    }
+
+    public Boolean booleanValue() {
+        final Class cl = value.getClass();
+
+        if (cl == Boolean.class) {
+            return (Boolean) value;
+        }
+
+        if (value instanceof Number) {
+            return BigDecimal.ZERO.equals(new BigDecimal(value.toString()));
+        }
+
+        if (cl == String.class) {
+            return false;
+        }
+
+        return false;
+    }
+
+    public String stringValue() {
+
+        if (value instanceof String) {
+            return (String) value;
+        }
+
+        return value.toString();
+    }
+
+    public Value copy() {
+        return new Value(value, dataType);
+    }
+
+    public Object getValueByType() {
+        DataType dataType = getType();
+
+        if (dataType == INTEGER) {
+            return intValue();
+        } else if (dataType == BYTE) {
+            return byteValue();
+        } else if (dataType == SHORT) {
+            return shortValue();
+        } else if (dataType == LONG) {
+            return longValue();
+        } else if (dataType == DOUBLE) {
+            return doubleValue();
+        } else if (dataType == FLOAT) {
+            return floatValue();
+        } else if (dataType == BOOLEAN) {
+            return booleanValue();
+        } else {
+            return stringValue();
+        }
+    }
+}

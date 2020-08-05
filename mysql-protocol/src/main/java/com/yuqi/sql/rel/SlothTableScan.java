@@ -1,5 +1,7 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.operator.Operator;
+import com.yuqi.engine.operator.SlothTableScanOperator;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
@@ -19,9 +21,13 @@ public class SlothTableScan extends TableScan implements SlothRel {
         super(cluster, traitSet, table);
     }
 
-
     @Override
     public RelOptCost computeSelfCost(RelOptPlanner planner, RelMetadataQuery mq) {
         return super.computeSelfCost(planner, mq);
+    }
+
+    @Override
+    public Operator implement() {
+        return new SlothTableScanOperator(this.table, this.rowType);
     }
 }

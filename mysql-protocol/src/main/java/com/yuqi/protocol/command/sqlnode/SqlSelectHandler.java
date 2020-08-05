@@ -1,6 +1,7 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
+import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
@@ -79,8 +80,10 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
         operator.open();
 
         List<Object> value;
-        while ((value = operator.next()) != null) {
-            result.add(value);
+
+        List<Value> tmp;
+        while ((tmp = operator.next()) != null) {
+            result.add(tmp.stream().map(v -> v.getValueByType()).collect(Collectors.toList()));
         }
 
         return result;

@@ -1,10 +1,9 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.io.IO;
 
 import java.util.List;
-
-import static com.yuqi.engine.operator.TableScanOperator.EOF;
 
 /**
  * @author yuqi
@@ -12,7 +11,7 @@ import static com.yuqi.engine.operator.TableScanOperator.EOF;
  * @description your description
  * @time 5/7/20 16:15
  **/
-public class FilterOperator implements Operator, IO {
+public class SlothFilterOperator implements Operator, IO {
 
     private List<String> filterCondition;
     private Operator child;
@@ -23,17 +22,19 @@ public class FilterOperator implements Operator, IO {
     }
 
     @Override
-    public List<Object> next() {
-        while (true) {
-            List<Object> result = child.next();
-            if (result != EOF && isTrue(result)) {
-                return result;
-            }
+    public List<Value> next() {
+//        while (true) {
+//            List<Object> result = child.next();
+//            if (result != EOF && isTrue(result)) {
+//                return result;
+//            }
+//
+//            if (result == EOF) {
+//                return EOF;
+//            }
+//        }
 
-            if (result == EOF) {
-                return EOF;
-            }
-        }
+        return null;
     }
 
     @Override

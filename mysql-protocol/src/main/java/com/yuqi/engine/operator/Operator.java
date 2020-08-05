@@ -1,5 +1,7 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.data.value.Value;
+
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ public interface Operator {
      * Get next row, next has another value to identify the value type
      * @return
      */
-    List<Object> next();
+    List<Value> next();
 
     void close();
 

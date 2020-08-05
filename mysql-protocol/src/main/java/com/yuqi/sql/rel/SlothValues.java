@@ -2,7 +2,7 @@ package com.yuqi.sql.rel;
 
 import com.google.common.collect.ImmutableList;
 import com.yuqi.engine.operator.Operator;
-import com.yuqi.engine.operator.ValueOperator;
+import com.yuqi.engine.operator.SlothValueOperator;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptCost;
 import org.apache.calcite.plan.RelOptPlanner;
@@ -37,6 +37,6 @@ public class SlothValues extends Values implements SlothRel {
 
     @Override
     public Operator implement() {
-        return new ValueOperator(tuples, rowType);
+        return new SlothValueOperator(tuples, rowType);
     }
 }

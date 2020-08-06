@@ -1,5 +1,6 @@
 package com.yuqi.engine.data.func;
 
+import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public abstract class Scalar {
         this.arglength = arglength;
     }
 
-    public abstract Value evaluate(List<Value> args);
+    public abstract Value evaluate(List<Value> args, DataType returnType);
 }

@@ -34,6 +34,9 @@ public class TypeConversionUtils {
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.BIGINT, LONG);
 
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.FLOAT, FLOAT);
+
+        //Treat Decimal as double
+        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.DECIMAL, DOUBLE);
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.DOUBLE, DOUBLE);
 
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.BOOLEAN, BOOLEAN);

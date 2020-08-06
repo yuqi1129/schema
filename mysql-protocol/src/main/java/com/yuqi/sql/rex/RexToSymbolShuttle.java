@@ -52,7 +52,8 @@ public class RexToSymbolShuttle implements RexVisitor<Symbol> {
     public Symbol visitLiteral(RexLiteral literal) {
         final SqlTypeName sqlTypeName = literal.getType().getSqlTypeName();
         DataType dataType = TypeConversionUtils.getBySqlTypeName(sqlTypeName);
-        Value value = new Value(literal.getValue2(), dataType);
+        //TODO why 1.5 literal.getValue2() return 15 ?????
+        Value value = new Value(literal.getValue(), dataType);
         return new Literal(value);
     }
 

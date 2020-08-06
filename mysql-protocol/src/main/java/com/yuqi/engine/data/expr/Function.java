@@ -35,7 +35,7 @@ public class Function extends Symbol {
                 .map(Symbol::compute)
                 .collect(Collectors.toList());
 
-        return operator.evaluate(values);
+        return operator.evaluate(values, returnType);
     }
 
     @Override

@@ -77,7 +77,4 @@ public abstract class ArithmeticFunction extends Scalar {
             return new Value(r, returnType);
         }
     };
-
-
-
 }

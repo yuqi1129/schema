@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
  **/
 public class RexToSymbolShuttle implements RexVisitor<Symbol> {
 
+    public static final RexToSymbolShuttle INSTANCE = new RexToSymbolShuttle();
+
     @Override
     public Symbol visitInputRef(RexInputRef inputRef) {
         final SqlTypeName sqlTypeName = inputRef.getType().getSqlTypeName();

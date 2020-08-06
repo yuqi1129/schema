@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
  * @time 5/8/20 19:08
  **/
 public class RexShuttleUtils {
-    public static final RexToSymbolShuttle INSTANCE = new RexToSymbolShuttle();
+
+
+    private static final RexToSymbolShuttle SHUTTLE = RexToSymbolShuttle.INSTANCE;
 
     public static List<Symbol> rexToSymbox(List<RexNode> rexNodes) {
         return rexNodes.stream()
-                .map(rexNode -> rexNode.accept(INSTANCE))
+                .map(rexNode -> rexNode.accept(SHUTTLE))
                 .collect(Collectors.toList());
     }
 }

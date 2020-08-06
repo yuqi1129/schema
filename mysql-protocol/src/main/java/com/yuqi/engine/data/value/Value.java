@@ -2,6 +2,7 @@ package com.yuqi.engine.data.value;
 
 
 import com.yuqi.engine.data.type.DataType;
+import com.yuqi.engine.data.type.DataTypes;
 
 import java.math.BigDecimal;
 
@@ -19,7 +20,8 @@ import static com.yuqi.engine.data.type.DataTypes.SHORT;
  * @description your description
  * @time 5/8/20 16:29
  **/
-public class Value {
+public class Value implements Comparable<Value> {
+
     protected Object value;
 
     //最终的控制输出格式是由dataType确定的，可能value与DataType不一致
@@ -216,5 +218,36 @@ public class Value {
         } else {
             return stringValue();
         }
+    }
+
+    @Override
+    public int compareTo(Value o) {
+        if (o.isNull()) {
+            return 1;
+        }
+
+        //TODO 暂时不考虑boolean类型
+        if (DataTypes.INTEGER_TYPES.contains(o.getType()) && DataTypes.INTEGER_TYPES.contains(this.getType())) {
+            return Long.compare(longValue(), o.longValue());
+        }
+
+
+        return BigDecimal.valueOf(doubleValue()).compareTo(BigDecimal.valueOf(o.doubleValue()));
+    }
+
+    public Value compare(Value o) {
+       return null;
+    }
+
+    public static Value ofBooleanTrue() {
+        return new Value(true, BOOLEAN);
+    }
+
+    public static Value ofBooleanFalse() {
+        return new Value(false, BOOLEAN);
+    }
+
+    public static Value ofBooean(boolean b) {
+        return new Value(b, BOOLEAN);
     }
 }

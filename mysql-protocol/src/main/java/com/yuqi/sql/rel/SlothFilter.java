@@ -1,10 +1,14 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.operator.Operator;
+import com.yuqi.engine.operator.SlothFilterOperator;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Filter;
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
+
 
 /**
  * @author yuqi
@@ -21,5 +25,14 @@ public class SlothFilter extends Filter implements SlothRel {
     @Override
     public Filter copy(RelTraitSet traitSet, RelNode input, RexNode condition) {
         return new SlothFilter(input.getCluster(), traitSet, input, condition);
+    }
+
+    @Override
+    public Operator implement() {
+        final Operator input = ((SlothRel) getInput()).implement();
+        RelDataType relDataType = this.rowType;
+        RexNode condition = this.condition;
+
+        return new SlothFilterOperator(condition, input, relDataType);
     }
 }

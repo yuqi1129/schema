@@ -8,6 +8,7 @@ import org.apache.calcite.rel.type.RelDataType;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import static com.yuqi.engine.data.type.DataTypes.LONG;
 import static com.yuqi.engine.data.type.DataTypes.STRING;
@@ -44,6 +45,12 @@ public class SlothTableScanOperator implements Operator, IO {
         valuesLists.add(v1);
         valuesLists.add(v2);
         valuesLists.add(v3);
+
+        Random random = new Random();
+        for (int i = 0; i < 100; i++) {
+            List<Value> v = Lists.newArrayList(new Value(random.nextInt(30), LONG), new Value(random.nextInt(30), STRING));
+            valuesLists.add(v);
+        }
 
         iterator = valuesLists.iterator();
     }

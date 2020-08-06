@@ -12,7 +12,7 @@ import com.yuqi.sql.SlothParser;
 import com.yuqi.sql.rel.SlothRel;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.rel.RelNode;
-import org.apache.calcite.sql.SqlSelect;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 31/7/20 17:03
  **/
-public class SqlSelectHandler implements Handler<SqlSelect> {
+public class SqlSelectHandler implements Handler<SqlNode> {
 
     public static final SqlSelectHandler INSTANCE = new SqlSelectHandler();
 
     @Override
-    public void handle(ConnectionContext connectionContext, SqlSelect type) {
+    public void handle(ConnectionContext connectionContext, SqlNode type) {
 
         String s = type.toString();
         Handler handler;
@@ -54,7 +54,9 @@ public class SqlSelectHandler implements Handler<SqlSelect> {
 
 
         //如果select * 之类就不能用这个sqlnode 拿列名
-        List<String> columnNames = type.getSelectList().getList().stream().map(Object::toString).collect(Collectors.toList());
+
+        final List<String> columnNames = relNode.getRowType().getFieldNames();
+
         int[] columnTypes = new int[columnNames.size()];
 
         for (int i = 0; i < columnNames.size(); i++) {

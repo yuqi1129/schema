@@ -1,11 +1,16 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.operator.Operator;
+import com.yuqi.engine.operator.SlothSortOperator;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.rel.RelCollation;
+import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Sort;
 import org.apache.calcite.rex.RexNode;
+
+import java.util.List;
 
 /**
  * @author yuqi
@@ -19,8 +24,22 @@ public class SlothSort extends Sort implements SlothRel {
         super(cluster, traits, child, collation);
     }
 
+    public SlothSort(RelOptCluster cluster, RelTraitSet traits, RelNode child, RelCollation collation, RexNode offset, RexNode fetch) {
+        super(cluster, traits, child, collation, offset, fetch);
+    }
+
     @Override
     public Sort copy(RelTraitSet traitSet, RelNode newInput, RelCollation newCollation, RexNode offset, RexNode fetch) {
-        return new SlothSort(input.getCluster(), traitSet, newInput, collation);
+        return new SlothSort(input.getCluster(), traitSet, newInput, collation, offset, fetch);
+    }
+
+    @Override
+    public Operator implement() {
+
+        //Sort has bug
+        //result of sql 'select id, name from person order by id + 1' has three column
+        Operator input = ((SlothRel) getInput()).implement();
+        final List<RelFieldCollation> sortKeys = this.collation.getFieldCollations();
+        return new SlothSortOperator(sortKeys, offset, fetch, input);
     }
 }

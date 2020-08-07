@@ -21,6 +21,9 @@ public abstract class AbstractAggregation implements Aggregation {
 
     protected int index;
     protected List<List<Value>> originDatas;
+    protected List<Integer> groupByIndex;
+
+    protected boolean showGroupByColumn = false;
 
     public AbstractAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType,
                                DataType resultType, int index) {
@@ -29,6 +32,20 @@ public abstract class AbstractAggregation implements Aggregation {
         this.inputType = inputType;
         this.resultType = resultType;
         this.index = index;
+    }
+
+    public AbstractAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType,
+                               DataType resultType, int index, List<Integer> groupByIndex) {
+        this.isDistinct = isDistinct;
+        this.ignoreNull = ignoreNull;
+        this.inputType = inputType;
+        this.resultType = resultType;
+        this.index = index;
+        this.groupByIndex = groupByIndex;
+    }
+
+    public void setShowGroupByColumn(boolean showGroupByColumn) {
+        this.showGroupByColumn = showGroupByColumn;
     }
 
     @Override

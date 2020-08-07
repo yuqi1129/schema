@@ -70,8 +70,7 @@ public class SlothAggregateOperator implements Operator, IO {
 
             List<List<List<Value>>> values;
             if (CollectionUtils.isNotEmpty(groupByIndex)) {
-                //todo
-                valueIterator = getResultWithGroupBy(null);
+                valueIterator = getResultWithGroupBy(valueHolder);
             } else {
                 valueIterator = getResultWithOutGroupBy(valueHolder);
             }
@@ -94,17 +93,33 @@ public class SlothAggregateOperator implements Operator, IO {
         //do your work
     }
 
+    Iterator<List<Value>> getResultWithGroupBy(List<List<Value>> valueHolder) {
+        List<AbstractAggregation> aggregations = createAggregation();
+        return valueHolder.stream().collect(Collectors.groupingBy(valueList -> {
+            final StringBuilder builder = new StringBuilder();
 
-    Iterator<List<Value>> getResultWithGroupBy(List<List<List<Value>>> values) {
+            for (Integer i : groupByIndex) {
+                builder.append(valueList.get(i).stringValue()).append("<------------>");
+            }
+            return builder.toString();
+        })).values().stream().map(l -> {
+            List<Value> g = aggregations.stream().map(agg -> {
+                agg.setOriginDatas(l);
+                return agg.compute();
+            }).collect(Collectors.toList());
 
-        List<List<Value>> rs = Lists.newArrayList();
+            List<Value> r = Lists.newArrayList();
+            for (Integer i : groupByIndex) {
+                //取第一个数据 做为rowkey
+                r.add(l.get(0).get(i).copy());
+            }
 
-        //for (List<List<Value>> v : )
-        return null;
+            r.addAll(g);
+            return r;
+        }).iterator();
     }
 
     Iterator<List<Value>> getResultWithOutGroupBy(List<List<Value>> valueHolder) {
-
         final List<AbstractAggregation> abstractAggregations = createAggregation();
 
         final List<Value> values = abstractAggregations.stream().map(a -> {
@@ -131,7 +146,8 @@ public class SlothAggregateOperator implements Operator, IO {
                         call.ignoreNulls(),
                         null,
                         TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
-                        index);
+                        index,
+                        groupByIndex);
             } else if (function == SqlStdOperatorTable.COUNT) {
                 r = new CountAggregation(
                         call.isDistinct(),
@@ -139,21 +155,26 @@ public class SlothAggregateOperator implements Operator, IO {
                         null,
                         TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
                         index,
-                        args.isEmpty());
+                        args.isEmpty(),
+                        groupByIndex);
             } else if (function == SqlStdOperatorTable.MAX) {
                 r = new MaxAggregation(
                         call.isDistinct(),
                         call.ignoreNulls(),
                         null,
                         TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
-                        index);
+                        index,
+                        groupByIndex
+                );
             } else {
                 r = new MinAggregation(
                         call.isDistinct(),
                         call.ignoreNulls(),
                         null,
                         TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
-                        index);
+                        index,
+                        groupByIndex
+                );
             }
 
             return r;

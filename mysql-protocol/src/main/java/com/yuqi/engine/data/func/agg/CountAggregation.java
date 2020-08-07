@@ -20,8 +20,8 @@ public class CountAggregation extends AbstractAggregation {
     private List<Value> v;
 
     public CountAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType, DataType resultType,
-                            int index, boolean countStart) {
-        super(isDistinct, ignoreNull, inputType, resultType, index);
+                            int index, boolean countStart, List<Integer> groupByIndex) {
+        super(isDistinct, ignoreNull, inputType, resultType, index, groupByIndex);
         this.countStart = countStart;
     }
 

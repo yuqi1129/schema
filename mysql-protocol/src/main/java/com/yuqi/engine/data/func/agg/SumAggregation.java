@@ -18,8 +18,9 @@ public class SumAggregation extends AbstractAggregation {
     private Value r;
     private List<Value> v;
 
-    public SumAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType, DataType resultType, int index) {
-        super(isDistinct, ignoreNull, inputType, resultType, index);
+    public SumAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType,
+                          DataType resultType, int index, List<Integer> groupByIndex) {
+        super(isDistinct, ignoreNull, inputType, resultType, index, groupByIndex);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.type.DataTypes;
 import com.yuqi.engine.data.value.Value;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -14,8 +15,9 @@ import java.util.stream.Collectors;
  **/
 public class MinAggregation extends MaxAggregation {
 
-    public MinAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType, DataType resultType, int index) {
-        super(isDistinct, ignoreNull, inputType, resultType, index);
+    public MinAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType,
+                          DataType resultType, int index, List<Integer> groupByIndex) {
+        super(isDistinct, ignoreNull, inputType, resultType, index, groupByIndex);
     }
 
     @Override

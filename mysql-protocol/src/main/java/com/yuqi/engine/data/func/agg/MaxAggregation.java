@@ -19,8 +19,9 @@ public class MaxAggregation extends AbstractAggregation {
     protected Value r;
     protected List<Value> v;
 
-    public MaxAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType, DataType resultType, int index) {
-        super(isDistinct, ignoreNull, inputType, resultType, index);
+    public MaxAggregation(boolean isDistinct, boolean ignoreNull, DataType inputType,
+                          DataType resultType, int index, List<Integer> groupByIndex) {
+        super(isDistinct, ignoreNull, inputType, resultType, index, groupByIndex);
     }
 
     @Override

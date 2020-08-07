@@ -68,7 +68,6 @@ public class SlothAggregateOperator implements Operator, IO {
                 valueHolder.add(v);
             }
 
-            List<List<List<Value>>> values;
             if (CollectionUtils.isNotEmpty(groupByIndex)) {
                 valueIterator = getResultWithGroupBy(valueHolder);
             } else {
@@ -99,6 +98,7 @@ public class SlothAggregateOperator implements Operator, IO {
             final StringBuilder builder = new StringBuilder();
 
             for (Integer i : groupByIndex) {
+                //TODO 用MD5拼key
                 builder.append(valueList.get(i).stringValue()).append("<------------>");
             }
             return builder.toString();

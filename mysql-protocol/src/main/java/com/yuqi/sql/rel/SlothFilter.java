@@ -22,6 +22,7 @@ public class SlothFilter extends Filter implements SlothRel {
         super(cluster, traits, child, condition);
     }
 
+
     @Override
     public Filter copy(RelTraitSet traitSet, RelNode input, RexNode condition) {
         return new SlothFilter(input.getCluster(), traitSet, input, condition);

@@ -59,6 +59,8 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         } catch (Exception e) {
             //TODO 这里异常需要分类处理一下
             LOGGER.error(Throwables.getStackTraceAsString(e));
+            System.out.println(Throwables.getStackTraceAsString(e));
+
             if (query.contains("@@")) {
                 handleSqlString(query);
                 return;

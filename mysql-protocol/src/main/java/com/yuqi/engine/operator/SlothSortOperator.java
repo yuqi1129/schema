@@ -71,8 +71,8 @@ public class SlothSortOperator implements Operator, IO {
                         return EOF;
                     }
                 }
+                haveFetchData = true;
             }
-            haveFetchData = true;
             data = input.next();
 
             if (limitValue != -1 && data != EOF) {
@@ -118,7 +118,7 @@ public class SlothSortOperator implements Operator, IO {
     }
 
 
-    //直接内存排序
+    //直接内存排序, 如果数据量过大，可以考虑归并排
     private void sortData(List<List<Value>> data) {
         data.sort((a, b) -> sort(0, a, b));
     }

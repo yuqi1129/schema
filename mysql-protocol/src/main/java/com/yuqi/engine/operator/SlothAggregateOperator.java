@@ -1,9 +1,25 @@
 package com.yuqi.engine.operator;
 
+import com.google.common.collect.Lists;
+import com.yuqi.engine.data.expr.Symbol;
+import com.yuqi.engine.data.func.agg.AbstractAggregation;
+import com.yuqi.engine.data.func.agg.CountAggregation;
+import com.yuqi.engine.data.func.agg.MaxAggregation;
+import com.yuqi.engine.data.func.agg.MinAggregation;
+import com.yuqi.engine.data.func.agg.SumAggregation;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.io.IO;
-
+import com.yuqi.sql.util.TypeConversionUtils;
+import org.apache.calcite.rel.core.AggregateCall;
+import org.apache.calcite.sql.SqlAggFunction;
+import org.apache.calcite.sql.fun.SqlStdOperatorTable;
+import org.apache.calcite.util.ImmutableBitSet;
+import org.apache.commons.collections4.CollectionUtils;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
 
 /**
  * @author yuqi
@@ -13,21 +29,134 @@ import java.util.List;
  **/
 public class SlothAggregateOperator implements Operator, IO {
 
-    private Operator child;
+    private Operator input;
+    private ImmutableBitSet groupset;
+
+    //currently do know the use;
+    private List<ImmutableBitSet> groupSets;
+    private List<AggregateCall> aggregateCalls;
+
+    private List<Integer> groupByIndex;
+    private List<Symbol> aggCalls;
+
+    private List<List<Value>> valueHolder = Lists.newArrayList();
+    private boolean hasFetchData = false;
+    private Iterator<List<Value>> valueIterator;
+
+    public SlothAggregateOperator(Operator input, ImmutableBitSet groupset, List<ImmutableBitSet> groupSets, List<AggregateCall> aggregateCalls) {
+        this.input = input;
+        this.groupset = groupset;
+        this.groupSets = groupSets;
+        this.aggregateCalls = aggregateCalls;
+    }
 
     @Override
     public void open() {
-        child.open();
+        input.open();
+
+        groupByIndex = groupset.asList();
+        //do your owner work
     }
 
     @Override
     public List<Value> next() {
         //block, util we handle all row from child
-        return null;
+        //return null;
+        List<Value> v = EOF;
+        if (!hasFetchData) {
+            while ((v = input.next()) != EOF) {
+                valueHolder.add(v);
+            }
+
+            List<List<List<Value>>> values;
+            if (CollectionUtils.isNotEmpty(groupByIndex)) {
+                //todo
+                valueIterator = getResultWithGroupBy(null);
+            } else {
+                valueIterator = getResultWithOutGroupBy(valueHolder);
+            }
+
+            hasFetchData = true;
+        }
+
+        if (valueIterator.hasNext()) {
+            v = valueIterator.next();
+        }
+
+        return v;
+
     }
 
     @Override
     public void close() {
-        child.close();
+        input.close();
+
+        //do your work
+    }
+
+
+    Iterator<List<Value>> getResultWithGroupBy(List<List<List<Value>>> values) {
+
+        List<List<Value>> rs = Lists.newArrayList();
+
+        //for (List<List<Value>> v : )
+        return null;
+    }
+
+    Iterator<List<Value>> getResultWithOutGroupBy(List<List<Value>> valueHolder) {
+
+        final List<AbstractAggregation> abstractAggregations = createAggregation();
+
+        final List<Value> values = abstractAggregations.stream().map(a -> {
+            a.setOriginDatas(valueHolder);
+            return a.compute();
+
+        }).collect(Collectors.toList());
+        final List<List<Value>> r = Lists.newArrayList();
+        r.add(values);
+
+        return r.iterator();
+    }
+
+    private List<AbstractAggregation> createAggregation() {
+       return aggregateCalls.stream().map(call -> {
+            final SqlAggFunction function = call.getAggregation();
+            final List<Integer> args = call.getArgList();
+            final int index = args.size() == 0 ? -1 : args.get(0);
+
+            final AbstractAggregation r;
+            if (function == SqlStdOperatorTable.SUM) {
+                r = new SumAggregation(
+                        call.isDistinct(),
+                        call.ignoreNulls(),
+                        null,
+                        TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
+                        index);
+            } else if (function == SqlStdOperatorTable.COUNT) {
+                r = new CountAggregation(
+                        call.isDistinct(),
+                        call.ignoreNulls(),
+                        null,
+                        TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
+                        index,
+                        args.isEmpty());
+            } else if (function == SqlStdOperatorTable.MAX) {
+                r = new MaxAggregation(
+                        call.isDistinct(),
+                        call.ignoreNulls(),
+                        null,
+                        TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
+                        index);
+            } else {
+                r = new MinAggregation(
+                        call.isDistinct(),
+                        call.ignoreNulls(),
+                        null,
+                        TypeConversionUtils.getBySqlTypeName(call.type.getSqlTypeName()),
+                        index);
+            }
+
+            return r;
+        }).collect(Collectors.toList());
     }
 }

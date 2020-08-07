@@ -5,6 +5,7 @@ import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.type.DataTypes;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static com.yuqi.engine.data.type.DataTypes.BOOLEAN;
 import static com.yuqi.engine.data.type.DataTypes.BYTE;
@@ -201,6 +202,10 @@ public class Value implements Comparable<Value> {
     public Object getValueByType() {
         DataType dataType = getType();
 
+        if (null == value) {
+            return value;
+        }
+
         if (dataType == INTEGER) {
             return intValue();
         } else if (dataType == BYTE) {
@@ -249,5 +254,30 @@ public class Value implements Comparable<Value> {
 
     public static Value ofBooean(boolean b) {
         return new Value(b, BOOLEAN);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o.getClass() != Value.class) {
+            return false;
+        }
+
+        Value v = (Value) o;
+
+        if (isNull()) {
+            return v.isNull();
+        }
+
+        return this.getValueByType().equals(v.getValueByType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, dataType);
+    }
+
+    public void setDataType(DataType dataType) {
+        this.dataType = dataType;
     }
 }

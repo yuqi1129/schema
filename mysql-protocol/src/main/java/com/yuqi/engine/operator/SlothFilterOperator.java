@@ -56,8 +56,4 @@ public class SlothFilterOperator implements Operator, IO {
     public void close() {
         input.close();
     }
-
-    private boolean isTrue(List<Object> row) {
-        return true;
-    }
 }

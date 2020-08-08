@@ -60,8 +60,6 @@ public class SlothAggregateOperator implements Operator, IO {
 
     @Override
     public List<Value> next() {
-        //block, util we handle all row from child
-        //return null;
         List<Value> v = EOF;
         if (!hasFetchData) {
             while ((v = input.next()) != EOF) {
@@ -92,7 +90,7 @@ public class SlothAggregateOperator implements Operator, IO {
         //do your work
     }
 
-    Iterator<List<Value>> getResultWithGroupBy(List<List<Value>> valueHolder) {
+    private Iterator<List<Value>> getResultWithGroupBy(List<List<Value>> valueHolder) {
         List<AbstractAggregation> aggregations = createAggregation();
         return valueHolder.stream().collect(Collectors.groupingBy(valueList -> {
             final StringBuilder builder = new StringBuilder();
@@ -119,7 +117,7 @@ public class SlothAggregateOperator implements Operator, IO {
         }).iterator();
     }
 
-    Iterator<List<Value>> getResultWithOutGroupBy(List<List<Value>> valueHolder) {
+    private Iterator<List<Value>> getResultWithOutGroupBy(List<List<Value>> valueHolder) {
         final List<AbstractAggregation> abstractAggregations = createAggregation();
 
         final List<Value> values = abstractAggregations.stream().map(a -> {

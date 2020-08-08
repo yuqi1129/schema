@@ -1,5 +1,6 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface Operator {
 
     void close();
 
-    default List<String> getRowType() {
+    default List<DataType> getRowType() {
         //TODO
         return null;
     }

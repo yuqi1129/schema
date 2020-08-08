@@ -43,7 +43,8 @@ public class SlothProject extends Project implements SlothRel {
         final Operator child = ((SlothRel) input).implement();
 
         //todo
-        List<Symbol> symbols = RexShuttleUtils.rexToSymbox(this.exps);
-        return new SlothProjectOperator(child, symbols);
+        final List<Symbol> symbols = RexShuttleUtils.rexToSymbox(this.exps);
+        final RelDataType dataType = getRowType();
+        return new SlothProjectOperator(child, symbols, dataType);
     }
 }

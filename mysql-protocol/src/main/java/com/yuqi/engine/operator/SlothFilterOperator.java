@@ -2,7 +2,6 @@ package com.yuqi.engine.operator;
 
 import com.yuqi.engine.data.expr.Symbol;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.engine.io.IO;
 import com.yuqi.sql.rex.RexToSymbolShuttle;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
@@ -17,19 +16,17 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
  * @description your description
  * @time 5/7/20 16:15
  **/
-public class SlothFilterOperator implements Operator, IO {
+public class SlothFilterOperator extends AbstractOperator {
 
     private RexNode filterCondtion;
     private Operator input;
-    private RelDataType relDataType;
-
 
     private Symbol filter;
 
     public SlothFilterOperator(RexNode filterCondtion, Operator input, RelDataType relDataType) {
+        super(relDataType);
         this.filterCondtion = filterCondtion;
         this.input = input;
-        this.relDataType = relDataType;
     }
 
     @Override

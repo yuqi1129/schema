@@ -8,6 +8,7 @@ import org.apache.calcite.rel.RelCollation;
 import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Sort;
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class SlothSort extends Sort implements SlothRel {
         //result of sql 'select id, name from person order by id + 1' has three column
         Operator input = ((SlothRel) getInput()).implement();
         final List<RelFieldCollation> sortKeys = this.collation.getFieldCollations();
-        return new SlothSortOperator(sortKeys, offset, fetch, input);
+        final RelDataType relDataType = getRowType();
+        return new SlothSortOperator(sortKeys, offset, fetch, input, relDataType);
     }
 }

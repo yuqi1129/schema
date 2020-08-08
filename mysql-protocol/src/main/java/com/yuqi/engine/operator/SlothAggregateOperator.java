@@ -8,9 +8,9 @@ import com.yuqi.engine.data.func.agg.MaxAggregation;
 import com.yuqi.engine.data.func.agg.MinAggregation;
 import com.yuqi.engine.data.func.agg.SumAggregation;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.engine.io.IO;
 import com.yuqi.sql.util.TypeConversionUtils;
 import org.apache.calcite.rel.core.AggregateCall;
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.sql.SqlAggFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.util.ImmutableBitSet;
@@ -27,7 +27,7 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
  * @description your description
  * @time 5/7/20 16:38
  **/
-public class SlothAggregateOperator implements Operator, IO {
+public class SlothAggregateOperator extends AbstractOperator {
 
     private Operator input;
     private ImmutableBitSet groupset;
@@ -43,7 +43,10 @@ public class SlothAggregateOperator implements Operator, IO {
     private boolean hasFetchData = false;
     private Iterator<List<Value>> valueIterator;
 
-    public SlothAggregateOperator(Operator input, ImmutableBitSet groupset, List<ImmutableBitSet> groupSets, List<AggregateCall> aggregateCalls) {
+    public SlothAggregateOperator(Operator input, ImmutableBitSet groupset, List<ImmutableBitSet> groupSets,
+                                  List<AggregateCall> aggregateCalls, RelDataType rowType) {
+
+        super(rowType);
         this.input = input;
         this.groupset = groupset;
         this.groupSets = groupSets;

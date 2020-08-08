@@ -3,7 +3,6 @@ package com.yuqi.engine.operator;
 import com.google.common.collect.ImmutableList;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.engine.io.IO;
 import com.yuqi.sql.util.TypeConversionUtils;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexLiteral;
@@ -19,16 +18,15 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 4/8/20 18:52
  **/
-public class SlothValueOperator implements Operator, IO {
+public class SlothValueOperator extends AbstractOperator {
     private final ImmutableList<ImmutableList<RexLiteral>> values;
-    private final RelDataType relDataType;
 
     //这里需要搞成Literal ???,
     private Iterator<List<Value>> r;
 
     public SlothValueOperator(ImmutableList<ImmutableList<RexLiteral>> values, RelDataType relDataType) {
+        super(relDataType);
         this.values = values;
-        this.relDataType = relDataType;
     }
 
     @Override

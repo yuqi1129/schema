@@ -2,7 +2,7 @@ package com.yuqi.engine.operator;
 
 import com.yuqi.engine.data.expr.Symbol;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.engine.io.IO;
+import org.apache.calcite.rel.type.RelDataType;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,12 +15,13 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
  * @description your description
  * @time 5/7/20 16:04
  **/
-public class SlothProjectOperator implements Operator, IO {
+public class SlothProjectOperator extends AbstractOperator {
     private Operator child;
     private List<Symbol> projects;
 
 
-    public SlothProjectOperator(Operator child, List<Symbol> projects) {
+    public SlothProjectOperator(Operator child, List<Symbol> projects, RelDataType rowType) {
+        super(rowType);
         this.child = child;
         this.projects = projects;
     }

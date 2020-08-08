@@ -16,6 +16,7 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +50,7 @@ public class SqlSelectHandler implements Handler<SqlNode> {
         final List<List<Object>> result = executeOperator(operator);
 
         final List<List<String>> data = result.stream()
-                .map(l -> l.stream().map(Object::toString).collect(Collectors.toList()))
+                .map(l -> l.stream().map(v -> Objects.isNull(v) ? "NULL" : v.toString()).collect(Collectors.toList()))
                 .collect(Collectors.toList());
 
 

@@ -2,9 +2,9 @@ package com.yuqi.engine.operator;
 
 import com.google.common.collect.Lists;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.engine.io.IO;
 import com.yuqi.sql.rex.RexToSymbolShuttle;
 import org.apache.calcite.rel.RelFieldCollation;
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -19,7 +19,7 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
  * @description your description
  * @time 6/8/20 18:56
  **/
-public class SlothSortOperator implements Operator, IO {
+public class SlothSortOperator extends AbstractOperator {
     private final List<RelFieldCollation> sort;
     private RexNode offset;
     private RexNode limit;
@@ -34,7 +34,10 @@ public class SlothSortOperator implements Operator, IO {
     private boolean haveFetchData = false;
     private int hasFetchNumberOfData = 0;
 
-    public SlothSortOperator(List<RelFieldCollation> sort, RexNode offset, RexNode limit, Operator input) {
+    public SlothSortOperator(List<RelFieldCollation> sort, RexNode offset, RexNode limit,
+                             Operator input, RelDataType relDataType) {
+        super(relDataType);
+
         this.sort = sort;
         this.offset = offset;
         this.limit = limit;

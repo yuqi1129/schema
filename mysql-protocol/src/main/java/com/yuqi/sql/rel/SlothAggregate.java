@@ -8,6 +8,7 @@ import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.core.Aggregate;
 import org.apache.calcite.rel.core.AggregateCall;
 import org.apache.calcite.rel.hint.RelHint;
+import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.util.ImmutableBitSet;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class SlothAggregate extends Aggregate implements SlothRel {
         //select id from person group by id
         //select distict id from person;
         //TODO
-        return new SlothAggregateOperator(input, groupSet, groupSets, aggCalls);
+        final RelDataType rowType = getRowType();
+        return new SlothAggregateOperator(input, groupSet, groupSets, aggCalls, rowType);
     }
 }

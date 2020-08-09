@@ -82,6 +82,7 @@ public class SlothTable extends AbstractQueryableTable implements TranslatableTa
         List<RelDataType> relDataTypes = Lists.newArrayListWithCapacity(columns.size());
         List<String> columnNames = Lists.newArrayList();
 
+        //date/time/datetime 都用long存储
         columns.forEach(cl -> {
             final String sqlTypeNameString = cl.getColumnType().getTypeName().toString().toUpperCase();
             final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);

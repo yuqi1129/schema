@@ -85,38 +85,56 @@ SqlDrop Drop() :
         {
             exist = true;
         }
-    )?
+                )?
 
-    dbName = CompoundIdentifier()
-    {
-        return new SqlDrop(pos, exist, dbName.toString(), isDb);
-    }
-}
+                dbName = CompoundIdentifier()
+                {
+                return new SqlDrop(pos, exist, dbName.toString(), isDb);
+                }
+                }
 
-SqlShow SqlShow() :
-{
-    final SqlIdentifier command;
-    SqlParserPos pos;
-}
-{
-    {
-        pos = getPos();
-    }
+                SqlShow SqlShow() :
+                {
+                SqlIdentifier command = null;
+                SqlParserPos pos;
+                int type;
+                }
+                {
+                {
+                pos = getPos();
+                }
 
-    <SHOW>
-    command  =  CompoundIdentifier()
-    {
-        return new SqlShow(pos, command.toString());
-    }
-}
+                <SHOW>
+                    (
+                    <DATABASES>
+                        {
+                        type = 0;
+                        }
+                        |
+                        <TABLES>
+                            {
+                            type = 1;
+                            }
+                            |
+                            <CREATE>
+                                <TABLE>
+                                    command = CompoundIdentifier()
+                                    {
+                                    type = 2;
+                                    }
+                                    )
+                                    {
+                                    return new SqlShow(pos, type, command == null ? null : command.toString());
+                                    }
+                                    }
 
-SqlUse SqlUseCommand() :
-{
-    final SqlIdentifier command;
-    SqlParserPos pos;
-}
-{
-    {
+                                    SqlUse SqlUseCommand() :
+                                    {
+                                    final SqlIdentifier command;
+                                    SqlParserPos pos;
+                                    }
+                                    {
+                                    {
         pos = getPos();
     }
     <USE>

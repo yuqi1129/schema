@@ -52,7 +52,9 @@ data: {
     # keyword add it to 'nonReservedKeywords' section.
     keywords: [
         "IF",
-        "USE"
+        "USE",
+        "DATABASES",
+        "TABLES"
     ]
 
     # List of keywords from "keywords" section that are not reserved.

@@ -34,9 +34,10 @@ public class SqlShowHandler implements Handler<SqlShow> {
         //todo
         List<String> data;
         String columnName = "Database";
-        if ("databases".equalsIgnoreCase(command)) {
+        final int showType = type.getType();
+        if (SqlShow.SHOW_DATABASES == showType) {
             data = SlothSchemaHolder.INSTANCE.getAllSchemas();
-        } else if ("tables".equalsIgnoreCase(command)) {
+        } else if (SqlShow.SHOW_TABLES == showType) {
             String db = connectionContext.getDb();
             if (Objects.isNull(db)) {
                 MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
@@ -48,10 +49,13 @@ public class SqlShowHandler implements Handler<SqlShow> {
                 return;
             }
 
-            columnName = String.join("_", Lists.newArrayList("Tables", "In", db));
+            columnName = String.join("_", Lists.newArrayList("Tables", "in", db));
 
             final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
             data = slothSchema.getTables();
+        } else if (SqlShow.SHOW_CREATE_TABLE == showType) {
+            data = Lists.newArrayList("mock create table");
+            columnName = "Create Table";
         } else {
             final MysqlPackage r = PackageUtils.buildErrPackage(
                     SYNTAX_ERROR.getCode(),

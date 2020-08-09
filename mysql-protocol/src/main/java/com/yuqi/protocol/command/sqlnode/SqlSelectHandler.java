@@ -63,7 +63,7 @@ public class SqlSelectHandler implements Handler<SqlNode> {
                 .collect(Collectors.toList());
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
-                .columnName(columnNames.toArray(new String[columnNames.size()]))
+                .columnName(columnNames.toArray(new String[0]))
                 .columnType(rowTypes)
                 .data(data)
                 .schema(StringUtils.EMPTY)
@@ -77,14 +77,11 @@ public class SqlSelectHandler implements Handler<SqlNode> {
 
     List<List<Object>> executeOperator(Operator operator) {
         final List<List<Object>> result = Lists.newArrayList();
-
         operator.open();
-
-        List<Object> value;
 
         List<Value> tmp;
         while ((tmp = operator.next()) != null) {
-            result.add(tmp.stream().map(v -> v.getValueByType()).collect(Collectors.toList()));
+            result.add(tmp.stream().map(Value::getValueByType).collect(Collectors.toList()));
         }
 
         return result;

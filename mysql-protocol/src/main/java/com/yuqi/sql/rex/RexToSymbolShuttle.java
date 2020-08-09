@@ -25,6 +25,7 @@ import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +64,10 @@ public class RexToSymbolShuttle implements RexVisitor<Symbol> {
     public Symbol visitCall(RexCall call) {
         final String operatorName = call.getOperator().getName();
         Scalar scalar = FunctionMappingUtils.getFunctionByName(operatorName);
+
+        if (Objects.isNull(scalar)) {
+            throw new RuntimeException(String.format("Currently we do not support '%s' function", operatorName));
+        }
 
         List<Symbol> ops = call.getOperands().stream()
                 .map(operand -> operand.accept(this))

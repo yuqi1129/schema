@@ -94,6 +94,8 @@ public class QueryCommandHandler extends AbstractCommandHandler {
                     Throwables.getStackTraceAsString(e)
             );
 
+            System.out.println(Throwables.getStackTraceAsString(e));
+
             connectionContext.write(PackageUtils.buildErrPackage(-1, e.toString(), 1));
         }
     }

@@ -3,6 +3,7 @@ package com.yuqi.sql.util;
 import com.google.common.collect.Maps;
 import com.yuqi.engine.data.func.AbsFunction;
 import com.yuqi.engine.data.func.ArithmeticFunction;
+import com.yuqi.engine.data.func.CastFunction;
 import com.yuqi.engine.data.func.CompareFunction;
 import com.yuqi.engine.data.func.LogicalFunction;
 import com.yuqi.engine.data.func.Scalar;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.ABS;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.AND;
+import static org.apache.calcite.sql.fun.SqlStdOperatorTable.CAST;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.DIVIDE;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.EQUALS;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.GREATER_THAN;
@@ -59,6 +61,8 @@ public class FunctionMappingUtils {
         //LOGICLA
         NAME_TO_SCLAR_MAP.put(AND.getName(), LogicalFunction.LOGICAL_AND);
         NAME_TO_SCLAR_MAP.put(OR.getName(), LogicalFunction.LOGICAL_OR);
+
+        NAME_TO_SCLAR_MAP.put(CAST.getName(), CastFunction.INSTANCE);
 
     }
 

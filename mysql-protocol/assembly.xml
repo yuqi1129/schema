@@ -1,0 +1,39 @@
+<assembly
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+
+    <id>RELEASE</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <outputDirectory>Mysql/lib</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+
+        <fileSet>
+            <includes>
+                <include>bin/**</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>Mysql/bin</outputDirectory>
+            <filtered>true</filtered>
+        </fileSet>
+
+        <fileSet>
+            <directory>target/classes/</directory>
+            <outputDirectory>Mysql</outputDirectory>
+        </fileSet>
+
+    </fileSets>
+    <!-- TODO 需要把 mysql-protocol-1.10.jar 也放到lib中, 完善startup.sh-->
+
+</assembly>

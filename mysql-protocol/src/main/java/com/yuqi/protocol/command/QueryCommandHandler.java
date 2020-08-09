@@ -85,7 +85,17 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             connectionContext.getChannelHandlerContext().writeAndFlush(PackageUtils.packageToBuf(result));
             return;
         }
-        handler.handle(connectionContext, sqlNode);
+
+        try {
+            handler.handle(connectionContext, sqlNode);
+        } catch (Exception e) {
+            LOGGER.info("Execute sql '{}' get error: {}",
+                    connectionContext.getQueryString(),
+                    Throwables.getStackTraceAsString(e)
+            );
+
+            connectionContext.write(PackageUtils.buildErrPackage(-1, e.toString(), 1));
+        }
     }
 
     private void defaultStringHandler(String command) {
@@ -94,7 +104,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {"@@VERSION_COMMENT"})
-                .columnType(new int[] {0xfd})
+                .columnType(Lists.newArrayList(0xfd))
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)

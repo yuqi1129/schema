@@ -1,5 +1,13 @@
 package com.yuqi.protocol.constants;
 
+import com.google.common.collect.Maps;
+import org.apache.calcite.sql.type.SqlTypeName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * @author yuqi
  * @mail yuqi5@xiaomi.com
@@ -7,6 +15,9 @@ package com.yuqi.protocol.constants;
  * @time 6/7/20 23:26
  **/
 public class ColumnTypeConstants {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(ColumnTypeConstants.class);
+
     public static final int MYSQL_TYPE_DECIMAL = 0x00;
     public static final int MYSQL_TYPE_TINY = 0x01;
     public static final int MYSQL_TYPE_SHORT = 0x02;
@@ -45,4 +56,42 @@ public class ColumnTypeConstants {
     public static final int MYSQL_TYPE_VAR_STRING = 0xfd;
     public static final int MYSQL_TYPE_STRING = 0xfe;
     public static final int MYSQL_TYPE_GEOMETRY = 0xff;
+
+
+    public static final Map<SqlTypeName, Integer> CALCITE_TYPE_TO_MYSQL_TYPE = Maps.newHashMap();
+
+    static {
+        //MySQL 使用tinyint(1) 来表示boolean type
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.BOOLEAN, MYSQL_TYPE_TINY);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.TINYINT, MYSQL_TYPE_TINY);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.SMALLINT, MYSQL_TYPE_SHORT);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.INTEGER, MYSQL_TYPE_INT24);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.BIGINT, MYSQL_TYPE_LONG);
+
+
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.FLOAT, MYSQL_TYPE_FLOAT);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.DOUBLE, MYSQL_TYPE_DOUBLE);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.DECIMAL, MYSQL_TYPE_DECIMAL);
+
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.DATE, MYSQL_TYPE_DATE);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.TIME, MYSQL_TYPE_TIME);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.TIMESTAMP, MYSQL_TYPE_TIMESTAMP);
+
+        //only support varchar
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.VARCHAR, MYSQL_TYPE_VAR_STRING);
+        CALCITE_TYPE_TO_MYSQL_TYPE.put(SqlTypeName.CHAR, MYSQL_TYPE_VAR_STRING);
+    }
+
+    public static final int getMysqlType(SqlTypeName sqlTypeName) {
+        Integer type = CALCITE_TYPE_TO_MYSQL_TYPE.get(sqlTypeName);
+
+        if (Objects.isNull(type)) {
+            LOGGER.info("SqlTypeName {} has no correspond mysql type, use MYSQL_TYPE_VAR_STRING(0xfd)", sqlTypeName);
+            type = MYSQL_TYPE_VAR_STRING;
+        }
+
+        return type;
+    }
+
+
 }

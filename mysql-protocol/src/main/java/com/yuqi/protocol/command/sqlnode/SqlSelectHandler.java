@@ -5,6 +5,7 @@ import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
 import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.constants.ColumnTypeConstants;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
@@ -50,23 +51,20 @@ public class SqlSelectHandler implements Handler<SqlNode> {
         final List<List<Object>> result = executeOperator(operator);
 
         final List<List<String>> data = result.stream()
-                .map(l -> l.stream().map(v -> Objects.isNull(v) ? "NULL" : v.toString()).collect(Collectors.toList()))
+                .map(l -> l.stream().map(v -> Objects.isNull(v) ? null : v.toString()).collect(Collectors.toList()))
                 .collect(Collectors.toList());
 
-
-        //如果select * 之类就不能用这个sqlnode 拿列名
-
         final List<String> columnNames = relNode.getRowType().getFieldNames();
-
-        int[] columnTypes = new int[columnNames.size()];
-
-        for (int i = 0; i < columnNames.size(); i++) {
-            columnTypes[i] = 0xfd;
-        }
+        final List<Integer> rowTypes = relNode.getRowType()
+                .getFieldList()
+                .stream()
+                .map(f -> f.getType().getSqlTypeName())
+                .map(ColumnTypeConstants::getMysqlType)
+                .collect(Collectors.toList());
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(columnNames.toArray(new String[columnNames.size()]))
-                .columnType(columnTypes)
+                .columnType(rowTypes)
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)

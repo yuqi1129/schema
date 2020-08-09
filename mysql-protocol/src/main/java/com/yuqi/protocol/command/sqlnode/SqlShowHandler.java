@@ -64,7 +64,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {columnName})
-                .columnType(new int[] {0xfd})
+                .columnType(Lists.newArrayList(0xfd))
                 .data(data.stream().map(Lists::newArrayList).collect(Collectors.toList()))
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)

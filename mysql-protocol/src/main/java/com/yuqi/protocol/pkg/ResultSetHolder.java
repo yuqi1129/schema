@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @Getter
 public class ResultSetHolder {
-    private int[] columnType;
+    private List<Integer> columnType;
 
     //may be we can use pool data array to avoid frequent allocated space
     private List<List<String>> data;

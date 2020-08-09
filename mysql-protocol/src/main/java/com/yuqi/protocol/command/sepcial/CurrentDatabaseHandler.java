@@ -28,7 +28,7 @@ public class CurrentDatabaseHandler extends AbstractHandler {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {"database()"})
-                .columnType(new int[] {0xfd})
+                .columnType(Lists.newArrayList(0xfd))
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)

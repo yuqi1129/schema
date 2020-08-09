@@ -131,10 +131,10 @@ public class PackageUtils {
         final List<MysqlPackage> result = Lists.newArrayList();
 
         final List<List<String>> data = resultSetHolder.getData();
-        final int[] columnType = resultSetHolder.getColumnType();
+        final List<Integer> columnType = resultSetHolder.getColumnType();
         final String[] columnName = resultSetHolder.getColumnName();
 
-        final int columnNum = columnType.length;
+        final int columnNum = columnType.size();
 
         //query seqNumber is 0 so result query number from 1
         byte seqNumber = 1;
@@ -163,7 +163,7 @@ public class PackageUtils {
                             .filler((byte) 0x0c)
                             //original 84
                             .columnLength(0)
-                            .columnType((byte) columnType[i])
+                            .columnType((byte) columnType.get(i).intValue())
                             .flags(0x00)
                             .dicimals((byte) 0x00)
                             .build();

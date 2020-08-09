@@ -43,7 +43,7 @@ public class ExplainHandler implements Handler<String> {
 
             final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                     .table(StringUtils.EMPTY)
-                    .columnType(new int[]{0xfd})
+                    .columnType(Lists.newArrayList(0xfd))
                     .schema(StringUtils.EMPTY)
                     .data(data)
                     .columnName(new String[]{"Plan"})

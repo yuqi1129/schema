@@ -186,6 +186,7 @@ public class SlothJoinOperator extends AbstractOperator {
 
 
     private List<Value> handleFullJoin() {
+        //MySQL do not support full out join
         return EOF;
     }
 

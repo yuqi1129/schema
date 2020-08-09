@@ -22,7 +22,8 @@ public class SlothRules {
             SlothJoinConverterRule.INSTANCE,
             SlothFilterConverterRule.INSTANCE,
             SlothSortConverterRule.INSTANCE,
-            SlothAggregateConverterRule.INSTANCE
+            SlothAggregateConverterRule.INSTANCE,
+            SlothUnionConverterRule.INSTANCE
     );
 
     public static final List<RelOptRule> CONSTANT_REDUCTION_RULES = ImmutableList.of(

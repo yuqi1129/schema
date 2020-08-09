@@ -6,6 +6,7 @@ import com.yuqi.sql.ddl.SqlCreateTable;
 import com.yuqi.sql.ddl.SqlDrop;
 import com.yuqi.sql.ddl.SqlShow;
 import com.yuqi.sql.ddl.SqlUse;
+import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlOrderBy;
 import org.apache.calcite.sql.SqlSelect;
 
@@ -25,8 +26,11 @@ public class HandlerHolder {
     static {
         SQL_TYPE_TO_HANDLER_MAP.put(SqlUse.class, SqlUseHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlShow.class, SqlShowHandler.INSTANCE);
+
         SQL_TYPE_TO_HANDLER_MAP.put(SqlSelect.class, SqlSelectHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlOrderBy.class, SqlSelectHandler.INSTANCE);
+        SQL_TYPE_TO_HANDLER_MAP.put(SqlBasicCall.class, SqlSelectHandler.INSTANCE);
+
         SQL_TYPE_TO_HANDLER_MAP.put(SqlDrop.class, SqlDropHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlCreateDb.class, SqlCreateDbHandler.INSTANCE);
         SQL_TYPE_TO_HANDLER_MAP.put(SqlCreateTable.class, SqlCreateTableHandler.INSTANCE);

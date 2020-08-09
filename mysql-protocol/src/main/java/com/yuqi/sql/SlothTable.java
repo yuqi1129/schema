@@ -99,6 +99,9 @@ public class SlothTable extends AbstractQueryableTable implements TranslatableTa
     public RelNode toRel(RelOptTable.ToRelContext context, RelOptTable relOptTable) {
         return new SlothTableScan(
                 context.getCluster(),
-                RelTraitSet.createEmpty().plus(SlothConvention.INSTANCE), relOptTable);
+                RelTraitSet.createEmpty()
+                        //.plus(RelCollations.EMPTY),
+                        .plus(SlothConvention.INSTANCE),
+                relOptTable);
     }
 }

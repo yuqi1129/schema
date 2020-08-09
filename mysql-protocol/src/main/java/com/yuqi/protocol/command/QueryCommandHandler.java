@@ -88,7 +88,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
 
         try {
             handler.handle(connectionContext, sqlNode);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.info("Execute sql '{}' get error: {}",
                     connectionContext.getQueryString(),
                     Throwables.getStackTraceAsString(e)

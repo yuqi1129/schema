@@ -144,9 +144,12 @@ public class SlothParser implements RelOptTable.ViewExpander {
         hepPlanner.setRoot(relNode);
         relNode = hepPlanner.findBestExp();
 
-
         relOptPlanner.setRoot(relNode);
-        RelTraitSet reqiredTraitSet = relNode.getTraitSet().replace(SlothConvention.INSTANCE).simplify();
+        RelTraitSet reqiredTraitSet = relNode.getTraitSet()
+                .replace(SlothConvention.INSTANCE)
+                //TODO FIX relcollation bug
+                //.plus(RelCollations.EMPTY)
+                .simplify();
 
         RelNode relNode1 = relNode.getTraitSet().equals(reqiredTraitSet)
                 ? relNode : relOptPlanner.changeTraits(relNode, reqiredTraitSet);

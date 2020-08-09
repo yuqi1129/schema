@@ -15,6 +15,7 @@ import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.plan.volcano.VolcanoPlanner;
 import org.apache.calcite.prepare.CalciteCatalogReader;
+import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.calcite.rel.rules.CoreRules;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexUtil;
@@ -77,6 +78,8 @@ public class ParserFactory {
             volcanoPlanner.addRule(relOptRule);
         }
 
+        //默认情况下plan有convertion 这个traitset,只需要加下需要加的traitset即可
+        volcanoPlanner.addRelTraitDef(RelCollationTraitDef.INSTANCE);
         return volcanoPlanner;
     }
 

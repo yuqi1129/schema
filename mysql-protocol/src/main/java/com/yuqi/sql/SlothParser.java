@@ -10,6 +10,7 @@ import org.apache.calcite.plan.hep.HepPlanner;
 import org.apache.calcite.plan.hep.HepProgram;
 import org.apache.calcite.plan.hep.HepProgramBuilder;
 import org.apache.calcite.prepare.CalciteCatalogReader;
+import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
@@ -148,7 +149,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
         RelTraitSet reqiredTraitSet = relNode.getTraitSet()
                 .replace(SlothConvention.INSTANCE)
                 //TODO FIX relcollation bug
-                //.plus(RelCollations.EMPTY)
+                .plus(RelCollations.EMPTY)
                 .simplify();
 
         RelNode relNode1 = relNode.getTraitSet().equals(reqiredTraitSet)

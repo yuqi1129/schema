@@ -8,6 +8,7 @@ import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
@@ -100,7 +101,7 @@ public class SlothTable extends AbstractQueryableTable implements TranslatableTa
         return new SlothTableScan(
                 context.getCluster(),
                 RelTraitSet.createEmpty()
-                        //.plus(RelCollations.EMPTY),
+                        .plus(RelCollations.EMPTY)
                         .plus(SlothConvention.INSTANCE),
                 relOptTable);
     }

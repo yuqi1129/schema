@@ -1,6 +1,5 @@
 package com.yuqi.protocol.connection.netty;
 
-import com.google.common.base.Throwables;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.request.Command;
@@ -36,7 +35,6 @@ public class ByteBufToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         //super.exceptionCaught(ctx, cause);
 
-        System.out.println(Throwables.getStackTraceAsString(cause));
 
     }
 }

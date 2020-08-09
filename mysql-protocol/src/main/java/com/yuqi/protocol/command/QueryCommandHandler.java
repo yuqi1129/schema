@@ -59,7 +59,6 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         } catch (Exception e) {
             //TODO 这里异常需要分类处理一下
             LOGGER.error(Throwables.getStackTraceAsString(e));
-            System.out.println(Throwables.getStackTraceAsString(e));
 
             if (query.contains("@@")) {
                 handleSqlString(query);
@@ -89,12 +88,10 @@ public class QueryCommandHandler extends AbstractCommandHandler {
         try {
             handler.handle(connectionContext, sqlNode);
         } catch (Throwable e) {
-            LOGGER.info("Execute sql '{}' get error: {}",
+            LOGGER.error("Execute sql '{}' get error: {}",
                     connectionContext.getQueryString(),
                     Throwables.getStackTraceAsString(e)
             );
-
-            System.out.println(Throwables.getStackTraceAsString(e));
 
             connectionContext.write(PackageUtils.buildErrPackage(-1, e.toString(), 1));
         }

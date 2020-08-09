@@ -27,6 +27,8 @@ import org.apache.calcite.sql.parser.impl.SqlSchemaParserImpl;
 import org.apache.calcite.sql.util.ChainedSqlOperatorTable;
 import org.apache.calcite.sql.validate.SqlValidator;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Properties;
@@ -41,6 +43,8 @@ import static com.yuqi.sql.rule.SlothRules.CONSTANT_REDUCTION_RULES;
  * @time 10/7/20 19:50
  **/
 public class ParserFactory {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParserFactory.class);
     private SlothSchemaHolder holder = SlothSchemaHolder.INSTANCE;
     public static final CalciteCatalogReader CALCITE_CATALOG_READER = new CalciteCatalogReader(
             CalciteSchema.createRootSchema(false),
@@ -151,7 +155,7 @@ public class ParserFactory {
             final String schema = k;
             final CalciteSchema schemas = v;
 
-            System.out.println("schema = " + k);
+            LOGGER.info("schema = " + k);
             v.getTableNames().forEach(System.out::println);
         });
 
@@ -161,7 +165,7 @@ public class ParserFactory {
 
         try {
             SqlNode sqlNode = parser.getSqlNode();
-            System.out.println(sqlNode);
+            LOGGER.info(sqlNode.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }

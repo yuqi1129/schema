@@ -102,6 +102,11 @@ public class ParserFactory {
         relOptPlanner.addRule(CoreRules.PROJECT_TABLE_SCAN);
         relOptPlanner.addRule(CoreRules.PROJECT_INTERPRETER_TABLE_SCAN);
         relOptPlanner.addRule(CoreRules.FILTER_REDUCE_EXPRESSIONS);
+
+        //Currently when introduce with relcollation rule, SortRemoveRule has bug
+        //sort remove this rule temporarily
+        relOptPlanner.removeRule(CoreRules.SORT_REMOVE);
+
     }
 
 

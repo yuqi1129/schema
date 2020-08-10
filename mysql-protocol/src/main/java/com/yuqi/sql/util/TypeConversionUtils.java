@@ -42,6 +42,8 @@ public class TypeConversionUtils {
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.BOOLEAN, BOOLEAN);
 
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.VARCHAR, STRING);
+        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.CHAR, STRING);
+
     }
 
     public static DataType getBySqlTypeName(SqlTypeName sqlTypeName) {

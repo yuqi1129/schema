@@ -1,19 +1,12 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Lists;
-import com.yuqi.sql.rel.SlothTableScan;
-import com.yuqi.sql.trait.SlothConvention;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
-import org.apache.calcite.plan.RelOptTable;
-import org.apache.calcite.plan.RelTraitSet;
-import org.apache.calcite.rel.RelCollations;
-import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.SchemaPlus;
-import org.apache.calcite.schema.TranslatableTable;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.util.List;
@@ -26,7 +19,8 @@ import java.util.Objects;
  * @description your description
  * @time 10/7/20 19:55
  **/
-public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
+//public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
+public class SlothTable extends AbstractQueryableTable {
 
     private String tableName;
 
@@ -97,13 +91,16 @@ public class SlothTable extends AbstractQueryableTable implements TranslatableTa
         return resultType;
     }
 
-    @Override
-    public RelNode toRel(RelOptTable.ToRelContext context, RelOptTable relOptTable) {
-        return new SlothTableScan(
-                context.getCluster(),
-                RelTraitSet.createEmpty()
-                        .plus(RelCollations.EMPTY)
-                        .plus(SlothConvention.INSTANCE),
-                relOptTable);
-    }
+
+    //TODO 高优, 这里需要找一下原因， 没有 SlothTableScanConverterRule RULE的话，直接会报错
+    // 直接toRel有问题， 在直接select * from table的情况下
+//    @Override
+//    public RelNode toRel(RelOptTable.ToRelContext context, RelOptTable relOptTable) {
+//        return new SlothTableScan(
+//                context.getCluster(),
+//                RelTraitSet.createEmpty()
+//                        .plus(RelCollations.EMPTY)
+//                        .plus(SlothConvention.INSTANCE),
+//                relOptTable);
+//    }
 }

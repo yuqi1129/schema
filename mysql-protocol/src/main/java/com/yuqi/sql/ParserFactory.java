@@ -45,7 +45,6 @@ import static com.yuqi.sql.rule.SlothRules.CONSTANT_REDUCTION_RULES;
 public class ParserFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParserFactory.class);
-    private SlothSchemaHolder holder = SlothSchemaHolder.INSTANCE;
     public static final CalciteCatalogReader CALCITE_CATALOG_READER = new CalciteCatalogReader(
             CalciteSchema.createRootSchema(false),
             ImmutableList.of(),

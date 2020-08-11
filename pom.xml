@@ -39,6 +39,7 @@
     <derby.version>10.14.2.0</derby.version>
     <slf4j-api.version>1.7.25</slf4j-api.version>
     <logback.version>1.2.3</logback.version>
+    <lucene.version>8.6.0</lucene.version>
 
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -188,6 +189,12 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-core</artifactId>
+            <version>${lucene.version}</version>
         </dependency>
 
     </dependencies>

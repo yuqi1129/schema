@@ -23,6 +23,7 @@ import org.apache.calcite.rex.RexSubQuery;
 import org.apache.calcite.rex.RexTableInputRef;
 import org.apache.calcite.rex.RexVisitor;
 import org.apache.calcite.sql.type.SqlTypeName;
+import org.apache.calcite.util.NlsString;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,8 +56,14 @@ public class RexToSymbolShuttle implements RexVisitor<Symbol> {
     public Symbol visitLiteral(RexLiteral literal) {
         final SqlTypeName sqlTypeName = literal.getType().getSqlTypeName();
         DataType dataType = TypeConversionUtils.getBySqlTypeName(sqlTypeName);
+
         //TODO why 1.5 literal.getValue2() return 15 ?????
-        Value value = new Value(literal.getValue(), dataType);
+        Object rawValue = literal.getValue();
+
+        if (rawValue instanceof NlsString) {
+            rawValue = ((NlsString) rawValue).getValue();
+        }
+        Value value = new Value(rawValue, dataType);
         return new Literal(value);
     }
 

@@ -14,6 +14,7 @@ import static com.yuqi.engine.data.type.DataTypes.FLOAT;
 import static com.yuqi.engine.data.type.DataTypes.INTEGER;
 import static com.yuqi.engine.data.type.DataTypes.LONG;
 import static com.yuqi.engine.data.type.DataTypes.SHORT;
+import static com.yuqi.engine.data.type.DataTypes.STRING;
 
 /**
  * @author yuqi
@@ -234,6 +235,10 @@ public class Value implements Comparable<Value> {
         //TODO 暂时不考虑boolean类型
         if (DataTypes.INTEGER_TYPES.contains(o.getType()) && DataTypes.INTEGER_TYPES.contains(this.getType())) {
             return Long.compare(longValue(), o.longValue());
+        }
+
+        if (STRING == o.dataType && STRING == this.dataType) {
+            return this.stringValue().compareTo(o.stringValue());
         }
 
 

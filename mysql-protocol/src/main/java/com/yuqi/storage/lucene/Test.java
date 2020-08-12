@@ -39,6 +39,8 @@ public class Test {
 
             indexWriter.addDocument(list);
 
+
+            //final IndexReader indexReader = new ExitableDirectoryReader();
             indexWriter.flush();
             indexWriter.maybeMerge();
 

@@ -8,6 +8,8 @@ import com.yuqi.engine.data.func.CompareFunction;
 import com.yuqi.engine.data.func.LogicalFunction;
 import com.yuqi.engine.data.func.Scalar;
 import com.yuqi.engine.data.func.UnaryMinusFunction;
+import com.yuqi.engine.data.func.nil.IsNotNullFunction;
+import com.yuqi.engine.data.func.nil.IsNullFunction;
 
 import java.util.Map;
 
@@ -18,6 +20,8 @@ import static org.apache.calcite.sql.fun.SqlStdOperatorTable.DIVIDE;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.EQUALS;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.GREATER_THAN;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.GREATER_THAN_OR_EQUAL;
+import static org.apache.calcite.sql.fun.SqlStdOperatorTable.IS_NOT_NULL;
+import static org.apache.calcite.sql.fun.SqlStdOperatorTable.IS_NULL;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.LESS_THAN;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.LESS_THAN_OR_EQUAL;
 import static org.apache.calcite.sql.fun.SqlStdOperatorTable.MINUS;
@@ -63,6 +67,10 @@ public class FunctionMappingUtils {
         NAME_TO_SCLAR_MAP.put(OR.getName(), LogicalFunction.LOGICAL_OR);
 
         NAME_TO_SCLAR_MAP.put(CAST.getName(), CastFunction.INSTANCE);
+
+        //is NULL/ is not null relatated
+        NAME_TO_SCLAR_MAP.put(IS_NOT_NULL.getName(), IsNotNullFunction.INSTANCE);
+        NAME_TO_SCLAR_MAP.put(IS_NULL.getName(), IsNullFunction.INSTANCE);
 
     }
 

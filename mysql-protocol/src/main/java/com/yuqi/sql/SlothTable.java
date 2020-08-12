@@ -81,7 +81,8 @@ public class SlothTable extends AbstractQueryableTable {
             final String sqlTypeNameString = cl.getColumnType().getTypeName().toString().toUpperCase();
             final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
             RelDataType relDataType = typeFactory.createSqlType(sqlTypeName);
-            typeFactory.createTypeWithNullability(relDataType, cl.getColumnType().getNullable());
+            relDataType = typeFactory.createTypeWithNullability(
+                    relDataType, cl.getColumnType().getNullable());
 
             relDataTypes.add(relDataType);
             columnNames.add(cl.getColumnName());

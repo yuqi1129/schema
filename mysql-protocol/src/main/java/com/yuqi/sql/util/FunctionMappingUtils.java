@@ -66,6 +66,7 @@ public class FunctionMappingUtils {
         NAME_TO_SCLAR_MAP.put(AND.getName(), LogicalFunction.LOGICAL_AND);
         NAME_TO_SCLAR_MAP.put(OR.getName(), LogicalFunction.LOGICAL_OR);
 
+        //CAST
         NAME_TO_SCLAR_MAP.put(CAST.getName(), CastFunction.INSTANCE);
 
         //is NULL/ is not null relatated
@@ -74,7 +75,7 @@ public class FunctionMappingUtils {
 
     }
 
-    public static final Scalar getFunctionByName(String name) {
+    public static Scalar getFunctionByName(String name) {
         return NAME_TO_SCLAR_MAP.get(name);
     }
 }

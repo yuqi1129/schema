@@ -50,7 +50,7 @@ public class ExplainHandler implements Handler<String> {
                     .build();
 
             result = PackageUtils.buildResultSet(resultSetHolder);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.error(Throwables.getStackTraceAsString(e));
             result = PackageUtils.packageToBuf(PackageUtils.buildSyntaxErrPackage(query));
         }

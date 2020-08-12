@@ -5,6 +5,7 @@ import com.yuqi.sql.trait.SlothConvention;
 import org.apache.calcite.plan.Convention;
 import org.apache.calcite.plan.RelTrait;
 import org.apache.calcite.plan.RelTraitSet;
+import org.apache.calcite.rel.RelCollations;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.rel.logical.LogicalValues;
 
@@ -33,6 +34,9 @@ public class SlothValueConverterRule extends AbstactSlothConverter {
                 logicalValues.getCluster(),
                 logicalValues.getRowType(),
                 logicalValues.getTuples(),
-                RelTraitSet.createEmpty().plus(SlothConvention.INSTANCE));
+                RelTraitSet.createEmpty()
+                        .plus(SlothConvention.INSTANCE)
+                        .plus(RelCollations.EMPTY)
+        );
     }
 }

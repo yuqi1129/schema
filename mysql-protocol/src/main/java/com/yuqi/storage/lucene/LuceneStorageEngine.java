@@ -107,7 +107,8 @@ public class LuceneStorageEngine implements StorageEngine {
             } else if (STRING.equals(dataType)) {
                 document.add(new StringField(columns.get(i).getColumnName(), value.stringValue(), Field.Store.YES));
                 document.add(new StoredField(columns.get(i).getColumnName(), value.stringValue()));
-            } else {//maybe time/datetime/timestamp
+            } else {
+                //maybe time/datetime/timestamp
                 document.add(new LongPoint(columns.get(i).getColumnName(), value.longValue()));
                 document.add(new StoredField(columns.get(i).getColumnName(), value.floatValue()));
             }

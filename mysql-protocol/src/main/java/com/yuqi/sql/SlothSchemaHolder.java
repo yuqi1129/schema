@@ -25,7 +25,8 @@ public class SlothSchemaHolder implements LifeCycle {
 
     @Override
     public void init() {
-        //load schema from file or db
+        //TODO load schema from file or db
+        //add default schema
     }
 
     @Override
@@ -33,13 +34,13 @@ public class SlothSchemaHolder implements LifeCycle {
 
     }
 
-    public CalciteSchema registerSchema(String schemaName) {
+    public SlothSchema registerSchema(String schemaName) {
         final SlothSchema slothSchema = new SlothSchema(schemaName);
         schemaMap.put(schemaName, slothSchema);
         CalciteSchema schema =
                 ParserFactory.getCatalogReader().getRootSchema().add(schemaName, slothSchema);
         slothSchema.setSchema(schema);
-        return schema;
+        return slothSchema;
         //todo insert into db to store
     }
 
@@ -60,5 +61,15 @@ public class SlothSchemaHolder implements LifeCycle {
 
     public SlothSchema getSlothSchema(String dbName) {
         return schemaMap.get(dbName);
+    }
+
+    private void addDefaultSchemasAndTables() {
+
+        //first add information schema
+        SlothSchema slothSchema = registerSchema("information_schema");
+
+        //second add inner table in information_schema;
+
+
     }
 }

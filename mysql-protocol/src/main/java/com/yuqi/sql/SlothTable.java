@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Lists;
+import com.yuqi.storage.lucene.TableEngine;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
@@ -22,6 +23,8 @@ import java.util.Objects;
 //public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
 public class SlothTable extends AbstractQueryableTable {
 
+    public static final int DEFAULT_SHARD = 3;
+
     private String tableName;
 
     private SlothSchema schema;
@@ -32,12 +35,23 @@ public class SlothTable extends AbstractQueryableTable {
 
     private RelDataType resultType;
 
+
+    private TableEngine tableEngine;
+
+    public SlothTable(String tableName, SlothSchema schema, RelDataType resultType) {
+        super(Object[].class);
+        this.tableName = tableName;
+        this.schema = schema;
+        this.resultType = resultType;
+    }
+
     public void setColumns(List<SlothColumn> columns) {
         this.columns = columns;
     }
 
     public SlothTable() {
         super(Object[].class);
+        tableEngine = new TableEngine(this);
     }
 
     public SlothTable(String tableName) {
@@ -59,6 +73,10 @@ public class SlothTable extends AbstractQueryableTable {
 
     public void setSchema(SlothSchema schema) {
         this.schema = schema;
+    }
+
+    public List<SlothColumn> getColumns() {
+        return columns;
     }
 
     @Override

@@ -2,10 +2,9 @@ package com.yuqi.storage.lucene;
 
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.LifeCycle;
-import org.apache.lucene.search.Collector;
-import org.apache.lucene.search.Query;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,10 +26,9 @@ public interface StorageEngine extends LifeCycle {
     /**
      * Query
      *
-     * @param query
-     * @param collector
+     * @param queryContext
      */
-    void query(Query query, Collector collector) throws IOException;
+    Iterator<List<Value>> query(QueryContext queryContext) throws IOException;
 
 
     /**

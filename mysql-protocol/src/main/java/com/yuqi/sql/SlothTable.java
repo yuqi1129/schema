@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Lists;
+import com.yuqi.storage.constant.FileConstants;
 import com.yuqi.storage.lucene.TableEngine;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
@@ -29,12 +30,9 @@ public class SlothTable extends AbstractQueryableTable {
 
     private SlothSchema schema;
 
-    private String createTableString;
-
     private List<SlothColumn> columns;
 
     private RelDataType resultType;
-
 
     private TableEngine tableEngine;
 
@@ -51,13 +49,18 @@ public class SlothTable extends AbstractQueryableTable {
 
     public SlothTable() {
         super(Object[].class);
-        tableEngine = new TableEngine(this);
     }
 
     public SlothTable(String tableName) {
         this();
         this.tableName = tableName;
     }
+
+    public SlothTable(SlothSchema slothSchema) {
+        super(Object[].class);
+        this.schema = slothSchema;
+    }
+
 
     public String getTableName() {
         return tableName;
@@ -77,6 +80,16 @@ public class SlothTable extends AbstractQueryableTable {
 
     public List<SlothColumn> getColumns() {
         return columns;
+    }
+
+
+    public String buildTableEnginePath() {
+        return FileConstants.TABLE_FILE_LOACTION + "/" + schema.getSchemaName() + "/" + tableName;
+    }
+
+
+    public void initTableEngine() {
+        tableEngine = new TableEngine(this);
     }
 
     @Override

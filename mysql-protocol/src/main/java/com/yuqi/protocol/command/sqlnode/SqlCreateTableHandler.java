@@ -63,7 +63,8 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         }
 
         final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
-        final SlothTable slothTable = new SlothTable();
+        final SlothTable slothTable = new SlothTable(slothSchema);
+        slothTable.setTableName(tableName);
 
         final List<SqlNode> nodes = sqlNodes.getList();
         final int size = nodes.size();
@@ -76,9 +77,8 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
             slothColumns.add(slothColumn);
         }
 
-        slothTable.setSchema(slothSchema);
-        slothTable.setTableName(tableName);
         slothTable.setColumns(slothColumns);
+        slothTable.initTableEngine();
 
         slothSchema.addTable(tableName, slothTable);
 

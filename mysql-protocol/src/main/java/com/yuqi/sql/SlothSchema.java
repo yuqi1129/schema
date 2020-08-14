@@ -29,6 +29,10 @@ public class SlothSchema extends AbstractSchema {
         this.calciteSchema = schema;
     }
 
+    public String getSchemaName() {
+        return schemaName;
+    }
+
     @Override
     protected Map<String, Table> getTableMap() {
         return tables;

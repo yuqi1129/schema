@@ -28,6 +28,7 @@ public class SlothTableScan extends TableScan implements SlothRel {
 
     @Override
     public Operator implement() {
+        //TODO 这里需要统一type 转化
         return new SlothTableScanOperator(this.table, this.rowType);
     }
 }

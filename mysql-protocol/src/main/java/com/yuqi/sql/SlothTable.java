@@ -61,6 +61,9 @@ public class SlothTable extends AbstractQueryableTable {
         this.schema = slothSchema;
     }
 
+    public TableEngine getTableEngine() {
+        return tableEngine;
+    }
 
     public String getTableName() {
         return tableName;

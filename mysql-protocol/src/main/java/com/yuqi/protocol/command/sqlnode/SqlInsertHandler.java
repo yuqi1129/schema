@@ -1,8 +1,14 @@
 package com.yuqi.protocol.command.sqlnode;
 
+import com.google.common.collect.Lists;
+import com.yuqi.engine.data.value.Value;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
+import com.yuqi.sql.SlothSchema;
+import com.yuqi.sql.SlothSchemaHolder;
+import com.yuqi.sql.SlothTable;
+import com.yuqi.storage.lucene.TableEngine;
 import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlInsert;
 import org.apache.calcite.sql.SqlNode;
@@ -10,6 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
+
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.NO_DATABASE_SELECTED;
 
 /**
  * @author yuqi
@@ -38,9 +47,47 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
         final SqlNode columnList = type.getTargetColumnList();
         final List<SqlNode> operands = ((SqlBasicCall) type.getSource()).getOperandList();
 
-        MysqlPackage r =
-                PackageUtils.buildOkMySqlPackage(0, 1, 0);
+        //
+        final String tableAndDb = table.toString();
+        String[] dbAndDbArray = tableAndDb.split("\\.", 2);
+
+        String db = dbAndDbArray.length == 2 ? dbAndDbArray[0] : connectionContext.getDb();
+        String tableName = dbAndDbArray.length == 2 ? dbAndDbArray[1] : dbAndDbArray[0];
+
+        MysqlPackage r = null;
+        if (Objects.isNull(db)) {
+            r = PackageUtils.buildErrPackage(
+                    NO_DATABASE_SELECTED.getCode(),
+                    NO_DATABASE_SELECTED.getMessage(),
+                    1);
+
+            connectionContext.write(r);
+            return;
+        }
+
+        SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
+        if (Objects.isNull(slothSchema)) {
+            r = PackageUtils.buildErrPackage(
+                    NO_DATABASE_SELECTED.getCode(),
+                    NO_DATABASE_SELECTED.getMessage(),
+                    1);
+            connectionContext.write(r);
+            return;
+        }
+
+        SlothTable slothTable = (SlothTable) slothSchema.getTable(tableName);
+        TableEngine tableEngine = slothTable.getTableEngine();
+        tableEngine.insert(Lists.newArrayList());
+
+        r = PackageUtils.buildOkMySqlPackage(0, 1, 0);
 
         connectionContext.write(r);
     }
+
+    private List<Value> extractColumnValue(List<SqlNode> rows) {
+        //todo
+
+        return null;
+    }
+
 }

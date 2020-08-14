@@ -2,13 +2,8 @@ package com.yuqi.storage.lucene;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.sql.SlothColumn;
-import com.yuqi.sql.SlothTable;
-import com.yuqi.sql.util.TypeConversionUtils;
-import org.apache.calcite.sql.type.SqlTypeName;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.Field;
@@ -51,21 +46,19 @@ import static com.yuqi.engine.data.type.DataTypes.STRING;
 public class LuceneStorageEngine implements StorageEngine {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(LuceneStorageEngine.class);
+
     private String storagePath;
-    private SlothTable slothTable;
+    private TableEngine tableEngine;
 
     private IndexWriter indexWriter;
     private IndexReader indexReader;
     private SearcherManager searcherManager;
 
-
     private boolean readOnly;
 
-    private Map<String, DataType> columnAndDataType = Maps.newHashMap();
-
-    public LuceneStorageEngine(String storagePath, SlothTable slothTable) {
+    public LuceneStorageEngine(String storagePath, TableEngine tableEngine) {
         this.storagePath = storagePath;
-        this.slothTable = slothTable;
+        this.tableEngine = tableEngine;
     }
 
     @Override
@@ -78,15 +71,6 @@ public class LuceneStorageEngine implements StorageEngine {
                     new SlothFilterDirectoryReader.SubReaderWrapper(1));
 
             searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
-
-
-            slothTable.getColumns().forEach(column -> {
-                final String sqlTypeNameString = column.getColumnType().getTypeName().toString().toUpperCase();
-                final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
-                columnAndDataType.put(column.getColumnName(),
-                        TypeConversionUtils.getBySqlTypeName(sqlTypeName));
-            });
-
         } catch (IOException e) {
             LOGGER.error(Throwables.getStackTraceAsString(e));
             throw new RuntimeException(e);
@@ -102,11 +86,14 @@ public class LuceneStorageEngine implements StorageEngine {
 
     private Document rowToDocument(List<Value> row) {
         final Document document = new Document();
-        final List<SlothColumn> columns = slothTable.getColumns();
+
+        final List<String> columnNames = tableEngine.getColumnNames();
+        final Map<String, DataType> dataTypeList = tableEngine.getColumnAndDataType();
+
         for (int i = 0; i < row.size(); i++) {
             final Value value = row.get(i);
-            final DataType dataType = value.getType();
-            final String columnName = columns.get(i).getColumnName();
+            final String columnName = columnNames.get(i);
+            final DataType dataType = dataTypeList.get(columnName);
 
             if (BYTE.equals(dataType) || SHORT.equals(dataType) || INTEGER.equals(dataType)) {
                 document.add(new IntPoint(columnName, value.intValue()));
@@ -122,6 +109,7 @@ public class LuceneStorageEngine implements StorageEngine {
                 document.add(new StoredField(columnName, value.doubleValue()));
             } else if (STRING.equals(dataType)) {
                 document.add(new StringField(columnName, value.stringValue(), Field.Store.YES));
+                //should add to store value;
                 document.add(new StoredField(columnName, value.stringValue()));
             } else {
                 //maybe time/datetime/timestamp
@@ -135,6 +123,8 @@ public class LuceneStorageEngine implements StorageEngine {
 
     private List<Value> documentToRow(Document document) {
 
+        final Map<String, DataType> columnAndDataType = tableEngine.getColumnAndDataType();
+        //TODO 可能只select部分列，目前这里是选择全部的列，效率不太好
         List<Value> rs = Lists.newArrayList();
         final List<IndexableField> fields = document.getFields();
         for (int i = 0; i < columnAndDataType.size(); i++) {
@@ -150,7 +140,7 @@ public class LuceneStorageEngine implements StorageEngine {
             }
         }
 
-        return Lists.newArrayList();
+        return rs;
     }
 
     @Override

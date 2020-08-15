@@ -19,12 +19,14 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherFactory;
 import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +73,18 @@ public class LuceneStorageEngine implements StorageEngine {
                     new SlothFilterDirectoryReader.SubReaderWrapper(1));
 
             searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+
+                    //TODO only this can generate segment file, or when restart
+                    // data will lost
+                    indexWriter.commit();
+                } catch (Exception e) {
+                    //ignore
+                    LOGGER.error(e.getMessage());
+                }
+            }));
         } catch (IOException e) {
             LOGGER.error(Throwables.getStackTraceAsString(e));
             throw new RuntimeException(e);
@@ -78,10 +92,26 @@ public class LuceneStorageEngine implements StorageEngine {
     }
 
     @Override
-    public boolean insert(List<Value> row) throws IOException {
-        final Document document = rowToDocument(row);
-        indexWriter.addDocument(document);
+    public boolean insert(List<List<Value>> rows) throws IOException {
+        for (List<Value> row : rows) {
+            final Document document = rowToDocument(row);
+            indexWriter.addDocument(document);
+        }
+
+        //TODO 有点坑爹，当前只能这样, 插入几条后再更新
+        updateIndexWriterAndReader();
         return true;
+    }
+
+    private void updateIndexWriterAndReader() throws IOException {
+        indexWriter.flush();
+
+        DirectoryReader reader = DirectoryReader.open(indexWriter);
+        indexReader = new SlothFilterDirectoryReader(reader,
+                new SlothFilterDirectoryReader.SubReaderWrapper(1));
+
+
+        searcherManager = new SearcherManager(indexWriter, new SearcherFactory());
     }
 
     private Document rowToDocument(List<Value> row) {
@@ -90,6 +120,7 @@ public class LuceneStorageEngine implements StorageEngine {
         final List<String> columnNames = tableEngine.getColumnNames();
         final Map<String, DataType> dataTypeList = tableEngine.getColumnAndDataType();
 
+        //TODO 目测lucene 当前无法存NULL值，NULL值需要自已处理
         for (int i = 0; i < row.size(); i++) {
             final Value value = row.get(i);
             final String columnName = columnNames.get(i);
@@ -108,9 +139,8 @@ public class LuceneStorageEngine implements StorageEngine {
                 document.add(new DoublePoint(columnName, value.doubleValue()));
                 document.add(new StoredField(columnName, value.doubleValue()));
             } else if (STRING.equals(dataType)) {
+                //String values do not need to add store field
                 document.add(new StringField(columnName, value.stringValue(), Field.Store.YES));
-                //should add to store value;
-                document.add(new StoredField(columnName, value.stringValue()));
             } else {
                 //maybe time/datetime/timestamp
                 document.add(new LongPoint(columnName, value.longValue()));
@@ -145,18 +175,22 @@ public class LuceneStorageEngine implements StorageEngine {
 
     @Override
     public Iterator<List<Value>> query(QueryContext queryContext) throws IOException {
-        final IndexSearcher searcher = searcherManager.acquire();
+
+        final IndexSearcher searcher = new IndexSearcher(indexReader);
+        //final IndexSearcher searcher = searcherManager.acquire();
         SlothCollector collector = new SlothCollector();
 
-        searcher.search(queryContext.getQuery(), collector);
+        //TODO, MAX_VALLUE will show down the query
+        TopDocs topDocs = searcher.search(queryContext.getQuery(), Integer.MAX_VALUE);
+
 
         //这里太丑陋了, 需要好好优化一下
-        return collector.docs.parallelStream()
-                .map(docId -> {
+        return Arrays.stream(topDocs.scoreDocs).parallel()
+                .map(scoreDoc -> {
                     try {
-                        return indexReader.document(docId, queryContext.getColumnNames());
+                        return indexReader.document(scoreDoc.doc, queryContext.getColumnNames());
                     } catch (IOException e) {
-                        LOGGER.error("get doc '{}' meets error:", docId, e);
+                        LOGGER.error("get doc '{}' meets error:", scoreDoc.doc, e);
                         throw new RuntimeException(e);
                     }
                 })

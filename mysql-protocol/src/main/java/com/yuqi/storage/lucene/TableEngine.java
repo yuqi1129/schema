@@ -69,7 +69,7 @@ public class TableEngine implements LifeCycle {
         return columnNames;
     }
 
-    public void insert(List<Value> values) {
+    public void insert(List<List<Value>> values) {
         int shard = new Random().nextInt(DEFAULT_SHARD);
         final StorageEngine storageEngine = storageEngines.get(shard);
 

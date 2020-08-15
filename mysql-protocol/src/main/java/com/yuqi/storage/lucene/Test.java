@@ -8,14 +8,14 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.MatchAllDocsQuery;
+import org.apache.lucene.search.SearcherFactory;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 
 import java.nio.file.Paths;
-import java.util.List;
 
 /**
  * @author yuqi
@@ -39,7 +39,13 @@ public class Test {
         try {
 
             final IndexWriter indexWriter =
-                    new IndexWriter(new NIOFSDirectory(Paths.get("/tmp/test")), conf);
+                    new IndexWriter(new NIOFSDirectory(Paths.get("/tmp/test/db1/person/0")), conf);
+
+            //DirectoryReader reader = DirectoryReader.open(indexWriter);
+            DirectoryReader reader = DirectoryReader.open(new NIOFSDirectory(Paths.get("/tmp/test/db1/person/0")));
+            final IndexReader indexReader =
+                    new SlothFilterDirectoryReader(reader, new SlothFilterDirectoryReader.SubReaderWrapper(1));
+            SearcherManager searcherManager = new SearcherManager(reader, new SearcherFactory());
 
             Document document = new Document();
 
@@ -51,24 +57,25 @@ public class Test {
 
             //document.add(new TextField("title", "English course", Field.Store.YES));
             //document.add(new TextField("name", "Good enough", Field.Store.YES));
-            indexWriter.addDocument(document);
-
-            DirectoryReader reader = DirectoryReader.open(indexWriter);
-            final IndexReader indexReader =
-                    new SlothFilterDirectoryReader(reader, new SlothFilterDirectoryReader.SubReaderWrapper(1));
-
+            //indexWriter.addDocument(document);
 
             IndexSearcher searcher = new IndexSearcher(indexReader);
 
+            //IndexSearcher searcher = searcherManager.acquire();
+
             //TopDocs topDocs = searcher.search(new TermQuery(new Term("title", "course")),  10);
-            TopDocs topDocs = searcher.search(FloatPoint.newRangeQuery("score", 60, Float.POSITIVE_INFINITY), 10);
+            //TopDocs topDocs = searcher.search(FloatPoint.newRangeQuery("score", 60, Float.POSITIVE_INFINITY), 10);
+            //Document r = searcher.doc(topDocs.scoreDocs[0].doc);
+            //List<IndexableField> fields = r.getFields();
 
-            Document r = searcher.doc(topDocs.scoreDocs[0].doc);
+            SlothCollector slothCollector = new SlothCollector();
+            searcher.search(new MatchAllDocsQuery(), slothCollector);
 
-            List<IndexableField> fields = r.getFields();
 
-            indexWriter.flush();
-            indexWriter.maybeMerge();
+//            indexWriter.flush();
+//            indexWriter.maybeMerge();
+
+            System.out.println("xxx");
 
         } catch (Exception e) {
             e.printStackTrace();

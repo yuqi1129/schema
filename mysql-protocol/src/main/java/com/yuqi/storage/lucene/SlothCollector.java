@@ -7,6 +7,8 @@ import org.apache.lucene.search.SimpleCollector;
 import java.io.IOException;
 import java.util.List;
 
+import static org.apache.lucene.search.ScoreMode.COMPLETE_NO_SCORES;
+
 /**
  * @author yuqi
  * @mail yuqi5@xiaomi.com
@@ -28,6 +30,6 @@ public class SlothCollector extends SimpleCollector {
 
     @Override
     public ScoreMode scoreMode() {
-        return null;
+        return COMPLETE_NO_SCORES;
     }
 }

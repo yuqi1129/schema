@@ -30,7 +30,7 @@ public class SlothFilter extends Filter implements SlothRel {
     @Override
     public Operator implement() {
         final Operator input = ((SlothRel) getInput()).implement();
-        RelDataType relDataType = this.rowType;
+        RelDataType relDataType = this.getRowType();
         RexNode condition = this.condition;
 
         return new SlothFilterOperator(condition, input, relDataType);

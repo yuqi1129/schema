@@ -21,7 +21,7 @@ public interface StorageEngine extends LifeCycle {
      * @param row
      * @return
      */
-    boolean insert(List<Value> row) throws IOException;
+    boolean insert(List<List<Value>> row) throws IOException;
 
     /**
      * Query

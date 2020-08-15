@@ -56,6 +56,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Integer intValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -75,6 +80,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Byte byteValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -94,6 +104,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Short shortValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -113,6 +128,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Long longValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -132,6 +152,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Float floatValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -151,6 +176,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Double doubleValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (value instanceof Number) {
@@ -170,6 +200,11 @@ public class Value implements Comparable<Value> {
     }
 
     public Boolean booleanValue() {
+
+        if (isNull()) {
+            return null;
+        }
+
         final Class cl = value.getClass();
 
         if (cl == Boolean.class) {
@@ -188,6 +223,10 @@ public class Value implements Comparable<Value> {
     }
 
     public String stringValue() {
+
+        if (isNull()) {
+            return null;
+        }
 
         if (value instanceof String) {
             return (String) value;

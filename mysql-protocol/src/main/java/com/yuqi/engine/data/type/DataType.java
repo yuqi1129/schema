@@ -8,6 +8,8 @@ package com.yuqi.engine.data.type;
  **/
 
 
+import com.yuqi.engine.data.value.Value;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -99,5 +101,9 @@ public abstract class DataType<T> implements Comparable<DataType<T>>, Streamer<T
     @Override
     public String toString() {
         return getName();
+    }
+
+    public Value createByType(Object o) {
+        return new Value(o, this);
     }
 }

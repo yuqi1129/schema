@@ -42,19 +42,37 @@ public enum ErrorCodeAndMessageEnum {
      */
     TABLE_ALREADY_EXISTS(1050, "Table '%s' already exists"),
 
-
     /**
      * Drop table 'yuqi.test', if yuqi or test does not exists
      */
     UNKNOWN_TABLE_NAME(1051, "Unknown table '%s'"),
 
+    /**
+     * Unknwn column name
+     */
+    UNKONW_COLUMN_NAME(1054, "Unknown column '%s' in 'field list'"),
 
     /**
      * Do not support this syntax
      */
     SYNTAX_ERROR(1064,
             "You have an error in your SQL syntax; check the manual"
-                    + " that corresponds to your MySQL server version for the right syntax to use near '%s'");
+                    + " that corresponds to your MySQL server version for the right syntax to use near '%s'"),
+
+    /**
+     * insert into t(c1, c2) value(....)
+     */
+    COLUMN_EXIST_TWICE(1110, "Column '%s' specified twice"),
+
+    /**
+     * insert into student(h,t) values(1); will encounter this problem
+     */
+    COLUMN_COUNT_NOT_MATCH(1136, "Column count doesn't match value count at row %s"),
+
+    /**
+     * Table do not exist
+     */
+    TABLE_NOT_EXISTS(1146, "Table '%s' doesn't exist");
 
 
     private final int code;

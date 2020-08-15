@@ -24,7 +24,7 @@ import java.util.Objects;
 //public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
 public class SlothTable extends AbstractQueryableTable {
 
-    public static final int DEFAULT_SHARD = 3;
+    public static final int DEFAULT_SHARD = 1;
 
     private String tableName;
 

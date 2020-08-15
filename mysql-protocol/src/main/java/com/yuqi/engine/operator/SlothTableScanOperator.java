@@ -1,18 +1,19 @@
 package com.yuqi.engine.operator;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
+import com.yuqi.sql.SlothSchemaHolder;
+import com.yuqi.sql.SlothTable;
+import com.yuqi.storage.lucene.QueryContext;
+import com.yuqi.storage.lucene.TableEngine;
 import org.apache.calcite.plan.RelOptTable;
+import org.apache.calcite.prepare.RelOptTableImpl;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.lucene.search.MatchAllDocsQuery;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
-
-import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
-import static com.yuqi.engine.data.type.DataTypes.LONG;
-import static com.yuqi.engine.data.type.DataTypes.STRING;
 
 /**
  * @author yuqi
@@ -37,81 +38,15 @@ public class SlothTableScanOperator extends AbstractOperator {
     @Override
     public void open() {
 
-        //TODO currently data is mock
-        List<List<Value>> valuesLists = Lists.newArrayList();
-        Random random = new Random();
-        if (table.getQualifiedName().contains("person")) {
-            List<Value> v1 = Lists.newArrayList(new Value(1L, LONG), new Value("hello", STRING));
-            List<Value> v2 = Lists.newArrayList(new Value(2L, LONG), new Value("good", STRING));
-            List<Value> v3 = Lists.newArrayList(new Value(3L, LONG), new Value("nice", STRING));
+        final RelOptTableImpl relOptTable = (RelOptTableImpl) table;
+        final List<String> dbAndTable = relOptTable.getQualifiedName();
+        final SlothTable slothTable = (SlothTable) SlothSchemaHolder.INSTANCE
+                .getSlothSchema(dbAndTable.get(0)).getTable(dbAndTable.get(1));
 
-            valuesLists.add(v1);
-            valuesLists.add(v2);
-            valuesLists.add(v3);
+        TableEngine tableEngine = slothTable.getTableEngine();
 
-//            for (int i = 0; i < 100; i++) {
-//                List<Value> v = Lists.newArrayList(new Value(random.nextInt(30), LONG), new Value(random.nextInt(30), STRING));
-//                valuesLists.add(v);
-//            }
-
-        } else {
-
-            List<Value> v1 = Lists.newArrayList(
-                    new Value(100L, LONG),
-                    new Value(3L, LONG),
-                    new Value(100L, LONG),
-                    new Value(25.5, DOUBLE),
-                    new Value("zhangsan", STRING));
-
-            List<Value> v2 = Lists.newArrayList(
-                    new Value(101L, LONG),
-                    new Value(2L, LONG),
-                    new Value(55L, LONG),
-                    new Value(32.5, DOUBLE),
-                    new Value("lisi", STRING));
-
-            List<Value> v3 = Lists.newArrayList(
-                    new Value(102L, LONG),
-                    new Value(5L, LONG),
-                    new Value(23L, LONG),
-                    new Value(45, DOUBLE),
-                    new Value("wangwu", STRING));
-
-
-            valuesLists.add(v1);
-            valuesLists.add(v2);
-            valuesLists.add(v3);
-
-//            for (int i = 0; i < 100; i++) {
-//                List<Value> v1 = Lists.newArrayList(
-//                        new Value(100L, LONG),
-//                        new Value(3L, LONG),
-//                        new Value(100L, LONG),
-//                        new Value(25.5, DOUBLE),
-//                        new Value("zhangsan", STRING));
-//
-//                List<Value> v2 = Lists.newArrayList(
-//                        new Value(101L, LONG),
-//                        new Value(2L, LONG),
-//                        new Value(55L, LONG),
-//                        new Value(32.5, DOUBLE),
-//                        new Value("lisi", STRING));
-//
-//                List<Value> v3 = Lists.newArrayList(
-//                        new Value(102L, LONG),
-//                        new Value(5L, LONG),
-//                        new Value(23L, LONG),
-//                        new Value(45, DOUBLE),
-//                        new Value("wangwu", STRING));
-//
-//
-//                valuesLists.add(v1);
-//                valuesLists.add(v2);
-//                valuesLists.add(v3);
-//            }
-        }
-
-        iterator = valuesLists.iterator();
+        QueryContext queryContext = new QueryContext(new MatchAllDocsQuery(), Sets.newHashSet(tableEngine.getColumnNames()));
+        iterator = tableEngine.search(queryContext);
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.yuqi.storage.lucene.TableEngine;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.prepare.RelOptTableImpl;
 import org.apache.calcite.rel.type.RelDataType;
+import org.apache.calcite.rex.RexNode;
 import org.apache.lucene.search.MatchAllDocsQuery;
 
 import java.util.Iterator;
@@ -25,23 +26,28 @@ public class SlothTableScanOperator extends AbstractOperator {
     public static final List<Value> EOF = null;
 
     private RelOptTable table;
+    private List<RexNode> project;
+    private RexNode condition;
 
     //MOCK
     private Iterator<List<Value>> iterator;
     private List<DataType> dataTypes;
 
-    public SlothTableScanOperator(RelOptTable table, RelDataType rowType) {
-        super(rowType);
+    public SlothTableScanOperator(RelOptTable table, RelDataType originType,
+                                  RelDataType outputType, List<RexNode> projects, RexNode filter) {
+        super(originType);
         this.table = table;
+        this.project = projects;
+        this.condition = filter;
     }
 
     @Override
     public void open() {
-
         final RelOptTableImpl relOptTable = (RelOptTableImpl) table;
         final List<String> dbAndTable = relOptTable.getQualifiedName();
         final SlothTable slothTable = (SlothTable) SlothSchemaHolder.INSTANCE
                 .getSlothSchema(dbAndTable.get(0)).getTable(dbAndTable.get(1));
+
 
         TableEngine tableEngine = slothTable.getTableEngine();
 

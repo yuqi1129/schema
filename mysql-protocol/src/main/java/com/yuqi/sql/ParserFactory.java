@@ -105,7 +105,6 @@ public class ParserFactory {
         //Currently when introduce with relcollation rule, SortRemoveRule has bug
         //sort remove this rule temporarily
         relOptPlanner.removeRule(CoreRules.SORT_REMOVE);
-
     }
 
 

@@ -1,4 +1,4 @@
-package com.yuqi.sql.rule;
+package com.yuqi.sql.rule.converter;
 
 import com.yuqi.sql.rel.SlothUnion;
 import com.yuqi.sql.trait.SlothConvention;

@@ -1,13 +1,14 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
+import com.yuqi.sql.rule.SlothRules;
 import com.yuqi.sql.trait.SlothConvention;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptPlanner;
+import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.plan.RelTraitSet;
 import org.apache.calcite.plan.hep.HepPlanner;
-import org.apache.calcite.plan.hep.HepProgram;
 import org.apache.calcite.plan.hep.HepProgramBuilder;
 import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelCollations;
@@ -16,6 +17,7 @@ import org.apache.calcite.rel.RelRoot;
 import org.apache.calcite.rel.metadata.ChainedRelMetadataProvider;
 import org.apache.calcite.rel.metadata.DefaultRelMetadataProvider;
 import org.apache.calcite.rel.metadata.RelMetadataProvider;
+import org.apache.calcite.rel.rules.CoreRules;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexBuilder;
 import org.apache.calcite.sql.SqlKind;
@@ -27,8 +29,6 @@ import org.apache.calcite.sql2rel.SqlToRelConverter;
 import org.apache.calcite.sql2rel.StandardConvertletTable;
 
 import java.util.List;
-
-import static com.yuqi.sql.ParserFactory.registerRules;
 
 
 /**
@@ -141,10 +141,12 @@ public class SlothParser implements RelOptTable.ViewExpander {
 
     private RelNode optimize(RelNode relNode) {
 
-        final HepPlanner hepPlanner = buildHepPlanner();
-        hepPlanner.setRoot(relNode);
-        relNode = hepPlanner.findBestExp();
+        //before cbo
+        final HepPlanner hepPlannerBefore = buildHepPlannerBeforeCbo();
+        hepPlannerBefore.setRoot(relNode);
+        relNode = hepPlannerBefore.findBestExp();
 
+        //cbo
         relOptPlanner.setRoot(relNode);
         RelTraitSet reqiredTraitSet = relNode.getTraitSet()
                 .replace(SlothConvention.INSTANCE)
@@ -156,15 +158,47 @@ public class SlothParser implements RelOptTable.ViewExpander {
                 ? relNode : relOptPlanner.changeTraits(relNode, reqiredTraitSet);
 
         relOptPlanner.setRoot(relNode1);
-        return relOptPlanner.chooseDelegate().findBestExp();
+        relNode = relOptPlanner.chooseDelegate().findBestExp();
+
+        //after cbo
+        final HepPlanner hepPlannerAfter = buildHepPlannerAfterCbo();
+        hepPlannerAfter.setRoot(relNode);
+        return hepPlannerAfter.findBestExp();
     }
 
 
-    private HepPlanner buildHepPlanner() {
-        final HepProgram hepProgram = new HepProgramBuilder().build();
-        final HepPlanner hepPlanner = new HepPlanner(hepProgram);
+    private HepPlanner buildHepPlannerBeforeCbo() {
+        HepProgramBuilder builder = new HepProgramBuilder();
+        for (RelOptRule relOptRule : SlothRules.CONSTANT_REDUCTION_RULES) {
+            builder.addRuleInstance(relOptRule);
+        }
 
-        registerRules(hepPlanner);
+        for (RelOptRule relOptRule : SlothRules.BASE_RULES) {
+            builder.addRuleInstance(relOptRule);
+        }
+
+        for (RelOptRule relOptRule : SlothRules.ABSTRACT_RELATIONAL_RULES) {
+            builder.addRuleInstance(relOptRule);
+        }
+
+        for (RelOptRule relOptRule : SlothRules.ABSTRACT_RULES) {
+            builder.addRuleInstance(relOptRule);
+        }
+
+
+        final HepPlanner hepPlanner = new HepPlanner(builder.build());
+
+        hepPlanner.removeRule(CoreRules.JOIN_COMMUTE);
+        hepPlanner.removeRule(CoreRules.JOIN_ASSOCIATE);
         return hepPlanner;
+    }
+
+    public HepPlanner buildHepPlannerAfterCbo() {
+
+        HepProgramBuilder builder = new HepProgramBuilder();
+        for (RelOptRule relOptRule : SlothRules.AFTER_CBO_RULES) {
+            builder.addRuleInstance(relOptRule);
+        }
+        return new HepPlanner(builder.build());
     }
 }

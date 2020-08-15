@@ -1,4 +1,4 @@
-package com.yuqi.sql.rule;
+package com.yuqi.sql.rule.converter;
 
 
 import org.apache.calcite.plan.Convention;

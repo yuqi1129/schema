@@ -47,7 +47,7 @@ public abstract class LogicalFunction extends Scalar {
                 return !v2.isNull();
             }
 
-            return v1.booleanValue() && v2.booleanValue();
+            return v1.booleanValue() || v2.booleanValue();
         }
     };
 

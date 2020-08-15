@@ -7,6 +7,7 @@ import com.yuqi.engine.data.value.Value;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.DoublePoint;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FloatPoint;
 import org.apache.lucene.document.IntPoint;
 import org.apache.lucene.document.LongPoint;
 import org.apache.lucene.document.StoredField;
@@ -30,6 +31,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.yuqi.engine.data.type.DataTypes.BYTE;
 import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
@@ -121,30 +123,43 @@ public class LuceneStorageEngine implements StorageEngine {
         final Map<String, DataType> dataTypeList = tableEngine.getColumnAndDataType();
 
         //TODO 目测lucene 当前无法存NULL值，NULL值需要自已处理
+        // NULL 映射某个固定的值
+
+        /**
+         * Store 'NULL' to String null
+         *
+         * for number type, minimum number of the type represent null value
+         */
         for (int i = 0; i < row.size(); i++) {
             final Value value = row.get(i);
             final String columnName = columnNames.get(i);
             final DataType dataType = dataTypeList.get(columnName);
 
             if (BYTE.equals(dataType) || SHORT.equals(dataType) || INTEGER.equals(dataType)) {
-                document.add(new IntPoint(columnName, value.intValue()));
-                document.add(new StoredField(columnName, value.intValue()));
+                int content = value.isNull() ? Integer.MIN_VALUE : value.intValue();
+                document.add(new IntPoint(columnName, content));
+                document.add(new StoredField(columnName, content));
             } else if (LONG.equals(dataType)) {
-                document.add(new LongPoint(columnName, value.longValue()));
-                document.add(new StoredField(columnName, value.longValue()));
+                long content = value.isNull() ? Long.MIN_VALUE : value.longValue();
+                document.add(new LongPoint(columnName, content));
+                document.add(new StoredField(columnName, content));
             } else if (FLOAT.equals(dataType)) {
-                document.add(new LongPoint(columnName, value.longValue()));
-                document.add(new StoredField(columnName, value.floatValue()));
+                float content = value.isNull() ? Float.MIN_VALUE : value.floatValue();
+                document.add(new FloatPoint(columnName, content));
+                document.add(new StoredField(columnName, content));
             } else if (DOUBLE.equals(dataType)) {
-                document.add(new DoublePoint(columnName, value.doubleValue()));
-                document.add(new StoredField(columnName, value.doubleValue()));
+                double content = value.isNull() ? Double.MIN_VALUE : value.doubleValue();
+                document.add(new DoublePoint(columnName, content));
+                document.add(new StoredField(columnName, content));
             } else if (STRING.equals(dataType)) {
                 //String values do not need to add store field
-                document.add(new StringField(columnName, value.stringValue(), Field.Store.YES));
+                String content = value.isNull() ? "NULL" : value.stringValue();
+                document.add(new StringField(columnName, content, Field.Store.YES));
             } else {
                 //maybe time/datetime/timestamp
-                document.add(new LongPoint(columnName, value.longValue()));
-                document.add(new StoredField(columnName, value.floatValue()));
+                long content = value.isNull() ? Long.MIN_VALUE : value.longValue();
+                document.add(new LongPoint(columnName, content));
+                document.add(new StoredField(columnName, content));
             }
         }
 
@@ -163,11 +178,28 @@ public class LuceneStorageEngine implements StorageEngine {
             String columneName = field.name();
             DataType dataType = columnAndDataType.get(columneName);
 
+            Value v;
             if (dataType == STRING) {
-                rs.add(new Value(field.stringValue(), dataType));
+                final String stringValue = field.stringValue();
+                v = new Value(Objects.equals("NULL", stringValue) ? null : stringValue, dataType);
+            } else if (dataType == INTEGER || dataType == SHORT || dataType == BYTE) {
+                Integer numericValue = (Integer) field.numericValue();
+                v = new Value(Integer.MIN_VALUE == numericValue ? null : numericValue, dataType);
+            } else if (dataType == LONG) {
+                Long numericValue = (Long) field.numericValue();
+                v = new Value(Long.MIN_VALUE == numericValue ? null : numericValue, dataType);
+            } else if (dataType == FLOAT) {
+                Float numericValue = (Float) field.numericValue();
+                v = new Value(Float.MIN_VALUE == numericValue ? null : numericValue, dataType);
+            } else if (dataType == DOUBLE) {
+                Double numericValue = (Double) field.numericValue();
+                v = new Value(Double.MIN_VALUE == numericValue ? null : numericValue, dataType);
             } else {
-                rs.add(new Value(field.numericValue(), dataType));
+                Long numericValue = (Long) field.numericValue();
+                v = new Value(Long.MIN_VALUE == numericValue ? null : numericValue, dataType);
             }
+            rs.add(v);
+
         }
 
         return rs;

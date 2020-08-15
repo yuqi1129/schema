@@ -26,8 +26,14 @@ public class SlothTableScanOperator extends AbstractOperator {
     public static final List<Value> EOF = null;
 
     private RelOptTable table;
+
     private List<RexNode> project;
     private RexNode condition;
+
+    /**
+     * if project is not null or empty, the outputType is the project output type;
+     */
+    private RelDataType outputType;
 
     //MOCK
     private Iterator<List<Value>> iterator;
@@ -39,6 +45,7 @@ public class SlothTableScanOperator extends AbstractOperator {
         this.table = table;
         this.project = projects;
         this.condition = filter;
+        this.outputType = outputType;
     }
 
     @Override

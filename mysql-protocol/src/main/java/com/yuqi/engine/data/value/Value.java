@@ -30,6 +30,8 @@ public class Value implements Comparable<Value> {
     //比如说 value = Integer, DataType为Long, 最终需要
     protected DataType dataType;
 
+    private boolean mappinngNull = false;
+
     public Value(Object value) {
         this.value = value;
     }
@@ -37,6 +39,12 @@ public class Value implements Comparable<Value> {
     public Value(Object value, DataType dataType) {
         this.value = value;
         this.dataType = dataType;
+    }
+
+    public Value(Object value, DataType dataType, boolean mappinngNull) {
+        this.value = value;
+        this.dataType = dataType;
+        this.mappinngNull = mappinngNull;
     }
 
     public DataType<?> getType() {

@@ -4,7 +4,7 @@ import com.yuqi.protocol.command.sqlnode.Handler;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 31/7/20 18:45
  **/

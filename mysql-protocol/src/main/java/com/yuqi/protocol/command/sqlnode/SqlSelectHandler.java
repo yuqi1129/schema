@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 31/7/20 17:03
  **/

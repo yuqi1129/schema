@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 5/8/20 11:25
  **/

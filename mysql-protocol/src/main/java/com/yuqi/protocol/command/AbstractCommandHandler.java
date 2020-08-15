@@ -4,7 +4,7 @@ import com.yuqi.protocol.connection.ConnectionContext;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 13/7/20 23:36
  **/

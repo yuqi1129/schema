@@ -6,7 +6,7 @@ import static com.yuqi.storage.constant.TypeConstants.INT_SIZE;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 5/7/20 16:45
  **/

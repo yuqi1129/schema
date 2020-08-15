@@ -12,7 +12,7 @@ import org.apache.calcite.rel.metadata.RelMetadataQuery;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 28/7/20 20:22
  **/

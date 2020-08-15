@@ -15,6 +15,7 @@ import org.apache.calcite.sql.SqlAggFunction;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.util.ImmutableBitSet;
 import org.apache.commons.collections4.CollectionUtils;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 5/7/20 16:38
  **/

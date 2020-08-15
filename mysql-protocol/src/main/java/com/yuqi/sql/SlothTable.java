@@ -17,7 +17,7 @@ import java.util.Objects;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 10/7/20 19:55
  **/

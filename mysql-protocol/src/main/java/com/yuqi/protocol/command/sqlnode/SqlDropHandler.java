@@ -15,7 +15,7 @@ import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.UNKNOWN_TABLE_
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 31/7/20 16:58
  **/

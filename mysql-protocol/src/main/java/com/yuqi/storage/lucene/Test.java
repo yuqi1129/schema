@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 11/8/20 22:29
  **/

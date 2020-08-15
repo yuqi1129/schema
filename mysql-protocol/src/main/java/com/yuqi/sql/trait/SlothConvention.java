@@ -10,7 +10,7 @@ import org.apache.calcite.plan.RelTraitSet;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 27/7/20 20:20
  **/

@@ -5,7 +5,7 @@ import org.apache.lucene.index.LeafReader;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 12/8/20 21:25
  **/

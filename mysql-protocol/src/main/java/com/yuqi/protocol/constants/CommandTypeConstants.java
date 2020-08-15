@@ -2,7 +2,7 @@ package com.yuqi.protocol.constants;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 4/7/20 20:38
  **/

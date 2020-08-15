@@ -9,7 +9,7 @@ import org.apache.calcite.rel.logical.LogicalJoin;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 3/8/20 19:37
  **/

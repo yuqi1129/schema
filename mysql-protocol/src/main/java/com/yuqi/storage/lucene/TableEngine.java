@@ -22,7 +22,7 @@ import static com.yuqi.sql.SlothTable.DEFAULT_SHARD;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 13/8/20 17:47
  **/

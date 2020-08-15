@@ -22,7 +22,7 @@ import static com.yuqi.protocol.constants.Constants.CPU_CORES;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 30/6/20 20:48
  **/

@@ -6,7 +6,7 @@ import static com.yuqi.engine.data.type.DataTypes.INTEGER;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 5/8/20 17:12
  **/

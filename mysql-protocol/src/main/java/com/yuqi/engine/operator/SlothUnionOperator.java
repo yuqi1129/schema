@@ -12,7 +12,7 @@ import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 9/8/20 13:14
  **/

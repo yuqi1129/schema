@@ -10,7 +10,7 @@ import static com.yuqi.engine.data.type.DataTypes.BOOLEAN;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 12/8/20 15:22
  **/

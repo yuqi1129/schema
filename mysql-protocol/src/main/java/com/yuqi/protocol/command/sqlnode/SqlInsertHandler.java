@@ -39,7 +39,7 @@ import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.UNKONW_COLUMN_
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 9/8/20 21:03
  **/

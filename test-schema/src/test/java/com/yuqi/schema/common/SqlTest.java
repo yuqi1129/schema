@@ -2,7 +2,6 @@ package com.yuqi.schema.common;
 
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.prepare.PlannerImpl;
-import org.apache.calcite.schema.SchemaPlus;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlSelect;
 import org.apache.calcite.sql.dialect.MysqlSqlDialect;
@@ -12,7 +11,7 @@ import org.apache.calcite.tools.Frameworks;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 25/2/20 11:58
  **/

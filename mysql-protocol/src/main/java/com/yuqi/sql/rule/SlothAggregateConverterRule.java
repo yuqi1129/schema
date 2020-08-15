@@ -9,7 +9,7 @@ import org.apache.calcite.rel.logical.LogicalAggregate;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 7/8/20 14:25
  **/

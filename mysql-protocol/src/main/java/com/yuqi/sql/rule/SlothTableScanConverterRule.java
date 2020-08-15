@@ -9,7 +9,7 @@ import org.apache.calcite.rel.logical.LogicalTableScan;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 10/8/20 11:16
  **/

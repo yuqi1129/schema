@@ -21,6 +21,7 @@ public class SlothSchemaHolder implements LifeCycle {
 
     public SlothSchemaHolder() {
         this.schemaMap = Maps.newHashMap();
+        init();
     }
 
     @Override

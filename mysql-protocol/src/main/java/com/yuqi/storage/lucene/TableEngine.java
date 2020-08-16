@@ -120,7 +120,6 @@ public class TableEngine implements LifeCycle {
     }
 
     private void resolveType() {
-
         slothTable.getColumns().forEach(column -> {
             final String sqlTypeNameString = column.getColumnType().getTypeName().toString().toUpperCase();
             final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);

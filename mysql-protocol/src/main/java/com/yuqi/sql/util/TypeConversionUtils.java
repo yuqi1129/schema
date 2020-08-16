@@ -44,6 +44,9 @@ public class TypeConversionUtils {
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.VARCHAR, STRING);
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.CHAR, STRING);
 
+        //存储层用long, 但是在表层、展示示需要用实际类型
+        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.DATE, LONG);
+        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.TIMESTAMP, LONG);
     }
 
     public static DataType getBySqlTypeName(SqlTypeName sqlTypeName) {

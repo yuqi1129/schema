@@ -151,6 +151,8 @@ SqlCreateTable CreateTable() :
     boolean isNotExist = false;
     SqlParserPos pos;
     SqlNodeList sqlNodeList;
+
+    String engine;
 }
 {
     {
@@ -166,6 +168,10 @@ SqlCreateTable CreateTable() :
     )?
     schemaAndTableName = CompoundIdentifier()
     sqlNodeList = SlothColumnTypes()
+    [
+        <ENGINE> <EQ>
+        engine = Identifier()
+    ]
     {
         return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist);
     }
@@ -239,6 +245,30 @@ void SlothColumnType(List<SqlNode> list) :
             defalutValue,
             comment
         ));
+    }
+}
+
+SqlTypeNameSpec SlothSpecailType(Span s) :
+{
+    SqlTypeName sqlTypeName = null;
+}
+{
+    (
+        (
+        <TEXT>
+        |
+        <TINYTEXT>
+        |
+        <MEDIUMTEXT>
+        |
+        <LONGTEXT>
+        )
+        {
+            sqlTypeName = SqlTypeName.VARCHAR;
+        }
+    )
+    {
+        return new SqlBasicTypeNameSpec(sqlTypeName, s.end(this));
     }
 }
 

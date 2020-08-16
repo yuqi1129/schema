@@ -57,7 +57,12 @@ data: {
         "DATABASES",
         "TABLES",
         "UNSIGNED",
-        "COMMENT"
+        "COMMENT",
+        "TEXT",
+        "TINYTEXT",
+        "MEDIUMTEXT",
+        "LONGTEXT",
+        "ENGINE"
     ]
 
     # List of keywords from "keywords" section that are not reserved.
@@ -411,6 +416,7 @@ data: {
     # Return type of method implementation should be "SqlTypeNameSpec".
     # Example: SqlParseTimeStampZ().
     dataTypeParserMethods: [
+        "SlothSpecailType(s)"
     ]
 
     # List of methods for parsing builtin function calls.

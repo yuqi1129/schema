@@ -58,7 +58,7 @@ public class QueryCommandHandler extends AbstractCommandHandler {
             handleSqlNode(sqlNode);
         } catch (Exception e) {
             //TODO 这里异常需要分类处理一下
-            LOGGER.error(Throwables.getStackTraceAsString(e));
+            LOGGER.error("execute sql\n '{}' \nget error:\n", query, Throwables.getStackTraceAsString(e));
 
             if (query.contains("@@")) {
                 handleSqlString(query);

@@ -12,8 +12,10 @@
         <dependencySet>
             <unpack>false</unpack>
             <scope>runtime</scope>
-            <outputDirectory>Mysql/lib</outputDirectory>
-            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>mysql-protocol/lib</outputDirectory>
+
+            <!-- 把项目本身的jar包也打进去 -->
+            <useProjectArtifact>true</useProjectArtifact>
         </dependencySet>
     </dependencySets>
 
@@ -24,16 +26,19 @@
                 <include>bin/**</include>
             </includes>
             <fileMode>0755</fileMode>
-            <outputDirectory>Mysql/bin</outputDirectory>
+            <outputDirectory>mysql-protocol/</outputDirectory>
             <filtered>true</filtered>
         </fileSet>
 
         <fileSet>
-            <directory>target/classes/</directory>
-            <outputDirectory>Mysql</outputDirectory>
+            <directory>${profile.dir}</directory>
+            <includes>
+                <include>resources/*.xml</include>
+            </includes>
+            <outputDirectory>mysql-protocol/</outputDirectory>
+            <filtered>true</filtered>
         </fileSet>
-
+        <!-- TODO 配置文件目测没法独立打进去，还需要好好看看-->
     </fileSets>
-    <!-- TODO 需要把 mysql-protocol-1.10.jar 也放到lib中, 完善startup.sh-->
 
 </assembly>

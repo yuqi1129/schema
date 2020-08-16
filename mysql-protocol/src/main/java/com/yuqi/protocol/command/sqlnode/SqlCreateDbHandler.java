@@ -4,7 +4,7 @@ import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchemaHolder;
-import com.yuqi.sql.ddl.SqlCreateDb;
+import com.yuqi.sql.sqlnode.ddl.SqlCreateDb;
 
 import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.DATABASE_EXISTS_ERROR;
 

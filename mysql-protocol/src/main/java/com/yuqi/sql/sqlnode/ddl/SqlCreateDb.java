@@ -1,4 +1,4 @@
-package com.yuqi.sql.ddl;
+package com.yuqi.sql.sqlnode.ddl;
 
 import org.apache.calcite.sql.SqlCreate;
 import org.apache.calcite.sql.SqlKind;

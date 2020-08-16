@@ -5,7 +5,7 @@ import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
-import com.yuqi.sql.ddl.SqlUse;
+import com.yuqi.sql.sqlnode.ddl.SqlUse;
 
 import java.util.Objects;
 

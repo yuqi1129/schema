@@ -41,11 +41,12 @@ data: {
     # List of additional classes and packages to import.
     # Example. "org.apache.calcite.sql.*", "java.util.List".
     imports: [
-        "com.yuqi.sql.ddl.SqlCreateDb",
-        "com.yuqi.sql.ddl.SqlDrop",
-        "com.yuqi.sql.ddl.SqlShow",
-        "com.yuqi.sql.ddl.SqlUse",
-        "com.yuqi.sql.ddl.SqlCreateTable",
+        "com.yuqi.sql.sqlnode.ddl.SqlCreateDb",
+        "com.yuqi.sql.sqlnode.ddl.SqlDrop",
+        "com.yuqi.sql.sqlnode.ddl.SqlShow",
+        "com.yuqi.sql.sqlnode.ddl.SqlUse",
+        "com.yuqi.sql.sqlnode.ddl.SqlCreateTable",
+        "com.yuqi.sql.sqlnode.type.SlothColumnType",
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
@@ -54,7 +55,9 @@ data: {
         "IF",
         "USE",
         "DATABASES",
-        "TABLES"
+        "TABLES",
+        "UNSIGNED",
+        "COMMENT"
     ]
 
     # List of keywords from "keywords" section that are not reserved.

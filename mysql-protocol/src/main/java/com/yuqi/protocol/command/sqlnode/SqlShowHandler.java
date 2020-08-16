@@ -7,7 +7,7 @@ import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
-import com.yuqi.sql.ddl.SqlShow;
+import com.yuqi.sql.sqlnode.ddl.SqlShow;
 import io.netty.buffer.ByteBuf;
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,11 +1,11 @@
 package com.yuqi.protocol.command.sqlnode;
 
 
-import com.yuqi.sql.ddl.SqlCreateDb;
-import com.yuqi.sql.ddl.SqlCreateTable;
-import com.yuqi.sql.ddl.SqlDrop;
-import com.yuqi.sql.ddl.SqlShow;
-import com.yuqi.sql.ddl.SqlUse;
+import com.yuqi.sql.sqlnode.ddl.SqlCreateDb;
+import com.yuqi.sql.sqlnode.ddl.SqlCreateTable;
+import com.yuqi.sql.sqlnode.ddl.SqlDrop;
+import com.yuqi.sql.sqlnode.ddl.SqlShow;
+import com.yuqi.sql.sqlnode.ddl.SqlUse;
 import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlInsert;
 import org.apache.calcite.sql.SqlOrderBy;

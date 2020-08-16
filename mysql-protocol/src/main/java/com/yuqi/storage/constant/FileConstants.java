@@ -8,5 +8,5 @@ package com.yuqi.storage.constant;
  **/
 public class FileConstants {
 
-    public static final String TABLE_FILE_LOACTION = "/tmp/test";
+    public static final String TABLE_FILE_LOACTION = "/Users/yuqi/test/sloth";
 }

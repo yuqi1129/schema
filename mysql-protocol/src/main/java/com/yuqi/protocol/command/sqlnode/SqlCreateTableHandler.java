@@ -9,8 +9,8 @@ import com.yuqi.sql.SlothColumn;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
-import com.yuqi.sql.ddl.SqlCreateTable;
-import org.apache.calcite.sql.SqlDataTypeSpec;
+import com.yuqi.sql.sqlnode.ddl.SqlCreateTable;
+import com.yuqi.sql.sqlnode.type.SlothColumnType;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
 
@@ -72,7 +72,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         final List<SlothColumn> slothColumns = Lists.newArrayList();
         for (int i = 0; i < size / 2; i++) {
             final String columnName = nodes.get(2 * i).toString();
-            final SqlDataTypeSpec sqlTypeName = (SqlDataTypeSpec) nodes.get(2 * i + 1);
+            final SlothColumnType sqlTypeName = (SlothColumnType) nodes.get(2 * i + 1);
             final SlothColumn slothColumn = new SlothColumn(columnName, sqlTypeName);
             slothColumns.add(slothColumn);
         }

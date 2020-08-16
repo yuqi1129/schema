@@ -155,18 +155,97 @@ SqlCreateTable CreateTable() :
 {
     {
         pos = getPos();
-    }
+        }
 
-    <CREATE> <TABLE>
-    (
-        <IF> <NOT> <EXISTS>
-            {
-                isNotExist = true;
-            }
-    )?
-    schemaAndTableName = CompoundIdentifier()
-    sqlNodeList = ExtendList()
-    {
-        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist);
-    }
-}
+        <CREATE>
+            <TABLE>
+                (
+                <IF>
+                    <NOT>
+                        <EXISTS>
+                            {
+                            isNotExist = true;
+                            }
+                            )?
+                            schemaAndTableName = CompoundIdentifier()
+                            sqlNodeList = SlothColumnTypes()
+                            {
+                            return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist);
+                            }
+                            }
+
+
+                            SqlNodeList SlothColumnTypes() :
+                            {
+                            final Span s;
+                            List
+                            <SqlNode> list = new ArrayList
+                                <SqlNode>();
+                                    }
+                                    {
+                                    <LPAREN> { s = span(); }
+                                        SlothColumnType(list)
+                                        (
+                                        <COMMA> SlothColumnType(list)
+                                            )*
+                                            <RPAREN> {
+                                                return new SqlNodeList(list, s.end(this));
+                                                }
+                                                }
+
+                                                void SlothColumnType(List
+                                                <SqlNode> list) :
+                                                    {
+                                                    SqlIdentifier name;
+                                                    SqlDataTypeSpec type;
+                                                    boolean nullable = true;
+                                                    boolean unsigned = false;
+                                                    SqlNode defalutValue = null;
+                                                    SqlNode comment = null;
+                                                    SqlNode precision = null;
+                                                    }
+                                                    {
+                                                    name = CompoundIdentifier()
+                                                    type = DataType()
+                                                    [
+                                                    <LPAREN>
+                                                        precision = Literal()
+                                                        <RPAREN>
+                                                            ]
+
+                                                            [
+                                                            <UNSIGNED> {
+                                                                unsigned = true;
+                                                                }
+                                                                ]
+
+                                                                [
+                                                                <NOT>
+                                                                    <NULL> {
+                                                                        nullable = false;
+                                                                        }
+                                                                        ]
+
+                                                                        [
+                                                                        <DEFAULT_>
+                                                                            defalutValue = Literal()
+                                                                            ]
+
+                                                                            [
+                                                                            <COMMENT>
+                                                                                comment = Literal()
+                                                                                ]
+
+                                                                                {
+                                                                                list.add(name);
+                                                                                type = type.withNullable(nullable);
+                                                                                list.add(new SlothColumnType(
+                                                                                type,
+                                                                                precision,
+                                                                                unsigned,
+                                                                                defalutValue,
+                                                                                comment
+                                                                                ));
+                                                                                }
+                                                                                }
+

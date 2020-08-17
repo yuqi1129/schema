@@ -36,7 +36,7 @@ for i in `ls "$BASE_HOME"/../lib/*.jar | sort -r `; do
    CLASSPATH="$CLASSPATH":"$i"
 done
 
-CLASSPATH="${BASE_HOME}/config":"${CLASSPATH}"
+CLASSPATH="${BASE_HOME}/../config":"${CLASSPATH}"
 
 #java虚拟机启动参数
 JAVA_OPTS="-ms512m -mx512m -Xmn256m -Djava.awt.headless=true -XX:MaxPermSize=128m"

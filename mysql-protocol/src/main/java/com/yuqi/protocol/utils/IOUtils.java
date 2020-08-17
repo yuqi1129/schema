@@ -150,9 +150,12 @@ public class IOUtils {
         return (short) (high << 8 + low);
     }
 
+    /**
+     * @param byteBuf
+     * @return
+     */
     public static String readString(ByteBuf byteBuf) {
         ByteBuf tmp = ByteBufAllocator.DEFAULT.buffer(byteBuf.readableBytes());
-
         byte b;
         while (byteBuf.isReadable() && (b = ((byte) (byteBuf.readByte() & 0xff))) != 0x00) {
             tmp.writeByte(b);
@@ -161,6 +164,18 @@ public class IOUtils {
         int length = tmp.readableBytes();
         byte[] byteResult = new byte[length];
         tmp.readBytes(byteResult);
+        return new String(byteResult);
+    }
+
+    /**
+     * See https://dev.mysql.com/doc/internals/en/string.html#packet-Protocol::RestOfPacketString
+     * @param byteBuf
+     * @return
+     */
+    public static String readEofString(ByteBuf byteBuf) {
+        int length = byteBuf.readableBytes();
+        byte[] byteResult = new byte[length];
+        byteBuf.readBytes(byteResult);
         return new String(byteResult);
     }
 

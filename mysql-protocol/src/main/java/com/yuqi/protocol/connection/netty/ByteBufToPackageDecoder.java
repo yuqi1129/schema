@@ -28,8 +28,6 @@ public class ByteBufToPackageDecoder extends MessageToMessageDecoder<ByteBuf> {
         }
 
         result.read(byteBuf);
-        //TODO 这里读命令包时会出现包没有读完整导致执行问题，后面的发来的sql得到的结果一直是前一条sql的执行
-        //结果
         list.add(result);
     }
 

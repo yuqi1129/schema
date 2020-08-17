@@ -1,5 +1,6 @@
 package com.yuqi.protocol;
 
+import com.google.common.base.Throwables;
 import com.yuqi.protocol.config.ConnectionConfig;
 import com.yuqi.protocol.connection.netty.AuthencationHandler;
 import com.yuqi.protocol.connection.netty.ByteBufToPackageDecoder;
@@ -14,11 +15,15 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.yuqi.protocol.constants.Constants.CPU_CORES;
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
 /**
  * @author yuqi
@@ -27,6 +32,8 @@ import static com.yuqi.protocol.constants.Constants.CPU_CORES;
  * @time 30/6/20 20:48
  **/
 public class ProtocolMainThread implements Runnable {
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(ProtocolMainThread.class);
     private final int port;
 
     public ProtocolMainThread(int port) {
@@ -61,6 +68,17 @@ public class ProtocolMainThread implements Runnable {
                             ConnectionConfig.writeTimeout,
                             ConnectionConfig.readTimeOut));
 
+                    //TODO try to learn how to use LengthFieldBasedFrameDecoder
+                    pipeline.addLast("decoder_before", new LengthFieldBasedFrameDecoder(
+                            LITTLE_ENDIAN,
+                            Integer.MAX_VALUE,
+                            0,
+                            3,
+                            1,
+                            0,
+                            true
+                    ));
+
                     pipeline.addLast("decoder", new ByteBufToPackageDecoder());
                     //pipeline.addLast("encoder", new MysqlPackageToByteBufEncoder());
                     pipeline.addLast("authencatin", new AuthencationHandler());
@@ -79,10 +97,7 @@ public class ProtocolMainThread implements Runnable {
                 }
             });
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(Throwables.getStackTraceAsString(e));
         }
-
-
-
     }
 }

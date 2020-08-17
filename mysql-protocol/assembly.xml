@@ -31,12 +31,15 @@
         </fileSet>
 
         <fileSet>
-            <directory>${profile.dir}</directory>
-            <includes>
-                <include>resources/*.xml</include>
-            </includes>
-            <outputDirectory>mysql-protocol/</outputDirectory>
-            <filtered>true</filtered>
+<!--            <directory>${project.basedir}</directory>-->
+<!--            <includes>-->
+<!--                <include>src/main/resources/**</include>-->
+<!--            </includes>-->
+<!--            <outputDirectory>mysql-protocol/config</outputDirectory>-->
+            <!--以上配置会将src/main/resources也打包到 config下 -->
+
+            <directory>${project.basedir}/src/main/resources</directory>
+            <outputDirectory>mysql-protocol/config</outputDirectory>
         </fileSet>
         <!-- TODO 配置文件目测没法独立打进去，还需要好好看看-->
     </fileSets>

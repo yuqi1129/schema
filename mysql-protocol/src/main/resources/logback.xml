@@ -96,6 +96,9 @@ configuration 子节点为 appender、logger、root
 
 </configuration>
 
-        <!--
-        reference from https://www.jianshu.com/p/696444e1a352
-        -->
+<!--
+reference from https://www.jianshu.com/p/696444e1a352
+
+TODO logback.xml 目前还不能独立以配置文件的形式、且用户可以修改
+
+-->

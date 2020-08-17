@@ -32,9 +32,11 @@ APP_MAINCLASS=com.yuqi.FrontEndMain
 
 #拼凑完整的classpath参数，包括指定lib目录下所有的jar
 CLASSPATH=${CLASSPATH}
-for i in "$BASE_HOME"/../lib/*.jar; do
+for i in `ls "$BASE_HOME"/../lib/*.jar | sort -r `; do
    CLASSPATH="$CLASSPATH":"$i"
 done
+
+CLASSPATH="${BASE_HOME}/config":"${CLASSPATH}"
 
 #java虚拟机启动参数
 JAVA_OPTS="-ms512m -mx512m -Xmn256m -Djava.awt.headless=true -XX:MaxPermSize=128m"
@@ -80,7 +82,8 @@ start() {
       echo "warn: $APP_MAINCLASS already started! (pid=$psid)"
       echo "================================"
    else
-      echo -n "Starting $APP_MAINCLASS ..."
+      echo "classpath="${CLASSPATH}
+      echo "Starting $APP_MAINCLASS ..."
       JAVA_CMD="nohup $JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH $APP_MAINCLASS >/dev/null 2>&1 &"
       su - $RUNNING_USER -c "$JAVA_CMD"
       checkpid

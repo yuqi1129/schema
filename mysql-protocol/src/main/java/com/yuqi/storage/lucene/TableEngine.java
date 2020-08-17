@@ -99,8 +99,8 @@ public class TableEngine implements LifeCycle {
 
     @Override
     public void init() {
-        loadData();
         resolveType();
+        loadData();
     }
 
     @Override

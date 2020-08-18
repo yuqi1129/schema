@@ -3,6 +3,7 @@ package com.yuqi.protocol.command.sepcial;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.constants.ColumnTypeConstants;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
@@ -28,7 +29,7 @@ public class CurrentDatabaseHandler extends AbstractHandler {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {"database()"})
-                .columnType(Lists.newArrayList())
+                .columnType(Lists.newArrayList(ColumnTypeConstants.MYSQL_TYPE_VAR_STRING))
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)

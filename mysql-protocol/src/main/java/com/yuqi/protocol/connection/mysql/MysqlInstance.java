@@ -16,7 +16,7 @@ import java.util.Set;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 18/8/20 14:44
  **/
@@ -29,7 +29,6 @@ public class MysqlInstance {
 
     public static final String INSERT_SCHEMA_TEMPLATE = "insert into sloth.schemata values"
             + "('def', '%s', 'utf8', 'utf8_general_ci', NULL)";
-
 
     public static boolean isOk = true;
 

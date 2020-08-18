@@ -85,56 +85,57 @@ SqlDrop Drop() :
         {
             exist = true;
         }
-                )?
+    )?
 
-                dbName = CompoundIdentifier()
-                {
-                return new SqlDrop(pos, exist, dbName.toString(), isDb);
-                }
-                }
+    dbName = CompoundIdentifier()
+    {
+        return new SqlDrop(pos, exist, dbName.toString(), isDb);
+    }
+}
 
-                SqlShow SqlShow() :
-                {
-                SqlIdentifier command = null;
-                SqlParserPos pos;
-                int type;
-                }
-                {
-                {
-                pos = getPos();
-                }
 
-                <SHOW>
-                    (
-                    <DATABASES>
-                        {
-                        type = 0;
-                        }
-                        |
-                        <TABLES>
-                            {
-                            type = 1;
-                            }
-                            |
-                            <CREATE>
-                                <TABLE>
-                                    command = CompoundIdentifier()
-                                    {
-                                    type = 2;
-                                    }
-                                    )
-                                    {
-                                    return new SqlShow(pos, type, command == null ? null : command.toString());
-                                    }
-                                    }
+SqlShow SqlShow() :
+{
+    SqlIdentifier command = null;
+    SqlParserPos pos;
+    int type;
+}
+{
+    {
+        pos = getPos();
+    }
 
-                                    SqlUse SqlUseCommand() :
-                                    {
-                                    final SqlIdentifier command;
-                                    SqlParserPos pos;
-                                    }
-                                    {
-                                    {
+    <SHOW>
+    (
+    <DATABASES>
+    {
+        type = 0;
+    }
+    |
+    <TABLES>
+    {
+        type = 1;
+    }
+    |
+    <CREATE>
+    <TABLE>
+    command = CompoundIdentifier()
+    {
+        type = 2;
+    }
+    )
+    {
+    return new SqlShow(pos, type, command == null ? null : command.toString());
+    }
+}
+
+SqlUse SqlUseCommand() :
+{
+    final SqlIdentifier command;
+    SqlParserPos pos;
+}
+{
+    {
         pos = getPos();
     }
     <USE>

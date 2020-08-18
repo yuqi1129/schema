@@ -24,7 +24,6 @@ public class SlothFilterDirectoryReader extends FilterDirectoryReader {
     @Override
     protected DirectoryReader doWrapDirectoryReader(DirectoryReader in) throws IOException {
         return new SlothFilterDirectoryReader(in, (SubReaderWrapper) wrapper);
-
     }
 
     @Override

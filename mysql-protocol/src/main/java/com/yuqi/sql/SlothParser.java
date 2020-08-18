@@ -61,7 +61,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
         this.calciteCatalogReader = calciteCatalogReader;
     }
 
-
     private SqlToRelConverter getSqlToRelConverter() {
         final SqlToRelConverter.ConfigBuilder builder =
                 SqlToRelConverter.configBuilder()
@@ -80,7 +79,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
     public SqlNode getSqlNode(String sql) throws SqlParseException {
         return sqlParser.parseQuery(sql);
     }
-
 
     public SqlNode getSqlNode() throws SqlParseException {
         return sqlParser.parseStmt();
@@ -102,12 +100,10 @@ public class SlothParser implements RelOptTable.ViewExpander {
         return optimize(relNode);
     }
 
-
     public RelNode getPlan(String sql) throws SqlParseException {
         final SqlNode sqlNode = sqlParser.parseQuery(sql);
         return getPlan(sqlNode);
     }
-
 
     protected RelRoot trimUnusedFields(RelRoot root, SqlToRelConverter converter) {
         final boolean ordered = !root.collation.getFieldCollations().isEmpty();
@@ -115,9 +111,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
         return root.withRel(converter.trimUnusedFields(dml || ordered, root.rel));
     }
 
-
-
-        @Override
+    @Override
     public RelRoot expandView(RelDataType rowType, String queryString, List<String> schemaPath, List<String> viewPath) {
         expansionDepth++;
 
@@ -185,7 +179,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
             builder.addRuleInstance(relOptRule);
         }
 
-
         final HepPlanner hepPlanner = new HepPlanner(builder.build());
 
         hepPlanner.removeRule(CoreRules.JOIN_COMMUTE);
@@ -194,7 +187,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
     }
 
     public HepPlanner buildHepPlannerAfterCbo() {
-
         HepProgramBuilder builder = new HepProgramBuilder();
         for (RelOptRule relOptRule : SlothRules.AFTER_CBO_RULES) {
             builder.addRuleInstance(relOptRule);

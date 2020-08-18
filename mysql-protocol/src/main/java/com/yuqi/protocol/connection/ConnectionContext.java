@@ -4,6 +4,7 @@ import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 
 import java.util.Properties;
 
@@ -51,7 +52,7 @@ public class ConnectionContext {
 
     public void write(ByteBuf byteBuf) {
         channelHandlerContext.writeAndFlush(byteBuf);
-        byteBuf.clear();
+        ReferenceCountUtil.release(byteBuf);
     }
 
     public void write(MysqlPackage result) {

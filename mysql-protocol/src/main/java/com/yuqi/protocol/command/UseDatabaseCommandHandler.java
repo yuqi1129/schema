@@ -26,11 +26,11 @@ public class UseDatabaseCommandHandler extends AbstractCommandHandler {
             connectionContext.setDb(command);
             MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
             ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
-            connectionContext.getChannelHandlerContext().writeAndFlush(byteBuf);
+            connectionContext.write(byteBuf);
         } else {
             final String errMsg = String.format("database '%s' does not existed", command);
-            final MysqlPackage mySQLPackage = PackageUtils.buildErrPackage(12, errMsg, 1);
-            connectionContext.getChannelHandlerContext().writeAndFlush(PackageUtils.packageToBuf(mySQLPackage));
+            final MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(12, errMsg, 1);
+            connectionContext.write(PackageUtils.packageToBuf(mysqlPackage));
         }
     }
 }

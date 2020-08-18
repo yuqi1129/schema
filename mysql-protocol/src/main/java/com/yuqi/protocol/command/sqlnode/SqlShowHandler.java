@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_VAR_STRING;
 import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.NO_DATABASE_SELECTED;
 import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.SYNTAX_ERROR;
 
@@ -68,16 +69,13 @@ public class SqlShowHandler implements Handler<SqlShow> {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {columnName})
-                .columnType(Lists.newArrayList(0xfd))
+                .columnType(Lists.newArrayList(MYSQL_TYPE_VAR_STRING))
                 .data(data.stream().map(Lists::newArrayList).collect(Collectors.toList()))
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)
                 .build();
 
         final ByteBuf byteBuf = PackageUtils.buildResultSet(resultSetHolder);
-
-        connectionContext.getChannelHandlerContext().channel()
-                .writeAndFlush(byteBuf);
-        byteBuf.clear();
+        connectionContext.write(byteBuf);
     }
 }

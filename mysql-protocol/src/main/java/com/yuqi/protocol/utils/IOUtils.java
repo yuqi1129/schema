@@ -7,6 +7,10 @@ import io.netty.buffer.PooledByteBufAllocator;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_BLOB;
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_STRING;
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_VAR_STRING;
+
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -38,7 +42,6 @@ public class IOUtils {
         }
 
         byte[] bytes = new byte[length];
-
         for (int i = length - 1; i >= 0; i--) {
             bytes[i] = (byte) ((s >> (i * 8)) & 0xff);
         }
@@ -70,7 +73,6 @@ public class IOUtils {
         byte b3 = (byte) ((s >> 8) & 0xff);
         byte b4 = (byte) (s & 0xff);
 
-
         byteBuf.writeByte(b4);
         byteBuf.writeByte(b3);
         byteBuf.writeByte(b2);
@@ -93,14 +95,14 @@ public class IOUtils {
         if (s < 251) {
             IOUtils.writeInteger(s, byteBuf, 1);
         } else if (s < 2 << 16) {
-            IOUtils.writeByte((byte) 0xfc, byteBuf);
+            IOUtils.writeByte((byte) MYSQL_TYPE_BLOB, byteBuf);
             IOUtils.writeInteger(s, byteBuf, 2);
         } else if (s < 2 << 24) {
-            IOUtils.writeByte((byte) 0xfd, byteBuf);
+            IOUtils.writeByte((byte) MYSQL_TYPE_VAR_STRING, byteBuf);
             IOUtils.writeInteger(s, byteBuf, 3);
         } else {
             //
-            IOUtils.writeByte((byte) 0xfe, byteBuf);
+            IOUtils.writeByte((byte) MYSQL_TYPE_STRING, byteBuf);
             IOUtils.writeInteger(s, byteBuf, 8);
         }
     }
@@ -208,9 +210,9 @@ public class IOUtils {
         int firstByteInt = IOUtils.readInteger(byteBuf, 1);
         if (firstByteInt < 251) {
             return firstByteInt;
-        } else if (firstByteInt == 0xfc) {
+        } else if (firstByteInt == MYSQL_TYPE_BLOB) {
             return IOUtils.readInteger(byteBuf, 2);
-        } else if (firstByteInt == 0xfd) {
+        } else if (firstByteInt == MYSQL_TYPE_VAR_STRING) {
             return IOUtils.readInteger(byteBuf, 3);
         } else {
             return IOUtils.readInteger(byteBuf, 8);

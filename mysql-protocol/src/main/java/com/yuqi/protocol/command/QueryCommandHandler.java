@@ -11,6 +11,7 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ReferenceCountUtil;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.yuqi.protocol.command.sepcial.RawHandlerHolder.getRawHandler;
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_VAR_STRING;
 
 /**
  * @author yuqi
@@ -98,21 +100,21 @@ public class QueryCommandHandler extends AbstractCommandHandler {
     }
 
     private void defaultStringHandler(String command) {
-        List<List<String>> data = Lists.newArrayListWithCapacity(1);
+        final List<List<String>> data = Lists.newArrayListWithCapacity(1);
         data.add(Lists.newArrayList("Yuqi version"));
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {"@@VERSION_COMMENT"})
-                .columnType(Lists.newArrayList(0xfd))
+                .columnType(Lists.newArrayList(MYSQL_TYPE_VAR_STRING))
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)
                 .build();
 
         final ByteBuf byteBuf = PackageUtils.buildResultSet(resultSetHolder);
-
         connectionContext.getChannelHandlerContext().channel()
                 .writeAndFlush(byteBuf);
-        byteBuf.clear();
+
+        ReferenceCountUtil.release(byteBuf);
     }
 }

@@ -24,7 +24,7 @@ public class ColumnCount extends AbstractReaderAndWriter {
 
     @Override
     public void read(ByteBuf byteBuf) {
-        IOUtils.readLengthEncodedInteger(byteBuf);
+        columnCount = IOUtils.readLengthEncodedInteger(byteBuf);
     }
 
     @Override

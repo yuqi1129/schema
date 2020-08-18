@@ -6,6 +6,7 @@ import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
+import io.netty.util.ReferenceCountUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -28,16 +29,16 @@ public class CurrentDatabaseHandler extends AbstractHandler {
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                 .columnName(new String[] {"database()"})
-                .columnType(Lists.newArrayList(0xfd))
+                .columnType(Lists.newArrayList())
                 .data(data)
                 .schema(StringUtils.EMPTY)
                 .table(StringUtils.EMPTY)
                 .build();
 
         final ByteBuf byteBuf = PackageUtils.buildResultSet(resultSetHolder);
-
         connectionContext.getChannelHandlerContext().channel()
                 .writeAndFlush(byteBuf);
-        byteBuf.clear();
+
+        ReferenceCountUtil.release(byteBuf);
     }
 }

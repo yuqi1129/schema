@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+import static com.yuqi.protocol.constants.ColumnTypeConstants.MYSQL_TYPE_VAR_STRING;
+
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -43,7 +45,7 @@ public class ExplainHandler implements Handler<String> {
 
             final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
                     .table(StringUtils.EMPTY)
-                    .columnType(Lists.newArrayList(0xfd))
+                    .columnType(Lists.newArrayList(MYSQL_TYPE_VAR_STRING))
                     .schema(StringUtils.EMPTY)
                     .data(data)
                     .columnName(new String[]{"Plan"})

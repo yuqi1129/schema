@@ -1,11 +1,14 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
+import com.yuqi.LifeCycle;
+import com.yuqi.protocol.connection.mysql.MysqlInstance;
 import org.apache.calcite.jdbc.CalciteSchema;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author yuqi
@@ -21,13 +24,23 @@ public class SlothSchemaHolder implements LifeCycle {
 
     public SlothSchemaHolder() {
         this.schemaMap = Maps.newHashMap();
-        init();
     }
 
     @Override
     public void init() {
-        //TODO load schema from file or db
+
+        if (!MysqlInstance.isOk) {
+            return;
+        }
+
         //add default schema
+        Set<String> schemes = MysqlInstance.INSTANCE.allSchema();
+        for (String schema : schemes) {
+            SlothSchema slothSchema = registerSchema(schema);
+            //register table
+
+            //
+        }
     }
 
     @Override
@@ -36,20 +49,34 @@ public class SlothSchemaHolder implements LifeCycle {
     }
 
     public SlothSchema registerSchema(String schemaName) {
+
+        //add db first
+        if (MysqlInstance.isOk) {
+            MysqlInstance.INSTANCE.addSchema(schemaName);
+        }
+
+        //then add in schema
         final SlothSchema slothSchema = new SlothSchema(schemaName);
         schemaMap.put(schemaName, slothSchema);
         CalciteSchema schema =
                 ParserFactory.getCatalogReader().getRootSchema().add(schemaName, slothSchema);
         slothSchema.setSchema(schema);
         return slothSchema;
-        //todo insert into db to store
     }
 
     public boolean removeSchema(String schemaName) {
         schemaMap.remove(schemaName);
-        return ParserFactory.getCatalogReader().getRootSchema().removeSubSchema(schemaName);
 
-        //todo delete schema in persistent store
+        //remove data in schema
+        ParserFactory.getCatalogReader().getRootSchema()
+                .removeSubSchema(schemaName);
+
+        //remove data in db;
+        if (MysqlInstance.isOk) {
+            MysqlInstance.INSTANCE.dropSchema(schemaName);
+        }
+
+        return true;
     }
 
     public List<String> getAllSchemas() {

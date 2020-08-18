@@ -68,7 +68,6 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
             mySQLPackage.write(buf);
             ctx.writeAndFlush(buf);
 
-
             if (!res) {
                 //错误的话，直接关闭
                 ctx.channel().close();

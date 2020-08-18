@@ -52,7 +52,9 @@ public class ConnectionContext {
 
     public void write(ByteBuf byteBuf) {
         channelHandlerContext.writeAndFlush(byteBuf);
-        ReferenceCountUtil.release(byteBuf);
+        if (ReferenceCountUtil.refCnt(byteBuf) > 0) {
+            ReferenceCountUtil.release(byteBuf);
+        }
     }
 
     public void write(MysqlPackage result) {

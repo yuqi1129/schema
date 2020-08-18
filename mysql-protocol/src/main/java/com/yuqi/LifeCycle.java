@@ -1,4 +1,4 @@
-package com.yuqi.sql;
+package com.yuqi;
 
 /**
  * @author yuqi

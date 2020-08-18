@@ -1,7 +1,7 @@
 package com.yuqi.storage.lucene;
 
+import com.yuqi.LifeCycle;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.sql.LifeCycle;
 
 import java.io.IOException;
 import java.util.Iterator;

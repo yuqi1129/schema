@@ -1,7 +1,6 @@
 package com.yuqi.protocol.utils;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 
 import java.nio.charset.StandardCharsets;
@@ -157,7 +156,7 @@ public class IOUtils {
      * @return
      */
     public static String readString(ByteBuf byteBuf) {
-        ByteBuf tmp = ByteBufAllocator.DEFAULT.buffer(byteBuf.readableBytes());
+        ByteBuf tmp = PooledByteBufAllocator.DEFAULT.buffer(byteBuf.readableBytes());
         byte b;
         while (byteBuf.isReadable() && (b = ((byte) (byteBuf.readByte() & 0xff))) != 0x00) {
             tmp.writeByte(b);

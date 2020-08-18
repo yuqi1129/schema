@@ -11,7 +11,6 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
 import io.netty.buffer.ByteBuf;
-import io.netty.util.ReferenceCountUtil;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -112,9 +111,6 @@ public class QueryCommandHandler extends AbstractCommandHandler {
                 .build();
 
         final ByteBuf byteBuf = PackageUtils.buildResultSet(resultSetHolder);
-        connectionContext.getChannelHandlerContext().channel()
-                .writeAndFlush(byteBuf);
-
-        ReferenceCountUtil.release(byteBuf);
+        connectionContext.write(byteBuf);
     }
 }

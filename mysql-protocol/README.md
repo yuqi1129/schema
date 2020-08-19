@@ -10,7 +10,7 @@
 - 简单实现了RBO与CBO
 - 实现了物理执行计划Operator(MPP)
 
-项目地址: [https://github.com/yuqi1129/schema](https://github.com/yuqi1129/schema), 欢迎小伙伴们一起参加
+项目地址: [https://github.com/yuqi1129/schema/mysql-protocol](https://github.com/yuqi1129/schema/mysql-protocol), 欢迎小伙伴们一起参加
 
 目前正在进行中
 - 数据持久化(表数据持久化已完成, 表元数据todo中)与存储优化
@@ -273,6 +273,58 @@ money: 32.5
  desc: lisi
  name: good
 1 row in set (0.15 sec)
+
+
+mysql> use db2;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+mysql> show tables;
++---------------+
+| Tables_in_db2 |
++---------------+
+| t1            |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select * from t1;
+Empty set (0.63 sec)
+
+mysql> insert into t1 values(1, 'hanngzhou'),(2, 'wuhan'),(3, 'nanjing'),(4, 'jiujiang');
+Query OK, 4 rows affected (0.15 sec)
+
+mysql> select * from t1;
++------+-----------+
+| id   | name      |
++------+-----------+
+|    1 | hanngzhou |
+|    2 | wuhan     |
+|    3 | nanjing   |
+|    4 | jiujiang  |
++------+-----------+
+4 rows in set (0.05 sec)
+
+mysql> select * from t1 where id > 2;
++------+----------+
+| id   | name     |
++------+----------+
+|    3 | nanjing  |
+|    4 | jiujiang |
++------+----------+
+2 rows in set (0.06 sec)
+
+mysql> explain select * from t1 where id > 2;
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Plan                                                                                                                                                                                                                                 |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|
+SlothFilter(condition=[>($0, 2)]): rowcount = 50.0, cumulative cost = {150.0 rows, 201.0 cpu, 0.0 io}, id = 138
+  SlothTableScan(table=[[db2, t1]]): rowcount = 100.0, cumulative cost = {100.0 rows, 101.0 cpu, 0.0 io}, id = 133
+ |
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
 
 mysql>
 ```

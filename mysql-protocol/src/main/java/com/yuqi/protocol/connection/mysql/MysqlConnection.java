@@ -36,6 +36,7 @@ public class MysqlConnection {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
+            //TODO make configuration
             addr = "jdbc:mysql://localhost:3306";
             username = "root";
             password = "123456";

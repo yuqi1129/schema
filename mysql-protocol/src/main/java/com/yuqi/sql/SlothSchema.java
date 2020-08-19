@@ -54,6 +54,14 @@ public class SlothSchema extends AbstractSchema {
         return true;
     }
 
+    public boolean restoreFromDb(SlothTable slothTable) {
+        final String tableName = slothTable.getTableName();
+
+        tables.put(tableName, slothTable);
+        calciteSchema.add(tableName, slothTable);
+        return true;
+    }
+
 
     public boolean containsTable(String tableName) {
         return tables.containsKey(tableName);

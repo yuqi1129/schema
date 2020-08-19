@@ -53,6 +53,7 @@ public class SchemaMeta {
 
     public void addSchema(String schema) {
 
+        //TODO remove dsl and use mybatis, or you can use spring to implement this
         final DSLContext dslContext = mysqlConnection.getDslContext();
         final int count = dslContext.selectCount().from(SLOTH.SCHEMATA)
                 .where(SLOTH.SCHEMATA.SCHEMA_NAME.eq(schema))

@@ -34,17 +34,14 @@ public class SlothSchemaHolder implements LifeCycle {
             return;
         }
 
-        //try to load meta data from db
-        //add default schema
         Set<String> schemes = SchemaMeta.INSTANCE.allSchema();
         for (String schema : schemes) {
             SlothSchema slothSchema = registerSchema(schema);
             //register table
             List<SlothTable> slothTables = TableMeta.INSTANCE.getAllTableInDb(slothSchema);
             for (SlothTable slothTable : slothTables) {
-                slothSchema.addTable(slothTable.getTableName(), slothTable);
+                slothSchema.restoreFromDb(slothTable);
             }
-            //todo
         }
     }
 

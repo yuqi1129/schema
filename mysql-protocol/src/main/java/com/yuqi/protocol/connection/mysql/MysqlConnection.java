@@ -1,5 +1,8 @@
 package com.yuqi.protocol.connection.mysql;
 
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.util.postgres.PostgresDSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,17 +30,19 @@ public class MysqlConnection {
     private String password;
 
     private Connection connection = null;
+    private DSLContext dslContext;
 
     public MysqlConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
 
-            //TODO in configuration
             addr = "jdbc:mysql://localhost:3306";
             username = "root";
             password = "123456";
 
             getConnection();
+
+            dslContext = PostgresDSL.using(connection, SQLDialect.MYSQL);
         } catch (ClassNotFoundException e) {
             LOGGER.error("Can't load mysql driver for:", e);
             throw new RuntimeException(e);
@@ -63,5 +68,9 @@ public class MysqlConnection {
 
     public boolean isOk() {
         return isOk;
+    }
+
+    public DSLContext getDslContext() {
+        return dslContext;
     }
 }

@@ -1,6 +1,7 @@
 package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
+import com.yuqi.protocol.connection.mysql.TableMeta;
 import org.apache.calcite.jdbc.CalciteSchema;
 import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
@@ -42,20 +43,15 @@ public class SlothSchema extends AbstractSchema {
         tables.remove(tableName);
         calciteSchema.removeTable(tableName);
 
+        TableMeta.INSTANCE.deleteTable(schemaName, tableName);
         return true;
-
-        //todo
-        //flush to db in case machine is crash
-        //notify other frontEnd that another table is add
-        //another front end
     }
 
     public boolean addTable(String tableName, SlothTable slothTable) {
+        TableMeta.INSTANCE.addTable(schemaName, slothTable);
         tables.put(tableName, slothTable);
         calciteSchema.add(tableName, slothTable);
         return true;
-
-        //todo
     }
 
 

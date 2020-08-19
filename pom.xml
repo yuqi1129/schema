@@ -40,6 +40,7 @@
     <slf4j-api.version>1.7.25</slf4j-api.version>
     <logback.version>1.2.3</logback.version>
     <lucene.version>8.6.0</lucene.version>
+    <jooq.version>3.13.4</jooq.version>
 
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -197,6 +198,24 @@
             <version>${lucene.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-codegen</artifactId>
+            <version>${jooq.version}</version>
+        </dependency>
+
     </dependencies>
 
 </dependencyManagement>
@@ -217,6 +236,7 @@
                     <phase>validate</phase>
                     <configuration>
                         <configLocation>checkstyle/style.xml</configLocation>
+                        <suppressionsLocation>checkstyle/suppression.xml</suppressionsLocation>
                         <encoding>UTF-8</encoding>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>

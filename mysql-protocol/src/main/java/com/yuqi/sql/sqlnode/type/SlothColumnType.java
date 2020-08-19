@@ -30,8 +30,6 @@ public class SlothColumnType extends SqlDataTypeSpec {
      */
     private SqlNode comment;
 
-    //others todo
-
     public SlothColumnType(SqlDataTypeSpec sqlDataTypeSpec, SqlNode precision, boolean unsigned,
                            SqlNode defaultValue, SqlNode comment) {
         super(sqlDataTypeSpec.getTypeNameSpec(), null, sqlDataTypeSpec.getNullable(), sqlDataTypeSpec.getParserPosition());

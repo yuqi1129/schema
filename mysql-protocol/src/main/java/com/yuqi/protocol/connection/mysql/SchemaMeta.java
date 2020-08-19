@@ -1,16 +1,15 @@
 package com.yuqi.protocol.connection.mysql;
 
-import com.google.common.collect.Sets;
+import com.yuqi.protocol.meta.tables.pojos.Schemata;
+import org.jooq.DSLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Objects;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.yuqi.protocol.meta.Sloth.SLOTH;
 
 /**
  * @author yuqi
@@ -21,9 +20,6 @@ import java.util.Set;
 public class SchemaMeta {
     public static final Logger LOGGER = LoggerFactory.getLogger(SchemaMeta.class);
     public static final SchemaMeta INSTANCE = new SchemaMeta(MysqlConnection.INSTANCE);
-
-    public static final String INSERT_SCHEMA_TEMPLATE = "insert into sloth.schemata values"
-            + "('def', '%s', 'utf8', 'utf8_general_ci', NULL)";
 
     private MysqlConnection mysqlConnection;
 
@@ -36,92 +32,41 @@ public class SchemaMeta {
     }
 
     public Set<String> allSchema() {
-        final String allSchema = "select schema_name from sloth.schemata";
+         final DSLContext dslContext = mysqlConnection.getDslContext();
+         List<Schemata> schemataList = dslContext.selectFrom(SLOTH.SCHEMATA)
+                 .fetchInto(Schemata.class);
 
-        Set<String> databases = Sets.newHashSet();
-        Connection connection = mysqlConnection.getConnection();
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(allSchema);
-            while (resultSet.next()) {
-                databases.add(resultSet.getString(1));
-            }
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (Objects.nonNull(statement)) {
-                    statement.close();
-                }
-            } catch (SQLException e1) {
-                LOGGER.error(e1.getMessage());
-            }
-        }
-
-        return databases;
+         return schemataList.stream().map(Schemata::getSchemaName).collect(Collectors.toSet());
     }
 
 
     public void dropSchema(String schema) {
-        final String dropScheamSql = String.format("delete from sloth.schemata where schema_name = '%s'", schema);
+        final DSLContext dslContext = mysqlConnection.getDslContext();
+        final int r = dslContext.deleteFrom(SLOTH.SCHEMATA)
+                .where(SLOTH.SCHEMATA.SCHEMA_NAME.eq(schema))
+                .execute();
 
-        PreparedStatement delete = null;
-        Connection connection = mysqlConnection.getConnection();
-        try {
-            delete = connection.prepareStatement(dropScheamSql);
-            delete.executeUpdate();
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (Objects.nonNull(delete)) {
-                    delete.close();
-                }
-            } catch (SQLException e1) {
-                LOGGER.info(e1.getMessage());
-            }
+        if (r == 0) {
+            LOGGER.warn("schema '{}' does not exist, pay attention...", schema);
         }
     }
 
     public void addSchema(String schema) {
-        final String schemaExistsSql =
-                String.format("select 1 from sloth.schemata where SCHEMA_NAME = '%s'", schema);
 
-        Connection connection = mysqlConnection.getConnection();
-        PreparedStatement query = null;
-        Statement insert = null;
-        try {
-            query = connection.prepareStatement(schemaExistsSql);
-            ResultSet resultSet = query.executeQuery();
+        final DSLContext dslContext = mysqlConnection.getDslContext();
+        final int count = dslContext.selectCount().from(SLOTH.SCHEMATA)
+                .where(SLOTH.SCHEMATA.SCHEMA_NAME.eq(schema))
+                .fetchOne()
+                .value1();
 
-            if (resultSet.next()) {
-                LOGGER.warn("schema '{}' already exist, omit .... ", schema);
-                return;
-            }
 
-            final String insertSchema = String.format(INSERT_SCHEMA_TEMPLATE, schema);
-            insert = connection.createStatement();
-
-            insert.execute(insertSchema);
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (Objects.nonNull(query)) {
-                    query.close();
-                }
-
-                if (Objects.nonNull(insert)) {
-                    insert.close();
-                }
-            } catch (Exception e1) {
-                //can ignore
-                LOGGER.info(e1.getMessage());
-            }
+        if (count > 0) {
+            LOGGER.warn("schema '{}' already exist, omit .... ", schema);
+            return;
         }
+
+        dslContext.insertInto(SLOTH.SCHEMATA)
+                .values("def", schema, "utf8", "utf8_general_ci", null)
+                .execute();
     }
 }

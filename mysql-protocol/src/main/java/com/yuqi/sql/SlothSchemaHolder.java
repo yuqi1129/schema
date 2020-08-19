@@ -3,6 +3,7 @@ package com.yuqi.sql;
 import com.google.common.collect.Maps;
 import com.yuqi.LifeCycle;
 import com.yuqi.protocol.connection.mysql.SchemaMeta;
+import com.yuqi.protocol.connection.mysql.TableMeta;
 import org.apache.calcite.jdbc.CalciteSchema;
 
 import java.util.ArrayList;
@@ -33,13 +34,17 @@ public class SlothSchemaHolder implements LifeCycle {
             return;
         }
 
+        //try to load meta data from db
         //add default schema
         Set<String> schemes = SchemaMeta.INSTANCE.allSchema();
         for (String schema : schemes) {
             SlothSchema slothSchema = registerSchema(schema);
             //register table
-
-            //
+            List<SlothTable> slothTables = TableMeta.INSTANCE.getAllTableInDb(slothSchema);
+            for (SlothTable slothTable : slothTables) {
+                slothSchema.addTable(slothTable.getTableName(), slothTable);
+            }
+            //todo
         }
     }
 

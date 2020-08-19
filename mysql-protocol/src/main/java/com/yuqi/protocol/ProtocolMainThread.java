@@ -16,7 +16,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import org.slf4j.Logger;
@@ -63,12 +64,9 @@ public class ProtocolMainThread implements Runnable {
                     final ChannelPipeline pipeline = channel.pipeline();
                     pipeline.addLast("open_channler", new NettyConnectionHandler());
 
-                    pipeline.addLast("idle_handler", new IdleStateHandler(
-                            ConnectionConfig.readTimeOut,
-                            ConnectionConfig.writeTimeout,
-                            ConnectionConfig.readTimeOut));
+                    pipeline.addLast("read_timeout_handler", new ReadTimeoutHandler(ConnectionConfig.readTimeOut));
+                    pipeline.addLast("write_time_handler", new WriteTimeoutHandler(ConnectionConfig.writeTimeout));
 
-                    //TODO try to learn how to use LengthFieldBasedFrameDecoder
                     pipeline.addLast("decoder_before", new LengthFieldBasedFrameDecoder(
                             LITTLE_ENDIAN,
                             Integer.MAX_VALUE,

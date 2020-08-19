@@ -72,4 +72,6 @@ public class NettyConnectionHandler extends ChannelInboundHandlerAdapter {
     public boolean channelHasAuthencation(Channel channel) {
         return alreadyAuthenChannels.containsKey(channel);
     }
+
+
 }

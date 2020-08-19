@@ -98,6 +98,5 @@ public class SlothSchemaHolder implements LifeCycle {
 
         //second add inner table in information_schema;
 
-
     }
 }

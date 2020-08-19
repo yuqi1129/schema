@@ -67,7 +67,7 @@ public class ProtocolMainThread implements Runnable {
                     pipeline.addLast("read_timeout_handler", new ReadTimeoutHandler(ConnectionConfig.readTimeOut));
                     pipeline.addLast("write_time_handler", new WriteTimeoutHandler(ConnectionConfig.writeTimeout));
 
-                    pipeline.addLast("decoder_before", new LengthFieldBasedFrameDecoder(
+                    pipeline.addLast("bytebuf_to_bytebuf_decoder", new LengthFieldBasedFrameDecoder(
                             LITTLE_ENDIAN,
                             Integer.MAX_VALUE,
                             0,
@@ -77,7 +77,7 @@ public class ProtocolMainThread implements Runnable {
                             true
                     ));
 
-                    pipeline.addLast("decoder", new ByteBufToPackageDecoder());
+                    pipeline.addLast("bytebuf_to_buffer_decoder", new ByteBufToPackageDecoder());
                     //pipeline.addLast("encoder", new MysqlPackageToByteBufEncoder());
                     pipeline.addLast("authencatin", new AuthencationHandler());
 

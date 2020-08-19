@@ -2,7 +2,7 @@ package com.yuqi.sql;
 
 import com.google.common.collect.Maps;
 import com.yuqi.LifeCycle;
-import com.yuqi.protocol.connection.mysql.MysqlInstance;
+import com.yuqi.protocol.connection.mysql.SchemaMeta;
 import org.apache.calcite.jdbc.CalciteSchema;
 
 import java.util.ArrayList;
@@ -29,12 +29,12 @@ public class SlothSchemaHolder implements LifeCycle {
     @Override
     public void init() {
 
-        if (!MysqlInstance.isOk) {
+        if (!SchemaMeta.INSTANCE.schemaIsOk()) {
             return;
         }
 
         //add default schema
-        Set<String> schemes = MysqlInstance.INSTANCE.allSchema();
+        Set<String> schemes = SchemaMeta.INSTANCE.allSchema();
         for (String schema : schemes) {
             SlothSchema slothSchema = registerSchema(schema);
             //register table
@@ -51,8 +51,8 @@ public class SlothSchemaHolder implements LifeCycle {
     public SlothSchema registerSchema(String schemaName) {
 
         //add db first
-        if (MysqlInstance.isOk) {
-            MysqlInstance.INSTANCE.addSchema(schemaName);
+        if (SchemaMeta.INSTANCE.schemaIsOk()) {
+            SchemaMeta.INSTANCE.addSchema(schemaName);
         }
 
         //then add in schema
@@ -72,8 +72,8 @@ public class SlothSchemaHolder implements LifeCycle {
                 .removeSubSchema(schemaName);
 
         //remove data in db;
-        if (MysqlInstance.isOk) {
-            MysqlInstance.INSTANCE.dropSchema(schemaName);
+        if (SchemaMeta.INSTANCE.schemaIsOk()) {
+            SchemaMeta.INSTANCE.dropSchema(schemaName);
         }
 
         return true;

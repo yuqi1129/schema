@@ -13,7 +13,7 @@ CREATE TABLE `schemata` (
 
 
 -- store table info
-CREATE TABLE `TABLES` (
+CREATE TABLE `tables` (
   `TABLE_CATALOG` varchar(512) NOT NULL DEFAULT '',
   `TABLE_SCHEMA` varchar(64) NOT NULL DEFAULT '',
   `TABLE_NAME` varchar(64) NOT NULL DEFAULT '',
@@ -38,7 +38,7 @@ CREATE TABLE `TABLES` (
 ) ENGINE=InnoDB;
 
 -- store column info
-CREATE TABLE `COLUMNS` (
+CREATE TABLE `columns` (
   `TABLE_CATALOG` varchar(512) NOT NULL DEFAULT '',
   `TABLE_SCHEMA` varchar(64) NOT NULL DEFAULT '',
   `TABLE_NAME` varchar(64) NOT NULL DEFAULT '',

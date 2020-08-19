@@ -1,12 +1,10 @@
 package com.yuqi.protocol.connection.mysql;
 
 import com.google.common.collect.Sets;
-import com.yuqi.sql.SlothTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,71 +14,32 @@ import java.util.Set;
 
 /**
  * @author yuqi
- * @mail yuqi4733@gmail.com
+ * @mail yuqi5@xiaomi.com
  * @description your description
- * @time 18/8/20 14:44
+ * @time 19/8/20 10:12
  **/
-public class MysqlInstance {
-
-    public static final Logger LOG = LoggerFactory.getLogger(MysqlInstance.class);
-
-    public static final MysqlInstance INSTANCE = new MysqlInstance();
-    public static final Logger LOGGER = LoggerFactory.getLogger(MysqlInstance.class);
+public class SchemaMeta {
+    public static final Logger LOGGER = LoggerFactory.getLogger(SchemaMeta.class);
+    public static final SchemaMeta INSTANCE = new SchemaMeta(MysqlConnection.INSTANCE);
 
     public static final String INSERT_SCHEMA_TEMPLATE = "insert into sloth.schemata values"
             + "('def', '%s', 'utf8', 'utf8_general_ci', NULL)";
 
-    public static boolean isOk = true;
+    private MysqlConnection mysqlConnection;
 
-    static {
-        try {
-            INSTANCE.getConnection();
-        } catch (Exception e) {
-            LOG.error("init meta database failed, mark meta database is fail, then all db/table you create could not be store");
-            isOk = false;
-        }
+    public SchemaMeta(MysqlConnection mysqlConnection) {
+        this.mysqlConnection = mysqlConnection;
     }
 
-    private String addr;
-    private String username;
-    private String password;
-
-    private Connection connection = null;
-
-    public MysqlInstance() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-
-            //TODO in configuration
-            addr = "jdbc:mysql://localhost:3306";
-            username = "root";
-            password = "123456";
-        } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't load mysql driver for:", e);
-            throw new RuntimeException(e);
-        }
+    public boolean schemaIsOk() {
+        return mysqlConnection.isOk();
     }
-
-
-    private Connection getConnection() {
-        try {
-            if (Objects.nonNull(connection) && !connection.isClosed()) {
-                return connection;
-            }
-            connection = DriverManager.getConnection(addr, username, password);
-            return connection;
-        } catch (SQLException e) {
-            LOGGER.info("can't get connection:", e);
-            throw new RuntimeException(e);
-        }
-    }
-
 
     public Set<String> allSchema() {
         final String allSchema = "select schema_name from sloth.schemata";
 
         Set<String> databases = Sets.newHashSet();
-        Connection connection = getConnection();
+        Connection connection = mysqlConnection.getConnection();
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -109,7 +68,7 @@ public class MysqlInstance {
         final String dropScheamSql = String.format("delete from sloth.schemata where schema_name = '%s'", schema);
 
         PreparedStatement delete = null;
-        Connection connection = getConnection();
+        Connection connection = mysqlConnection.getConnection();
         try {
             delete = connection.prepareStatement(dropScheamSql);
             delete.executeUpdate();
@@ -131,7 +90,7 @@ public class MysqlInstance {
         final String schemaExistsSql =
                 String.format("select 1 from sloth.schemata where SCHEMA_NAME = '%s'", schema);
 
-        Connection connection = getConnection();
+        Connection connection = mysqlConnection.getConnection();
         PreparedStatement query = null;
         Statement insert = null;
         try {
@@ -164,10 +123,5 @@ public class MysqlInstance {
                 LOGGER.info(e1.getMessage());
             }
         }
-    }
-
-
-    public void addTable(SlothTable slothTable) {
-        //todo
     }
 }

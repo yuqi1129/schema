@@ -60,6 +60,9 @@ public class LuceneStorageEngine implements StorageEngine {
 
     private boolean readOnly;
 
+    private volatile int dataNumUncommited = 0;
+    private volatile long lastFlushTime = System.currentTimeMillis();
+
     public LuceneStorageEngine(String storagePath, TableEngine tableEngine) {
         this.storagePath = storagePath;
         this.tableEngine = tableEngine;
@@ -95,13 +98,19 @@ public class LuceneStorageEngine implements StorageEngine {
 
     @Override
     public boolean insert(List<List<Value>> rows) throws IOException {
+
+        if (readOnly) {
+            LOGGER.error("Storage engine is mark read only, can't flush");
+            return false;
+        }
+
+        // async, 5 seconds later, data can be query
         for (List<Value> row : rows) {
             final Document document = rowToDocument(row);
             indexWriter.addDocument(document);
         }
 
-        //TODO 有点坑爹，当前只能这样, 插入几条后再更新
-        updateIndexWriterAndReader();
+        dataNumUncommited = dataNumUncommited + rows.size();
         return true;
     }
 
@@ -249,5 +258,31 @@ public class LuceneStorageEngine implements StorageEngine {
     @Override
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    @Override
+    public void flush() {
+        //todo make config
+
+        if (readOnly) {
+            LOGGER.error("Storage engine is mark read only, can't flush");
+            return;
+        }
+
+        LOGGER.info("Start to flush, current thread = {}", Thread.currentThread());
+        if (dataNumUncommited > 0) {
+            try {
+                updateIndexWriterAndReader();
+                dataNumUncommited = 0;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @Override
+    public boolean shouldFlush() {
+        //at last after 1s we should flush data
+        return dataNumUncommited > 0 || System.currentTimeMillis() - lastFlushTime > 1000;
     }
 }

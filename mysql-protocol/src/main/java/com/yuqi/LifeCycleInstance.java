@@ -2,6 +2,7 @@ package com.yuqi;
 
 import com.google.common.collect.Lists;
 import com.yuqi.sql.SlothSchemaHolder;
+import com.yuqi.storage.lucene.StorageService;
 
 import java.util.List;
 
@@ -16,14 +17,24 @@ public class LifeCycleInstance {
 
     static {
         lifeCycles.add(SlothSchemaHolder.INSTANCE);
+        lifeCycles.add(StorageService.INSTANCE);
     }
 
     public static void add(LifeCycle lifeCycle) {
         lifeCycles.add(lifeCycle);
     }
 
+    public static void start() {
+        initAll();
+        startAll();
+    }
+
     public static void initAll() {
         lifeCycles.forEach(LifeCycle::init);
+    }
+
+    public static void startAll() {
+        lifeCycles.forEach(LifeCycle::start);
     }
 
     public static void closeAll() {

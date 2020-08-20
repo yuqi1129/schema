@@ -47,4 +47,16 @@ public interface StorageEngine extends LifeCycle {
     default void setReadOnly(boolean readOnly) {
         //todo
     }
+
+    /**
+     * flush data in memory to disk and update index
+     */
+    default void flush() {
+
+    }
+
+
+    default boolean shouldFlush() {
+        return false;
+    }
 }

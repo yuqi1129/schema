@@ -7,6 +7,7 @@ import org.apache.calcite.schema.Table;
 import org.apache.calcite.schema.impl.AbstractSchema;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,11 @@ public class SlothSchema extends AbstractSchema {
         tables.put(tableName, slothTable);
         calciteSchema.add(tableName, slothTable);
         return true;
+    }
+
+
+    public Collection<Table> getAllTable() {
+        return tables.values();
     }
 
 

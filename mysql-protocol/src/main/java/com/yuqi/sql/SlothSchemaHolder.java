@@ -7,6 +7,7 @@ import com.yuqi.protocol.connection.mysql.TableMeta;
 import org.apache.calcite.jdbc.CalciteSchema;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -91,6 +92,10 @@ public class SlothSchemaHolder implements LifeCycle {
 
     public SlothSchema getSlothSchema(String dbName) {
         return schemaMap.get(dbName);
+    }
+
+    public Collection<SlothSchema> getSchemaMap() {
+        return schemaMap.values();
     }
 
     private void addDefaultSchemasAndTables() {

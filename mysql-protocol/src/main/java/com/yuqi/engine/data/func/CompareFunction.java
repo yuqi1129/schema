@@ -66,7 +66,7 @@ public abstract class CompareFunction extends Scalar {
         if (v1.isNull() && v2.isNull()) {
             return Value.ofBooleanTrue();
         } else if (!v1.isNull() && !v2.isNull()) {
-            return Value.ofBooean(0 > v1.compareTo(v2));
+            return Value.ofBooean(compare(v1, v2));
         } else {
             return Value.ofBooleanFalse();
         }

@@ -11,8 +11,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
-
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com

@@ -8,7 +8,6 @@ import org.apache.calcite.rex.RexNode;
 
 import java.util.List;
 
-import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
 
 /**
  * @author yuqi

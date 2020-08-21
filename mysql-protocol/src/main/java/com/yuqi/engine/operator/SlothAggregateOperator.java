@@ -20,8 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
-
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com

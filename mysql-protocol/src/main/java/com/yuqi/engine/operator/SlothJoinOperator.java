@@ -16,7 +16,6 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.yuqi.engine.operator.SlothTableScanOperator.EOF;
 
 /**
  * @author yuqi

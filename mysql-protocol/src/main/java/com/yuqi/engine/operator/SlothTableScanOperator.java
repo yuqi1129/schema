@@ -23,7 +23,6 @@ import java.util.List;
  * @time 5/7/20 15:46
  **/
 public class SlothTableScanOperator extends AbstractOperator {
-    public static final List<Value> EOF = null;
 
     private RelOptTable table;
 

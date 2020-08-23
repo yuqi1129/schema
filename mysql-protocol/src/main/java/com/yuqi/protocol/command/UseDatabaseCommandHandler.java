@@ -6,6 +6,8 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchemaHolder;
 import io.netty.buffer.ByteBuf;
 
+import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.UNKNOWN_DB_NAME;
+
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -28,9 +30,10 @@ public class UseDatabaseCommandHandler extends AbstractCommandHandler {
             ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
             connectionContext.write(byteBuf);
         } else {
-            final String errMsg = String.format("database '%s' does not existed", command);
-            final MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(12, errMsg, 1);
-            connectionContext.write(PackageUtils.packageToBuf(mysqlPackage));
+            final MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
+                    UNKNOWN_DB_NAME.getCode(),
+                    String.format(UNKNOWN_DB_NAME.getMessage(), command));
+            connectionContext.write(mysqlPackage);
         }
     }
 }

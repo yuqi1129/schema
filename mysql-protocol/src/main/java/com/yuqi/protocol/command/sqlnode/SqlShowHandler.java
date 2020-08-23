@@ -43,8 +43,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
             if (Objects.isNull(db)) {
                 MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
                         NO_DATABASE_SELECTED.getCode(),
-                        NO_DATABASE_SELECTED.getMessage(),
-                        1);
+                        NO_DATABASE_SELECTED.getMessage());
 
                 connectionContext.write(mysqlPackage);
                 return;
@@ -60,8 +59,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
         } else {
             final MysqlPackage r = PackageUtils.buildErrPackage(
                     SYNTAX_ERROR.getCode(),
-                    String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()),
-                    1);
+                    String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()));
 
             connectionContext.write(r);
             return;

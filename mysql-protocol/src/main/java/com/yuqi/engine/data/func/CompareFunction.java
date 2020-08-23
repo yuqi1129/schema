@@ -72,6 +72,12 @@ public abstract class CompareFunction extends Scalar {
         }
     }
 
+    /**
+     *
+     * @param v1 first value
+     * @param v2 second value
+     * @return result of first value compared to the second value
+     */
     public abstract boolean compare(Value v1, Value v2);
 
 }

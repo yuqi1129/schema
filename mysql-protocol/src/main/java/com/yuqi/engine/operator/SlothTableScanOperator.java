@@ -54,10 +54,10 @@ public class SlothTableScanOperator extends AbstractOperator {
         final SlothTable slothTable = (SlothTable) SlothSchemaHolder.INSTANCE
                 .getSlothSchema(dbAndTable.get(0)).getTable(dbAndTable.get(1));
 
+        final TableEngine tableEngine = slothTable.getTableEngine();
 
-        TableEngine tableEngine = slothTable.getTableEngine();
-
-        QueryContext queryContext = new QueryContext(new MatchAllDocsQuery(), Sets.newHashSet(tableEngine.getColumnNames()));
+        final QueryContext queryContext =
+                new QueryContext(new MatchAllDocsQuery(), Sets.newHashSet(tableEngine.getColumnNames()));
         iterator = tableEngine.search(queryContext);
     }
 

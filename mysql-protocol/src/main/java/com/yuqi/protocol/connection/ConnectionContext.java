@@ -15,6 +15,10 @@ import java.util.Properties;
  * @time 13/7/20 23:25
  **/
 public class ConnectionContext {
+
+    /**
+     * Connection
+     */
     private ChannelHandlerContext channelHandlerContext;
 
     /**
@@ -22,8 +26,14 @@ public class ConnectionContext {
      */
     private String db;
 
+    /**
+     * Store the property
+     */
     private Properties properties = new Properties();
 
+    /**
+     * Store the current query string
+     */
     private ThreadLocal<String> queryString = new ThreadLocal<>();
 
     public ConnectionContext(ChannelHandlerContext channelHandlerContext) {

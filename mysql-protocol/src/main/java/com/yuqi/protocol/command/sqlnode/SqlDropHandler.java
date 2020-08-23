@@ -43,7 +43,7 @@ public class SqlDropHandler implements Handler<SqlDrop> {
        if (Objects.isNull(slothSchema)) {
            final MysqlPackage error = PackageUtils.buildErrPackage(
                    DATABASE_NOT_EXIST_IN_DROP.getCode(),
-                   DATABASE_NOT_EXIST_IN_DROP.getMessage(), 1);
+                   DATABASE_NOT_EXIST_IN_DROP.getMessage());
 
            connectionContext.write(error);
            return;
@@ -82,7 +82,7 @@ public class SqlDropHandler implements Handler<SqlDrop> {
         if (Objects.isNull(slothSchema) || !slothSchema.containsTable(table)) {
             final MysqlPackage error = PackageUtils.buildErrPackage(
                     UNKNOWN_TABLE_NAME.getCode(),
-                    String.format(UNKNOWN_TABLE_NAME.getMessage(), tableAndDb), 1);
+                    String.format(UNKNOWN_TABLE_NAME.getMessage(), tableAndDb));
             connectionContext.write(error);
             return;
         }

@@ -44,7 +44,6 @@ public class SqlSelectHandler implements Handler<SqlNode> {
                 connectionContext.getDb());
         final RelNode relNode = slothParser.getPlan(type);
 
-
         final Operator operator = ((SlothRel) relNode).implement();
 
         //now start to start execute;
@@ -74,8 +73,12 @@ public class SqlSelectHandler implements Handler<SqlNode> {
         connectionContext.write(byteBuf);
     }
 
-
-    List<List<Object>> executeOperator(Operator operator) {
+    /**
+     * Execute the Mpp iterator operator
+     * @param operator
+     * @return
+     */
+    private List<List<Object>> executeOperator(Operator operator) {
         final List<List<Object>> result = Lists.newArrayList();
         operator.open();
 
@@ -86,5 +89,4 @@ public class SqlSelectHandler implements Handler<SqlNode> {
 
         return result;
     }
-
 }

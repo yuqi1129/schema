@@ -13,12 +13,12 @@ public class ConnectionConfig {
      *
      * Connection read time out
      */
-    public static final int readTimeOut = 20 * 60;
+    public static final int READ_TIMEOUT = 20 * 60;
 
     /**
      * Unit seconds
      *
      * Connection write time out;
      */
-    public static final int writeTimeout = 10 * 60;
+    public static final int WRITE_TIMEOUT = 10 * 60;
 }

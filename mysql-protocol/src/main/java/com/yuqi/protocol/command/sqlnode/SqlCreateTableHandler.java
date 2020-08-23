@@ -35,12 +35,12 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         final SqlNodeList sqlNodes = type.getNameAndType();
         final String tableName = type.getTableName();
         final boolean isNotExist = type.isNotExisted();
-        String db = connectionContext.getDb();
+        final String db = connectionContext.getDb();
 
         final ErrorMessage errorMessage = checkDbAndTableName(tableName, db, isNotExist);
         if (ErrorMessage.OK_MESSAGE != errorMessage) {
-            MysqlPackage mySQLPackage = PackageUtils.buildErrPackage(errorMessage.getErrorCode(), errorMessage.getDetailMessage(), 1);
-            connectionContext.write(mySQLPackage);
+            MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(errorMessage.getErrorCode(), errorMessage.getDetailMessage());
+            connectionContext.write(mysqlPackage);
             return;
         }
 

@@ -68,8 +68,8 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
             return;
         }
 
-        TableEngine tableEngine = slothTable.getTableEngine();
-        List<String> columnsNames = checkAndGetColumnName(connectionContext, tableEngine, columnList);
+        final TableEngine tableEngine = slothTable.getTableEngine();
+        final List<String> columnsNames = checkAndGetColumnName(connectionContext, tableEngine, columnList);
         if (Objects.isNull(columnsNames)) {
             return;
         }
@@ -92,34 +92,25 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
 
         //check whether has used db
         if (Objects.isNull(db)) {
-            r = PackageUtils.buildErrPackage(
-                    NO_DATABASE_SELECTED.getCode(),
-                    NO_DATABASE_SELECTED.getMessage(),
-                    1);
-
+            r = PackageUtils.buildErrPackage(NO_DATABASE_SELECTED.getCode(), NO_DATABASE_SELECTED.getMessage());
             connectionContext.write(r);
             return null;
         }
 
         //check whether db exists
-        SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
+        final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
         if (Objects.isNull(slothSchema)) {
-            r = PackageUtils.buildErrPackage(
-                    NO_DATABASE_SELECTED.getCode(),
-                    NO_DATABASE_SELECTED.getMessage(),
-                    1);
+            r = PackageUtils.buildErrPackage(NO_DATABASE_SELECTED.getCode(), NO_DATABASE_SELECTED.getMessage());
             connectionContext.write(r);
             return null;
         }
 
         //check whether table exists
-        SlothTable slothTable = (SlothTable) slothSchema.getTable(tableName);
+        final SlothTable slothTable = (SlothTable) slothSchema.getTable(tableName);
         if (Objects.isNull(slothTable)) {
             r = PackageUtils.buildErrPackage(
                     TABLE_NOT_EXISTS.getCode(),
-                    String.format(TABLE_NOT_EXISTS.getMessage(), db + "." + tableName),
-                    1
-            );
+                    String.format(TABLE_NOT_EXISTS.getMessage(), db + "." + tableName));
             connectionContext.write(r);
             return null;
         }
@@ -136,19 +127,18 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
             return allColumnNames;
         }
 
-        List<String> columnsNames = sqlNodes.getList().stream()
+        final List<String> columnsNames = sqlNodes.getList().stream()
                 .map(SqlNode::toString)
                 .collect(Collectors.toList());
 
 
-        List<String> unknowColumns = ListUtils.removeAll(columnsNames, allColumnNames);
+        final List<String> unknowColumns = ListUtils.removeAll(columnsNames, allColumnNames);
 
         //insert into t(c1, c2) values(1, 2) and c1 does not exsit in table
         if (CollectionUtils.isNotEmpty(unknowColumns)) {
             MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
                     UNKONW_COLUMN_NAME.getCode(),
-                    String.format(UNKONW_COLUMN_NAME.getMessage(), unknowColumns.toString()),
-                    1);
+                    String.format(UNKONW_COLUMN_NAME.getMessage(), unknowColumns.toString()));
 
             connectionContext.write(mysqlPackage);
             return null;
@@ -166,13 +156,11 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
         if (CollectionUtils.isNotEmpty(pairs)) {
             MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
                     UNKONW_COLUMN_NAME.getCode(),
-                    String.format(COLUMN_EXIST_TWICE.getMessage(), pairs.get(0).getLeft()),
-                    1);
+                    String.format(COLUMN_EXIST_TWICE.getMessage(), pairs.get(0).getLeft()));
 
             connectionContext.write(mysqlPackage);
             return null;
         }
-
 
         return columnsNames;
     }
@@ -203,8 +191,7 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
             if (dataColumnSize != columnSize) {
                 MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
                         COLUMN_COUNT_NOT_MATCH.getCode(),
-                        String.format(COLUMN_COUNT_NOT_MATCH.getMessage(), i + 1),
-                        1);
+                        String.format(COLUMN_COUNT_NOT_MATCH.getMessage(), i + 1));
                 connectionContext.write(mysqlPackage);
                 return null;
             }
@@ -247,5 +234,4 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
 
         return rs;
     }
-
 }

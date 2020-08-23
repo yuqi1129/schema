@@ -43,7 +43,6 @@ public class QueryCommandHandler extends AbstractCommandHandler {
     public void execute() {
         SqlNode sqlNode;
         try {
-            //TODO 出现了粘包与粘包现象，明天看看怎么解决
             final SlothParser slothParser = ParserFactory.getParser(query, connectionContext.getDb());
             connectionContext.setQueryString(query);
 

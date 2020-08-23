@@ -30,7 +30,7 @@ public class SqlUseHandler implements Handler<SqlUse> {
         if (Objects.isNull(slothSchema)) {
             final MysqlPackage error = PackageUtils.buildErrPackage(
                     UNKNOWN_DB_NAME.getCode(),
-                    String.format(UNKNOWN_DB_NAME.getMessage(), db), 1);
+                    String.format(UNKNOWN_DB_NAME.getMessage(), db));
             connectionContext.write(error);
             return;
         }

@@ -64,8 +64,8 @@ public class ProtocolMainThread implements Runnable {
                     final ChannelPipeline pipeline = channel.pipeline();
                     pipeline.addLast("open_channler", new NettyConnectionHandler());
 
-                    pipeline.addLast("read_timeout_handler", new ReadTimeoutHandler(ConnectionConfig.readTimeOut));
-                    pipeline.addLast("write_time_handler", new WriteTimeoutHandler(ConnectionConfig.writeTimeout));
+                    pipeline.addLast("read_timeout_handler", new ReadTimeoutHandler(ConnectionConfig.READ_TIMEOUT));
+                    pipeline.addLast("write_time_handler", new WriteTimeoutHandler(ConnectionConfig.WRITE_TIMEOUT));
 
                     pipeline.addLast("bytebuf_to_bytebuf_decoder", new LengthFieldBasedFrameDecoder(
                             LITTLE_ENDIAN,

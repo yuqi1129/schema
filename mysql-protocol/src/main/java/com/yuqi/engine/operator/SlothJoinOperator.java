@@ -30,7 +30,6 @@ public class SlothJoinOperator extends AbstractOperator {
     private RexNode joinCondition;
     private JoinRelType joinType;
 
-
     private Symbol joinConditionSymbol;
 
     //是否是第一次取数
@@ -99,7 +98,7 @@ public class SlothJoinOperator extends AbstractOperator {
 
     private List<Value> handleInnerJoin() {
         //直nestloop, 也可以sort merge/hash
-        List<Value> leftValue = EOF;
+        List<Value> leftValue;
         while (leftReadIndex < leftValueHodler.size()) {
             leftValue = leftValueHodler.get(leftReadIndex);
             while (rightReadIndex < rigthValueHodler.size()) {
@@ -120,7 +119,7 @@ public class SlothJoinOperator extends AbstractOperator {
 
 
     private List<Value> handleLeftJoin() {
-        List<Value> leftValue = EOF;
+        List<Value> leftValue;
         while (leftReadIndex < leftValueHodler.size()) {
             leftValue = leftValueHodler.get(leftReadIndex);
             while (rightReadIndex < rigthValueHodler.size()) {
@@ -152,7 +151,7 @@ public class SlothJoinOperator extends AbstractOperator {
     }
 
     private List<Value> handleRightJoin() {
-        List<Value> rigthValue = EOF;
+        List<Value> rigthValue;
         while (rightReadIndex < rigthValueHodler.size()) {
             rigthValue = rigthValueHodler.get(rightReadIndex);
             while (leftReadIndex < leftValueHodler.size()) {

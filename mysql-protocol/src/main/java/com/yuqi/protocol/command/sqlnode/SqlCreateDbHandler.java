@@ -26,8 +26,8 @@ public class SqlCreateDbHandler implements Handler<SqlCreateDb> {
         if (SlothSchemaHolder.INSTANCE.contains(db)) {
             MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
                     DATABASE_EXISTS_ERROR.getCode(),
-                    String.format(DATABASE_EXISTS_ERROR.getMessage(), db),
-                    1);
+                    String.format(DATABASE_EXISTS_ERROR.getMessage(), db));
+
             connectionContext.write(mysqlPackage);
             return;
         }

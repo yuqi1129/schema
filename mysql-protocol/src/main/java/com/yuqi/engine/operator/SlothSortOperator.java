@@ -54,7 +54,6 @@ public class SlothSortOperator extends AbstractOperator {
 
     @Override
     public List<Value> next() {
-
         if (limitValue != -1 && hasFetchNumberOfData >= limitValue) {
             return EOF;
         }

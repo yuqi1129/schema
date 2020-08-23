@@ -13,6 +13,9 @@ import java.util.List;
  **/
 public interface Operator {
 
+    /**
+     * Open operator, do some init work
+     */
     void open();
 
     /**
@@ -21,8 +24,15 @@ public interface Operator {
      */
     List<Value> next();
 
+    /**
+     * do close work, eg, you can close resource/network
+     */
     void close();
 
+    /**
+     * Get return type of this operator
+     * @return
+     */
     default List<DataType> getRowType() {
         //TODO
         return null;

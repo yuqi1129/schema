@@ -93,6 +93,10 @@ public class PackageUtils {
         return mysqlPacakge;
     }
 
+    public static MysqlPackage buildErrPackage(int errorCode, String errorMessage) {
+        return buildErrPackage(errorCode, errorMessage, 1);
+    }
+
     public static MysqlPackage buildErrPackage(int errorCode, String errorMessage, int seqNumber) {
         ErrPackage errPackage = ErrPackage.builder()
                 .header((byte) 0xff)

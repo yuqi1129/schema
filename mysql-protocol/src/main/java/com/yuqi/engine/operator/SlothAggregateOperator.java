@@ -82,13 +82,11 @@ public class SlothAggregateOperator extends AbstractOperator {
         }
 
         return v;
-
     }
 
     @Override
     public void close() {
         input.close();
-
         //do your work
     }
 
@@ -176,7 +174,6 @@ public class SlothAggregateOperator extends AbstractOperator {
                         groupByIndex
                 );
             }
-
             return r;
         }).collect(Collectors.toList());
     }

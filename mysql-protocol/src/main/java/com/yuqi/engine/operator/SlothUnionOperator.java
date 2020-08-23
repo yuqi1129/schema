@@ -67,6 +67,7 @@ public class SlothUnionOperator extends AbstractOperator {
                 }
             });
 
+            //也可以直接是Set去重
             valueIt = valueHolder.stream()
                     .distinct()
                     .collect(Collectors.toList())

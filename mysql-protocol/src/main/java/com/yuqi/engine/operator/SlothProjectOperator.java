@@ -17,7 +17,6 @@ public class SlothProjectOperator extends AbstractOperator {
     private Operator child;
     private List<Symbol> projects;
 
-
     public SlothProjectOperator(Operator child, List<Symbol> projects, RelDataType rowType) {
         super(rowType);
         this.child = child;

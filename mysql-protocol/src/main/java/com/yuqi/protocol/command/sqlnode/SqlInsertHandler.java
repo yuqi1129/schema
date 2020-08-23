@@ -209,7 +209,7 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
                     BigDecimal decimal = (BigDecimal) ((SqlNumericLiteral) node).getValue();
                     v = dataType.createByType(decimal);
                 } else {
-                    //todo
+                    //todo, insert into t values(NULL, NULL, NULL) will come here and get exception
                     SqlCharStringLiteral sqlCharStringLiteral = (SqlCharStringLiteral) node;
                     final String stringValue = sqlCharStringLiteral.getNlsString().getValue();
                     v = dataType.createByType(stringValue);

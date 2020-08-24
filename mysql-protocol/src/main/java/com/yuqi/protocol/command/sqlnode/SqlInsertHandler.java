@@ -11,6 +11,7 @@ import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.storage.lucene.SlothTableEngine;
+import com.yuqi.util.StringUtil;
 import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlCharStringLiteral;
 import org.apache.calcite.sql.SqlInsert;
@@ -59,11 +60,12 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
                 .getOperandList();
 
         final String tableAndDb = table.toString();
-        String[] dbAndDbArray = tableAndDb.split("\\.", 2);
-        String db = dbAndDbArray.length == 2 ? dbAndDbArray[0] : connectionContext.getDb();
-        String tableName = dbAndDbArray.length == 2 ? dbAndDbArray[1] : dbAndDbArray[0];
+        final Pair<String, String> dbAndTablePair =
+                StringUtil.getDbAndTablePair(tableAndDb, connectionContext.getDb());
+        final String db = dbAndTablePair.getLeft();
+        final String tableName = dbAndTablePair.getRight();
 
-        SlothTable slothTable = checkTableAndDb(connectionContext, db, tableName);
+        final SlothTable slothTable = checkTableAndDb(connectionContext, db, tableName);
         if (Objects.isNull(slothTable)) {
             return;
         }
@@ -145,7 +147,7 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
         }
 
         //insert into t(c1, c2) values(2, 2) c1 exists twice
-        List<Pair<String, Integer>> pairs = columnsNames.stream()
+        final List<Pair<String, Integer>> pairs = columnsNames.stream()
                 .collect(Collectors.groupingBy(f -> f))
                 .entrySet()
                 .stream()

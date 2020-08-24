@@ -8,6 +8,7 @@ import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
+import com.yuqi.util.StringUtil;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
@@ -33,7 +34,7 @@ public class ExplainHandler implements Handler<String> {
 
     @Override
     public void handle(ConnectionContext connectionContext, String type) {
-        final String query = type.split(" ", 2)[1];
+        final String query = StringUtil.getDbAndTableName(type)[1];
         final SlothParser slothParser = ParserFactory.getParser(query, connectionContext.getDb());
 
         ByteBuf result;

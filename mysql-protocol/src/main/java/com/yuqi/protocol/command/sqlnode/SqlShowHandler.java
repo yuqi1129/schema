@@ -11,8 +11,10 @@ import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.sql.sqlnode.ddl.SqlShow;
+import com.yuqi.util.StringUtil;
 import io.netty.buffer.ByteBuf;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Objects;
@@ -100,9 +102,9 @@ public class SqlShowHandler implements Handler<SqlShow> {
     }
 
     private ShowCreateTableResult getCreateTable(String tableNameDatabase, String dbFromConnction) {
-        final String[] tableAndDb = tableNameDatabase.split("\\.", 2);
-        final String db = tableAndDb.length == 2 ? tableAndDb[0] : dbFromConnction;
-        final String tableName = tableAndDb.length == 2 ? tableAndDb[1] : tableAndDb[0];
+        final Pair<String, String> dbAndTablePair = StringUtil.getDbAndTablePair(tableNameDatabase, dbFromConnction);
+        final String db = dbAndTablePair.getLeft();
+        final String tableName = dbAndTablePair.getRight();
 
         MysqlPackage mysqlPackage = null;
         if (Objects.isNull(db)) {
@@ -117,7 +119,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
         if (Objects.isNull(slothSchema)) {
             mysqlPackage = PackageUtils.buildErrPackage(
                     TABLE_NOT_EXISTS.getCode(),
-                    String.format(TABLE_NOT_EXISTS.getMessage(), tableAndDb));
+                    String.format(TABLE_NOT_EXISTS.getMessage(), tableNameDatabase));
             return new ShowCreateTableResult(true, null, null, mysqlPackage);
         }
 
@@ -125,7 +127,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
         if (Objects.isNull(slothTable)) {
             mysqlPackage = PackageUtils.buildErrPackage(
                     TABLE_NOT_EXISTS.getCode(),
-                    String.format(TABLE_NOT_EXISTS.getMessage(), tableAndDb));
+                    String.format(TABLE_NOT_EXISTS.getMessage(), tableNameDatabase));
             return new ShowCreateTableResult(true, null, null, mysqlPackage);
         }
 

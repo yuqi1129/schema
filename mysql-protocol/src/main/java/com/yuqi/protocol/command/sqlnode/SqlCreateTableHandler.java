@@ -12,8 +12,10 @@ import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.sql.sqlnode.ddl.SqlCreateTable;
 import com.yuqi.sql.sqlnode.type.SlothColumnType;
+import com.yuqi.util.StringUtil;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlNodeList;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,7 +35,6 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
     public static final SqlCreateTableHandler INSTANCE = new SqlCreateTableHandler();
     @Override
     public void handle(ConnectionContext connectionContext, SqlCreateTable type) {
-        final SqlNodeList sqlNodes = type.getNameAndType();
         final String tableName = type.getTableName();
         final boolean isNotExist = type.isNotExisted();
         final String db = connectionContext.getDb();
@@ -59,17 +60,10 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
     private void createTable(String tableAndDb, SqlCreateTable sqlCreateTable, ConnectionContext connectionContext) {
         final SqlNodeList sqlNodes = sqlCreateTable.getNameAndType();
-        final String[] tableAndDatabase = tableAndDb.split("\\.", 2);
-        final String db;
-        final String tableName;
 
-        if (tableAndDatabase.length == 1) {
-            db = connectionContext.getDb();
-            tableName = tableAndDatabase[0];
-        } else {
-            db = tableAndDatabase[0];
-            tableName = tableAndDatabase[1];
-        }
+        final Pair<String, String> dbAndTablePair = StringUtil.getDbAndTablePair(tableAndDb, connectionContext.getDb());
+        final String db = dbAndTablePair.getLeft();
+        final String tableName = dbAndTablePair.getRight();
 
         final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
         final SlothTable slothTable = new SlothTable(slothSchema);
@@ -109,7 +103,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
 
     private ErrorMessage checkDbAndTableName(String tableNameAndDB, String db, boolean isNotExist) {
-        final String[] tableAndDb = tableNameAndDB.split("\\.", 2);
+        final String[] tableAndDb = StringUtil.getDbAndTableName(tableNameAndDB);
 
         if (tableAndDb.length == 1) {
             if (Objects.isNull(db)) {

@@ -6,6 +6,8 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.sqlnode.ddl.SqlDrop;
+import com.yuqi.util.StringUtil;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Objects;
 
@@ -58,18 +60,11 @@ public class SqlDropHandler implements Handler<SqlDrop> {
     }
 
     private void dropTable(String tableAndDb, ConnectionContext connectionContext) {
-        final String[] tableAndDatabase = tableAndDb.split("\\.", 2);
+        final Pair<String, String> dbAndTablePair =
+                StringUtil.getDbAndTablePair(tableAndDb, connectionContext.getDb());
 
-        final String table;
-        final String db;
-        if (tableAndDatabase.length == 1) {
-            table = tableAndDatabase[0];
-            db = connectionContext.getDb();
-        } else {
-            table = tableAndDatabase[0];
-            db = tableAndDatabase[1];
-        }
-
+        final String db = dbAndTablePair.getLeft();
+        final String table = dbAndTablePair.getRight();
         if (Objects.isNull(db)) {
             final MysqlPackage error = PackageUtils.buildErrPackage(
                     NO_DATABASE_SELECTED.getCode(),

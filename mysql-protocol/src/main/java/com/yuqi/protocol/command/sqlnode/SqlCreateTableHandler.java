@@ -89,8 +89,15 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         }
 
         slothTable.setColumns(slothColumns);
-        slothTable.setEngineName(sqlCreateTable.getEngine());
-        slothTable.setTableComment(sqlCreateTable.getTableComment().toString());
+
+        if (Objects.nonNull(sqlCreateTable.getEngine())) {
+            slothTable.setEngineName(sqlCreateTable.getEngine());
+        }
+
+        if (Objects.nonNull(sqlCreateTable.getTableComment())) {
+            slothTable.setTableComment(sqlCreateTable.getTableComment().toString());
+        }
+
         slothTable.initTableEngine();
 
         slothSchema.addTable(tableName, slothTable);

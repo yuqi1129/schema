@@ -24,6 +24,8 @@ import java.util.Objects;
 //public class SlothTable extends AbstractQueryableTable implements TranslatableTable {
 public class SlothTable extends AbstractQueryableTable {
 
+    public static final String DEFAULT_ENGINE_NAME = "sloth";
+
     public static final int DEFAULT_SHARD = 1;
 
     private String tableName;
@@ -35,7 +37,7 @@ public class SlothTable extends AbstractQueryableTable {
     private RelDataType resultType;
 
     /**
-     * Engine name, currently sloth
+     * Engine name, currently DEFAULT_ENGINE_NAME
      */
     private String engineName;
 

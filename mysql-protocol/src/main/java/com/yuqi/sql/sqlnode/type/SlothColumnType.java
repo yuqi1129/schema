@@ -7,6 +7,8 @@ import org.apache.calcite.sql.SqlTypeNameSpec;
 import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.type.SqlTypeName;
 
+import java.util.Objects;
+
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -77,14 +79,16 @@ public class SlothColumnType extends SqlDataTypeSpec {
         enhanceSlothColumn.setColumName(columnName);
         enhanceSlothColumn.setColumnComment(comment.toString());
 
-        final String sqlTypeNameString = getComponentTypeSpec().getTypeName().toString().toUpperCase();
+        final String sqlTypeNameString = getTypeNameSpec().getTypeName().toString().toUpperCase();
         final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
 
         enhanceSlothColumn.setColumnType(sqlTypeName);
         enhanceSlothColumn.setUnsigned(unsigned);
         enhanceSlothColumn.setDefalutValue(defaultValue.toString());
         enhanceSlothColumn.setNullable(getNullable());
-        enhanceSlothColumn.setPrecision(Integer.parseInt(precision.toString()));
+        if (Objects.nonNull(precision)) {
+            enhanceSlothColumn.setPrecision(Integer.parseInt(precision.toString()));
+        }
 
         return enhanceSlothColumn;
     }

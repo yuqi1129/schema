@@ -11,6 +11,7 @@ import org.jooq.DSLContext;
 import org.jooq.InsertValuesStep10;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.yuqi.protocol.meta.Sloth.SLOTH;
@@ -40,7 +41,11 @@ public class TableMeta {
                         SLOTH.TABLES.TABLE_NAME,
                         SLOTH.TABLES.TABLE_COMMENT,
                         SLOTH.TABLES.ENGINE)
-                .values("def", schema, tableName, table.getTableComment(), table.getEngineName())
+                .values("def",
+                        schema,
+                        tableName,
+                        Objects.isNull(table.getTableComment()) ? "" : table.getTableComment(),
+                        Objects.isNull(table.getEngineName()) ? null : table.getEngineName())
                 .execute();
 
         //add column
@@ -66,12 +71,12 @@ public class TableMeta {
                     schema,
                     tableName,
                     columnList.get(i).getColumnName(),
-                    columnList.get(i).getColumnType().toString(),
+                    columnList.get(i).getColumnType().getColumnType().getName(),
                     "",
                     i,
                     columnList.get(i).getColumnType().getDefalutValue(),
-                    columnList.get(i).getColumnType().isNullable(),
-                    columnList.get(i).getColumnType().getColumnComment()
+                    columnList.get(i).getColumnType().isNullable() ? "YES" : "NO",
+                    Objects.isNull(columnList.get(i).getColumnType().getColumnComment()) ? "" : columnList.get(i).getColumnType().getColumnComment()
             );
         }
 
@@ -105,9 +110,11 @@ public class TableMeta {
         columns.stream().collect(Collectors.groupingBy(Columns::getTableName)).forEach((tableName, cols) -> {
             final List<SlothColumn> slothColumns = cols.stream().map(c -> {
                 EnhanceSlothColumn enhanceSlothColumn = new EnhanceSlothColumn();
-                enhanceSlothColumn.setNullable(true);
+                enhanceSlothColumn.setNullable(!Objects.equals("NO", c.getIsNullable()));
                 enhanceSlothColumn.setColumName(c.getColumnName());
+                enhanceSlothColumn.setColumnComment(c.getColumnComment());
                 enhanceSlothColumn.setColumnType(SqlTypeName.valueOf(c.getColumnType()));
+                enhanceSlothColumn.setDefalutValue(c.getColumnDefault());
                 return new SlothColumn(c.getColumnName(), enhanceSlothColumn);
             }).collect(Collectors.toList());
 

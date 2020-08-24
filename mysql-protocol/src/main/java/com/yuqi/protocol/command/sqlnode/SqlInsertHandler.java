@@ -10,7 +10,7 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
-import com.yuqi.storage.lucene.TableEngine;
+import com.yuqi.storage.lucene.SlothTableEngine;
 import org.apache.calcite.sql.SqlBasicCall;
 import org.apache.calcite.sql.SqlCharStringLiteral;
 import org.apache.calcite.sql.SqlInsert;
@@ -68,20 +68,20 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
             return;
         }
 
-        final TableEngine tableEngine = slothTable.getTableEngine();
-        final List<String> columnsNames = checkAndGetColumnName(connectionContext, tableEngine, columnList);
+        final SlothTableEngine slothTableEngine = slothTable.getSlothTableEngine();
+        final List<String> columnsNames = checkAndGetColumnName(connectionContext, slothTableEngine, columnList);
         if (Objects.isNull(columnsNames)) {
             return;
         }
 
         final List<List<Value>> valueList = extractColumnValue(connectionContext, operands,
-                tableEngine, columnsNames);
+                slothTableEngine, columnsNames);
 
         if (Objects.isNull(valueList)) {
             return;
         }
 
-        tableEngine.insert(valueList);
+        slothTableEngine.insert(valueList);
 
         final MysqlPackage r = PackageUtils.buildOkMySqlPackage(valueList.size(), 1, 0);
         connectionContext.write(r);
@@ -119,10 +119,10 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
     }
 
     private List<String> checkAndGetColumnName(ConnectionContext connectionContext,
-                                               TableEngine tableEngine, SqlNodeList sqlNodes) {
+                                               SlothTableEngine slothTableEngine, SqlNodeList sqlNodes) {
 
         //insert to t values()....., do not check column name and size
-        final List<String> allColumnNames = tableEngine.getColumnNames();
+        final List<String> allColumnNames = slothTableEngine.getColumnNames();
         if (Objects.isNull(sqlNodes)) {
             return allColumnNames;
         }
@@ -167,13 +167,13 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
 
     private List<List<Value>> extractColumnValue(ConnectionContext connectionContext,
                                                  List<SqlNode> rows,
-                                                 TableEngine tableEngine,
+                                                 SlothTableEngine slothTableEngine,
                                                  List<String> columnList) {
 
         final List<List<Value>> rs = Lists.newArrayList();
 
-        final List<String> allColumns = tableEngine.getColumnNames();
-        final Map<String, DataType> map = tableEngine.getColumnAndDataType();
+        final List<String> allColumns = slothTableEngine.getColumnNames();
+        final Map<String, DataType> map = slothTableEngine.getColumnAndDataType();
 
         int rowCount = rows.size();
         for (int i = 0; i < rowCount; i++) {

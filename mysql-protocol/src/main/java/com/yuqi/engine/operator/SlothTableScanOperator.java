@@ -6,7 +6,7 @@ import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.storage.lucene.QueryContext;
-import com.yuqi.storage.lucene.TableEngine;
+import com.yuqi.storage.lucene.SlothTableEngine;
 import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.prepare.RelOptTableImpl;
 import org.apache.calcite.rel.type.RelDataType;
@@ -54,11 +54,11 @@ public class SlothTableScanOperator extends AbstractOperator {
         final SlothTable slothTable = (SlothTable) SlothSchemaHolder.INSTANCE
                 .getSlothSchema(dbAndTable.get(0)).getTable(dbAndTable.get(1));
 
-        final TableEngine tableEngine = slothTable.getTableEngine();
+        final SlothTableEngine slothTableEngine = slothTable.getSlothTableEngine();
 
         final QueryContext queryContext =
-                new QueryContext(new MatchAllDocsQuery(), Sets.newHashSet(tableEngine.getColumnNames()));
-        iterator = tableEngine.search(queryContext);
+                new QueryContext(new MatchAllDocsQuery(), Sets.newHashSet(slothTableEngine.getColumnNames()));
+        iterator = slothTableEngine.search(queryContext);
     }
 
     @Override

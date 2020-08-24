@@ -52,7 +52,7 @@ public class LuceneStorageEngine implements StorageEngine {
     public static final Logger LOGGER = LoggerFactory.getLogger(LuceneStorageEngine.class);
 
     private String storagePath;
-    private TableEngine tableEngine;
+    private SlothTableEngine slothTableEngine;
 
     private IndexWriter indexWriter;
     private IndexReader indexReader;
@@ -63,9 +63,9 @@ public class LuceneStorageEngine implements StorageEngine {
     private volatile int dataNumUncommited = 0;
     private volatile long lastFlushTime = System.currentTimeMillis();
 
-    public LuceneStorageEngine(String storagePath, TableEngine tableEngine) {
+    public LuceneStorageEngine(String storagePath, SlothTableEngine slothTableEngine) {
         this.storagePath = storagePath;
-        this.tableEngine = tableEngine;
+        this.slothTableEngine = slothTableEngine;
     }
 
     @Override
@@ -115,6 +115,8 @@ public class LuceneStorageEngine implements StorageEngine {
     }
 
     private void updateIndexWriterAndReader() throws IOException {
+        LOGGER.info("Start to flush, current thread = {}", Thread.currentThread());
+
         indexWriter.flush();
 
         DirectoryReader reader = DirectoryReader.open(indexWriter);
@@ -128,8 +130,8 @@ public class LuceneStorageEngine implements StorageEngine {
     private Document rowToDocument(List<Value> row) {
         final Document document = new Document();
 
-        final List<String> columnNames = tableEngine.getColumnNames();
-        final Map<String, DataType> dataTypeList = tableEngine.getColumnAndDataType();
+        final List<String> columnNames = slothTableEngine.getColumnNames();
+        final Map<String, DataType> dataTypeList = slothTableEngine.getColumnAndDataType();
 
         //TODO 目测lucene 当前无法存NULL值，NULL值需要自已处理
         // NULL 映射某个固定的值
@@ -177,7 +179,7 @@ public class LuceneStorageEngine implements StorageEngine {
 
     private List<Value> documentToRow(Document document) {
 
-        final Map<String, DataType> columnAndDataType = tableEngine.getColumnAndDataType();
+        final Map<String, DataType> columnAndDataType = slothTableEngine.getColumnAndDataType();
         //TODO 可能只select部分列，目前这里是选择全部的列，效率不太好
         List<Value> rs = Lists.newArrayList();
         final List<IndexableField> fields = document.getFields();
@@ -269,7 +271,6 @@ public class LuceneStorageEngine implements StorageEngine {
             return;
         }
 
-        LOGGER.info("Start to flush, current thread = {}", Thread.currentThread());
         if (dataNumUncommited > 0) {
             try {
                 updateIndexWriterAndReader();

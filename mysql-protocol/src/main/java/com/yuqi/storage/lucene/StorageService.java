@@ -39,9 +39,10 @@ public class StorageService implements LifeCycle {
 
 
     private List<StorageEngine> getShouldFlush() {
+        LOGGER.info("Start to check if any table needs to flush data...");
         return SlothSchemaHolder.INSTANCE.getSchemaMap().stream()
                 .flatMap(schema -> schema.getAllTable().stream())
-                .map(table -> ((SlothTable) table).getTableEngine())
+                .map(table -> ((SlothTable) table).getSlothTableEngine())
                 .flatMap(tableEngine -> tableEngine.getStorageEngines().stream())
                 .filter(StorageEngine::shouldFlush)
                 .collect(Collectors.toList());

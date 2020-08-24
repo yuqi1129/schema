@@ -26,9 +26,9 @@ import static com.yuqi.sql.SlothTable.DEFAULT_SHARD;
  * @description your description
  * @time 13/8/20 17:47
  **/
-public class TableEngine implements LifeCycle {
+public class SlothTableEngine implements LifeCycle {
 
-    public static final Logger LOGGER = LoggerFactory.getLogger(TableEngine.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(SlothTableEngine.class);
 
     /**
      * Sloth Table instance
@@ -60,7 +60,7 @@ public class TableEngine implements LifeCycle {
         return storageEngines;
     }
 
-    public TableEngine(SlothTable slothTable) {
+    public SlothTableEngine(SlothTable slothTable) {
         this.slothTable = slothTable;
         init();
     }

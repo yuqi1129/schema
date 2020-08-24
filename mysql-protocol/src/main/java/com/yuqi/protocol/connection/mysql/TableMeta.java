@@ -91,7 +91,7 @@ public class TableMeta {
                 //这里关于列、表组需要好好重组一下
                 SqlDataTypeSpec dataTypeSpec = new SqlDataTypeSpec(sqlBasicTypeNameSpec, SqlParserPos.ZERO);
                 dataTypeSpec = dataTypeSpec.withNullable(true);
-                final SqlDataTypeSpec sqlDataTypeSpec = new SlothColumnType(dataTypeSpec, null, false, null, null);
+                final SlothColumnType sqlDataTypeSpec = new SlothColumnType(dataTypeSpec, null, false, null, null);
                 return new SlothColumn(c.getColumnName(), sqlDataTypeSpec);
             }).collect(Collectors.toList());
 

@@ -20,15 +20,21 @@ public class SqlCreateTable extends SqlDdl {
     private String tableName;
     private SqlNodeList nameAndType;
     private boolean isNotExisted;
+    private String engine;
+    private SqlNode tableComment;
 
     public static final SqlSpecialOperator CREATE_TABLE =
             new SqlSpecialOperator("CREATE TABLE", SqlKind.OTHER_DDL);
 
-    public SqlCreateTable(SqlParserPos pos, String tableName, SqlNodeList nameAndType, boolean isNotExisted) {
+    public SqlCreateTable(SqlParserPos pos, String tableName, SqlNodeList nameAndType,
+                          boolean isNotExisted, String engine, SqlNode tableComment) {
         super(CREATE_TABLE, pos);
         this.tableName = tableName;
         this.nameAndType = nameAndType;
         this.isNotExisted = isNotExisted;
+
+        this.engine = engine;
+        this.tableComment = tableComment;
     }
 
     public String getTableName() {
@@ -41,6 +47,22 @@ public class SqlCreateTable extends SqlDdl {
 
     public boolean isNotExisted() {
         return isNotExisted;
+    }
+
+    public String getEngine() {
+        return engine;
+    }
+
+    public void setEngine(String engine) {
+        this.engine = engine;
+    }
+
+    public SqlNode getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(SqlNode tableComment) {
+        this.tableComment = tableComment;
     }
 
     @Nonnull

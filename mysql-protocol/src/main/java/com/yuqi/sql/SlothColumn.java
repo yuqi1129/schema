@@ -1,6 +1,6 @@
 package com.yuqi.sql;
 
-import org.apache.calcite.sql.SqlDataTypeSpec;
+import com.yuqi.sql.sqlnode.type.SlothColumnType;
 
 /**
  * @author yuqi
@@ -11,9 +11,9 @@ import org.apache.calcite.sql.SqlDataTypeSpec;
 public class SlothColumn {
     private String columnName;
 
-    private SqlDataTypeSpec columnType;
+    private SlothColumnType columnType;
 
-    public SlothColumn(String columnName, SqlDataTypeSpec columnType1) {
+    public SlothColumn(String columnName, SlothColumnType columnType1) {
         this.columnName = columnName;
         this.columnType = columnType1;
     }
@@ -22,7 +22,7 @@ public class SlothColumn {
         return columnName;
     }
 
-    public SqlDataTypeSpec getColumnType() {
+    public SlothColumnType getColumnType() {
         return columnType;
     }
 

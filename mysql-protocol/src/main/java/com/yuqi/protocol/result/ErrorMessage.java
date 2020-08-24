@@ -14,6 +14,15 @@ public class ErrorMessage {
 
     public static final ErrorMessage OK_MESSAGE = new ErrorMessage(0, StringUtils.EMPTY);
 
+    /**
+     * For example if you create table like
+     * ```
+     * create table if not exsits xxx (....)
+     * and table `xxx` does exists, we then return and ignore result
+     * ```
+     */
+    public static final ErrorMessage OK_MESSAGE_AND_RETURN = new ErrorMessage(0, StringUtils.EMPTY);
+
     public ErrorMessage(int errorCode, String detailMessage) {
         this.errorCode = errorCode;
         this.detailMessage = detailMessage;

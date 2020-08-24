@@ -153,7 +153,8 @@ SqlCreateTable CreateTable() :
     SqlParserPos pos;
     SqlNodeList sqlNodeList;
 
-    String engine;
+    String engine = null;
+    SqlNode tableComment = null;
 }
 {
     {
@@ -173,8 +174,12 @@ SqlCreateTable CreateTable() :
         <ENGINE> <EQ>
         engine = Identifier()
     ]
+    [
+        <COMMENT> <EQ>
+        tableComment =  Literal()
+    ]
     {
-        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist);
+        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist, engine, tableComment);
     }
 }
 

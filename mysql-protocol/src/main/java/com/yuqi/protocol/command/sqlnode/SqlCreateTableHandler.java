@@ -38,6 +38,13 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         final String db = connectionContext.getDb();
 
         final ErrorMessage errorMessage = checkDbAndTableName(tableName, db, isNotExist);
+
+        if (ErrorMessage.OK_MESSAGE_AND_RETURN == errorMessage) {
+            MysqlPackage mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 1, 0);
+            connectionContext.write(mysqlPackage);
+            return;
+        }
+
         if (ErrorMessage.OK_MESSAGE != errorMessage) {
             MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(errorMessage.getErrorCode(), errorMessage.getDetailMessage());
             connectionContext.write(mysqlPackage);
@@ -97,9 +104,14 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
             }
 
             final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
-            if (slothSchema.containsTable(tableNameAndDB) && !isNotExist) {
-                return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
-                        String.format(TABLE_ALREADY_EXISTS.getMessage(), tableNameAndDB));
+
+            if (slothSchema.containsTable(tableNameAndDB)) {
+                if (isNotExist) {
+                    return ErrorMessage.OK_MESSAGE_AND_RETURN;
+                } else {
+                    return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
+                            String.format(TABLE_ALREADY_EXISTS.getMessage(), tableNameAndDB));
+                }
             }
 
             return ErrorMessage.OK_MESSAGE;
@@ -113,9 +125,13 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
             return new ErrorMessage(UNKNOWN_DB_NAME.getCode(), String.format(UNKNOWN_DB_NAME.getMessage(), realDb));
         }
 
-        if (slothSchema.containsTable(tableName) && !isNotExist) {
-            return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
-                    String.format(TABLE_ALREADY_EXISTS.getMessage(), tableName));
+        if (slothSchema.containsTable(tableName)) {
+            if (isNotExist) {
+                return ErrorMessage.OK_MESSAGE_AND_RETURN;
+            } else {
+                return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
+                        String.format(TABLE_ALREADY_EXISTS.getMessage(), tableNameAndDB));
+            }
         }
 
         return ErrorMessage.OK_MESSAGE;

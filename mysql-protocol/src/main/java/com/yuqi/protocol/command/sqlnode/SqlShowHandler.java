@@ -70,7 +70,8 @@ public class SqlShowHandler implements Handler<SqlShow> {
                 return;
             }
 
-            data = showCreateTableResult.columnValues.stream().map(Lists::newArrayList).collect(Collectors.toList());
+            data = Lists.newArrayListWithCapacity(1);
+            data.add(showCreateTableResult.columnValues);
             columnName = showCreateTableResult.columnNames;
         } else {
             final MysqlPackage r = PackageUtils.buildErrPackage(

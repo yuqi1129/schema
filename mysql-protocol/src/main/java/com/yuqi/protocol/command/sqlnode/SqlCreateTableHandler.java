@@ -5,6 +5,7 @@ import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.result.ErrorMessage;
 import com.yuqi.protocol.utils.PackageUtils;
+import com.yuqi.sql.EnhanceSlothColumn;
 import com.yuqi.sql.SlothColumn;
 import com.yuqi.sql.SlothSchema;
 import com.yuqi.sql.SlothSchemaHolder;
@@ -52,11 +53,12 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         }
 
         //now handle
-        createTable(tableName, sqlNodes, connectionContext);
+        createTable(tableName, type, connectionContext);
     }
 
 
-    private void createTable(String tableAndDb, SqlNodeList sqlNodes, ConnectionContext connectionContext) {
+    private void createTable(String tableAndDb, SqlCreateTable sqlCreateTable, ConnectionContext connectionContext) {
+        final SqlNodeList sqlNodes = sqlCreateTable.getNameAndType();
         final String[] tableAndDatabase = tableAndDb.split("\\.", 2);
         final String db;
         final String tableName;
@@ -80,11 +82,15 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         for (int i = 0; i < size / 2; i++) {
             final String columnName = nodes.get(2 * i).toString();
             final SlothColumnType sqlTypeName = (SlothColumnType) nodes.get(2 * i + 1);
-            final SlothColumn slothColumn = new SlothColumn(columnName, sqlTypeName);
+            final EnhanceSlothColumn column = sqlTypeName.toEnhance(columnName);
+            final SlothColumn slothColumn = new SlothColumn(columnName, column);
+
             slothColumns.add(slothColumn);
         }
 
         slothTable.setColumns(slothColumns);
+        slothTable.setEngineName(sqlCreateTable.getEngine());
+        slothTable.setTableComment(sqlCreateTable.getTableComment().toString());
         slothTable.initTableEngine();
 
         slothSchema.addTable(tableName, slothTable);

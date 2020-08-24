@@ -1,7 +1,5 @@
 package com.yuqi.sql;
 
-import com.yuqi.sql.sqlnode.type.SlothColumnType;
-
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -11,18 +9,18 @@ import com.yuqi.sql.sqlnode.type.SlothColumnType;
 public class SlothColumn {
     private String columnName;
 
-    private SlothColumnType columnType;
+    private EnhanceSlothColumn columnType;
 
-    public SlothColumn(String columnName, SlothColumnType columnType1) {
+    public SlothColumn(String columnName, EnhanceSlothColumn columnType) {
         this.columnName = columnName;
-        this.columnType = columnType1;
+        this.columnType = columnType;
     }
 
     public String getColumnName() {
         return columnName;
     }
 
-    public SlothColumnType getColumnType() {
+    public EnhanceSlothColumn getColumnType() {
         return columnType;
     }
 

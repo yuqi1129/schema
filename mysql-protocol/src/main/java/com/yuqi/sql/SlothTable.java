@@ -34,6 +34,16 @@ public class SlothTable extends AbstractQueryableTable {
 
     private RelDataType resultType;
 
+    /**
+     * Engine name, currently sloth
+     */
+    private String engineName;
+
+    /**
+     * Table comment
+     */
+    private String tableComment;
+
     private SlothTableEngine slothTableEngine;
 
     public SlothTable(String tableName, SlothSchema schema, RelDataType resultType) {
@@ -85,6 +95,21 @@ public class SlothTable extends AbstractQueryableTable {
         return columns;
     }
 
+    public String getEngineName() {
+        return engineName;
+    }
+
+    public void setEngineName(String engineName) {
+        this.engineName = engineName;
+    }
+
+    public String getTableComment() {
+        return tableComment;
+    }
+
+    public void setTableComment(String tableComment) {
+        this.tableComment = tableComment;
+    }
 
     public String buildTableEnginePath() {
         return FileConstants.TABLE_FILE_LOACTION + "/" + schema.getSchemaName() + "/" + tableName;
@@ -112,11 +137,10 @@ public class SlothTable extends AbstractQueryableTable {
 
         //date/time/datetime 都用long存储
         columns.forEach(cl -> {
-            final String sqlTypeNameString = cl.getColumnType().getTypeName().toString().toUpperCase();
-            final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
+            final SqlTypeName sqlTypeName = cl.getColumnType().getColumnType();
             RelDataType relDataType = typeFactory.createSqlType(sqlTypeName);
             relDataType = typeFactory.createTypeWithNullability(
-                    relDataType, cl.getColumnType().getNullable());
+                    relDataType, cl.getColumnType().isNullable());
 
             relDataTypes.add(relDataType);
             columnNames.add(cl.getColumnName());

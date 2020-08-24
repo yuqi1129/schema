@@ -1,9 +1,11 @@
 package com.yuqi.sql.sqlnode.type;
 
+import com.yuqi.sql.EnhanceSlothColumn;
 import org.apache.calcite.sql.SqlDataTypeSpec;
 import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlTypeNameSpec;
 import org.apache.calcite.sql.parser.SqlParserPos;
+import org.apache.calcite.sql.type.SqlTypeName;
 
 /**
  * @author yuqi
@@ -67,5 +69,23 @@ public class SlothColumnType extends SqlDataTypeSpec {
     @Override
     public Boolean getNullable() {
         return super.getNullable();
+    }
+
+    public EnhanceSlothColumn toEnhance(String columnName) {
+        EnhanceSlothColumn enhanceSlothColumn = new EnhanceSlothColumn();
+
+        enhanceSlothColumn.setColumName(columnName);
+        enhanceSlothColumn.setColumnComment(comment.toString());
+
+        final String sqlTypeNameString = getComponentTypeSpec().getTypeName().toString().toUpperCase();
+        final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
+
+        enhanceSlothColumn.setColumnType(sqlTypeName);
+        enhanceSlothColumn.setUnsigned(unsigned);
+        enhanceSlothColumn.setDefalutValue(defaultValue.toString());
+        enhanceSlothColumn.setNullable(getNullable());
+        enhanceSlothColumn.setPrecision(Integer.parseInt(precision.toString()));
+
+        return enhanceSlothColumn;
     }
 }

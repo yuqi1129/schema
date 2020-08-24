@@ -165,7 +165,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
                 builder.append("DEFALUT ").append(columnType.getDefalutValue()).append(" ");
             }
 
-            if (Objects.nonNull(columnType.getColumnComment())) {
+            if (StringUtils.isNotBlank(columnType.getColumnComment())) {
                 builder.append("COMMENT ").append(columnType.getColumnComment());
             }
 

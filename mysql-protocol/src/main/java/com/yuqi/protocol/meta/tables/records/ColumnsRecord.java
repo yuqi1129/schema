@@ -21,10 +21,24 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     private static final long serialVersionUID = -603135233;
 
     /**
+     * Setter for <code>sloth.columns.TABLE_CATALOG</code>.
+     */
+    public void setTableCatalog(String value) {
+        set(0, value);
+    }
+
+    /**
      * Create a detached ColumnsRecord
      */
     public ColumnsRecord() {
         super(Columns.COLUMNS);
+    }
+
+    /**
+     * Setter for <code>sloth.columns.TABLE_SCHEMA</code>.
+     */
+    public void setTableSchema(String value) {
+        set(1, value);
     }
 
     /**
@@ -57,41 +71,6 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.TABLE_CATALOG</code>.
-     */
-    public String getTableCatalog() {
-        return (String) get(0);
-    }
-
-    /**
-     * Setter for <code>sloth.columns.TABLE_CATALOG</code>.
-     */
-    public void setTableCatalog(String value) {
-        set(0, value);
-    }
-
-    /**
-     * Getter for <code>sloth.columns.TABLE_SCHEMA</code>.
-     */
-    public String getTableSchema() {
-        return (String) get(1);
-    }
-
-    /**
-     * Setter for <code>sloth.columns.TABLE_SCHEMA</code>.
-     */
-    public void setTableSchema(String value) {
-        set(1, value);
-    }
-
-    /**
-     * Getter for <code>sloth.columns.TABLE_NAME</code>.
-     */
-    public String getTableName() {
-        return (String) get(2);
-    }
-
-    /**
      * Setter for <code>sloth.columns.TABLE_NAME</code>.
      */
     public void setTableName(String value) {
@@ -99,10 +78,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLUMN_NAME</code>.
+     * Getter for <code>sloth.columns.TABLE_CATALOG</code>.
      */
-    public String getColumnName() {
-        return (String) get(3);
+    public String getTableCatalog() {
+        return (String) get(0);
     }
 
     /**
@@ -113,10 +92,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.ORDINAL_POSITION</code>.
+     * Getter for <code>sloth.columns.TABLE_SCHEMA</code>.
      */
-    public ULong getOrdinalPosition() {
-        return (ULong) get(4);
+    public String getTableSchema() {
+        return (String) get(1);
     }
 
     /**
@@ -127,10 +106,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLUMN_DEFAULT</code>.
+     * Getter for <code>sloth.columns.TABLE_NAME</code>.
      */
-    public String getColumnDefault() {
-        return (String) get(5);
+    public String getTableName() {
+        return (String) get(2);
     }
 
     /**
@@ -141,10 +120,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.IS_NULLABLE</code>.
+     * Getter for <code>sloth.columns.COLUMN_NAME</code>.
      */
-    public String getIsNullable() {
-        return (String) get(6);
+    public String getColumnName() {
+        return (String) get(3);
     }
 
     /**
@@ -155,10 +134,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.DATA_TYPE</code>.
+     * Getter for <code>sloth.columns.ORDINAL_POSITION</code>.
      */
-    public String getDataType() {
-        return (String) get(7);
+    public ULong getOrdinalPosition() {
+        return (ULong) get(4);
     }
 
     /**
@@ -169,10 +148,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.CHARACTER_MAXIMUM_LENGTH</code>.
+     * Getter for <code>sloth.columns.COLUMN_DEFAULT</code>.
      */
-    public ULong getCharacterMaximumLength() {
-        return (ULong) get(8);
+    public String getColumnDefault() {
+        return (String) get(5);
     }
 
     /**
@@ -183,10 +162,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.CHARACTER_OCTET_LENGTH</code>.
+     * Getter for <code>sloth.columns.IS_NULLABLE</code>.
      */
-    public ULong getCharacterOctetLength() {
-        return (ULong) get(9);
+    public String getIsNullable() {
+        return (String) get(6);
     }
 
     /**
@@ -197,10 +176,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.NUMERIC_PRECISION</code>.
+     * Getter for <code>sloth.columns.DATA_TYPE</code>.
      */
-    public ULong getNumericPrecision() {
-        return (ULong) get(10);
+    public String getDataType() {
+        return (String) get(7);
     }
 
     /**
@@ -211,10 +190,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.NUMERIC_SCALE</code>.
+     * Getter for <code>sloth.columns.CHARACTER_MAXIMUM_LENGTH</code>.
      */
-    public ULong getNumericScale() {
-        return (ULong) get(11);
+    public ULong getCharacterMaximumLength() {
+        return (ULong) get(8);
     }
 
     /**
@@ -225,10 +204,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.DATETIME_PRECISION</code>.
+     * Getter for <code>sloth.columns.CHARACTER_OCTET_LENGTH</code>.
      */
-    public ULong getDatetimePrecision() {
-        return (ULong) get(12);
+    public ULong getCharacterOctetLength() {
+        return (ULong) get(9);
     }
 
     /**
@@ -239,10 +218,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.CHARACTER_SET_NAME</code>.
+     * Getter for <code>sloth.columns.NUMERIC_PRECISION</code>.
      */
-    public String getCharacterSetName() {
-        return (String) get(13);
+    public ULong getNumericPrecision() {
+        return (ULong) get(10);
     }
 
     /**
@@ -253,10 +232,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLLATION_NAME</code>.
+     * Getter for <code>sloth.columns.NUMERIC_SCALE</code>.
      */
-    public String getCollationName() {
-        return (String) get(14);
+    public ULong getNumericScale() {
+        return (ULong) get(11);
     }
 
     /**
@@ -267,10 +246,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLUMN_TYPE</code>.
+     * Getter for <code>sloth.columns.DATETIME_PRECISION</code>.
      */
-    public String getColumnType() {
-        return (String) get(15);
+    public ULong getDatetimePrecision() {
+        return (ULong) get(12);
     }
 
     /**
@@ -281,10 +260,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLUMN_KEY</code>.
+     * Getter for <code>sloth.columns.CHARACTER_SET_NAME</code>.
      */
-    public String getColumnKey() {
-        return (String) get(16);
+    public String getCharacterSetName() {
+        return (String) get(13);
     }
 
     /**
@@ -295,10 +274,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.EXTRA</code>.
+     * Getter for <code>sloth.columns.COLLATION_NAME</code>.
      */
-    public String getExtra() {
-        return (String) get(17);
+    public String getCollationName() {
+        return (String) get(14);
     }
 
     /**
@@ -309,10 +288,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.PRIVILEGES</code>.
+     * Getter for <code>sloth.columns.COLUMN_TYPE</code>.
      */
-    public String getPrivileges() {
-        return (String) get(18);
+    public String getColumnType() {
+        return (String) get(15);
     }
 
     /**
@@ -323,10 +302,10 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     }
 
     /**
-     * Getter for <code>sloth.columns.COLUMN_COMMENT</code>.
+     * Getter for <code>sloth.columns.COLUMN_KEY</code>.
      */
-    public String getColumnComment() {
-        return (String) get(19);
+    public String getColumnKey() {
+        return (String) get(16);
     }
 
     /**
@@ -336,15 +315,11 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
         set(19, value);
     }
 
-    // -------------------------------------------------------------------------
-    // Record21 type implementation
-    // -------------------------------------------------------------------------
-
     /**
-     * Getter for <code>sloth.columns.GENERATION_EXPRESSION</code>.
+     * Getter for <code>sloth.columns.EXTRA</code>.
      */
-    public String getGenerationExpression() {
-        return (String) get(20);
+    public String getExtra() {
+        return (String) get(17);
     }
 
     /**
@@ -353,6 +328,17 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
     public void setGenerationExpression(String value) {
         set(20, value);
     }
+
+    /**
+     * Getter for <code>sloth.columns.PRIVILEGES</code>.
+     */
+    public String getPrivileges() {
+        return (String) get(18);
+    }
+
+    // -------------------------------------------------------------------------
+    // Record21 type implementation
+    // -------------------------------------------------------------------------
 
     @Override
     public Row21<String, String, String, String, ULong, String, String, String, ULong, ULong, ULong, ULong, ULong, String, String, String, String, String, String, String, String> fieldsRow() {
@@ -799,10 +785,6 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public ColumnsRecord value21(String value) {
         setGenerationExpression(value);
@@ -833,5 +815,23 @@ public class ColumnsRecord extends TableRecordImpl<ColumnsRecord> implements Rec
         value20(value20);
         value21(value21);
         return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>sloth.columns.COLUMN_COMMENT</code>.
+     */
+    public String getColumnComment() {
+        return (String) get(19);
+    }
+
+    /**
+     * Getter for <code>sloth.columns.GENERATION_EXPRESSION</code>.
+     */
+    public String getGenerationExpression() {
+        return (String) get(20);
     }
 }

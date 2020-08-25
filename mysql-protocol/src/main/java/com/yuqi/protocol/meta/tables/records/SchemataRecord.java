@@ -20,10 +20,24 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
     private static final long serialVersionUID = -1655400475;
 
     /**
+     * Setter for <code>sloth.schemata.CATALOG_NAME</code>.
+     */
+    public void setCatalogName(String value) {
+        set(0, value);
+    }
+
+    /**
      * Create a detached SchemataRecord
      */
     public SchemataRecord() {
         super(Schemata.SCHEMATA);
+    }
+
+    /**
+     * Setter for <code>sloth.schemata.SCHEMA_NAME</code>.
+     */
+    public void setSchemaName(String value) {
+        set(1, value);
     }
 
     /**
@@ -40,6 +54,13 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
     }
 
     /**
+     * Setter for <code>sloth.schemata.DEFAULT_CHARACTER_SET_NAME</code>.
+     */
+    public void setDefaultCharacterSetName(String value) {
+        set(2, value);
+    }
+
+    /**
      * Getter for <code>sloth.schemata.CATALOG_NAME</code>.
      */
     public String getCatalogName() {
@@ -47,10 +68,10 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
     }
 
     /**
-     * Setter for <code>sloth.schemata.CATALOG_NAME</code>.
+     * Setter for <code>sloth.schemata.DEFAULT_COLLATION_NAME</code>.
      */
-    public void setCatalogName(String value) {
-        set(0, value);
+    public void setDefaultCollationName(String value) {
+        set(3, value);
     }
 
     /**
@@ -61,10 +82,10 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
     }
 
     /**
-     * Setter for <code>sloth.schemata.SCHEMA_NAME</code>.
+     * Setter for <code>sloth.schemata.SQL_PATH</code>.
      */
-    public void setSchemaName(String value) {
-        set(1, value);
+    public void setSqlPath(String value) {
+        set(4, value);
     }
 
     /**
@@ -74,44 +95,9 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
         return (String) get(2);
     }
 
-    /**
-     * Setter for <code>sloth.schemata.DEFAULT_CHARACTER_SET_NAME</code>.
-     */
-    public void setDefaultCharacterSetName(String value) {
-        set(2, value);
-    }
-
-    /**
-     * Getter for <code>sloth.schemata.DEFAULT_COLLATION_NAME</code>.
-     */
-    public String getDefaultCollationName() {
-        return (String) get(3);
-    }
-
-    /**
-     * Setter for <code>sloth.schemata.DEFAULT_COLLATION_NAME</code>.
-     */
-    public void setDefaultCollationName(String value) {
-        set(3, value);
-    }
-
     // -------------------------------------------------------------------------
     // Record5 type implementation
     // -------------------------------------------------------------------------
-
-    /**
-     * Getter for <code>sloth.schemata.SQL_PATH</code>.
-     */
-    public String getSqlPath() {
-        return (String) get(4);
-    }
-
-    /**
-     * Setter for <code>sloth.schemata.SQL_PATH</code>.
-     */
-    public void setSqlPath(String value) {
-        set(4, value);
-    }
 
     @Override
     public Row5<String, String, String, String, String> fieldsRow() {
@@ -222,10 +208,6 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
         return this;
     }
 
-    // -------------------------------------------------------------------------
-    // Constructors
-    // -------------------------------------------------------------------------
-
     @Override
     public SchemataRecord value5(String value) {
         setSqlPath(value);
@@ -240,5 +222,23 @@ public class SchemataRecord extends TableRecordImpl<SchemataRecord> implements R
         value4(value4);
         value5(value5);
         return this;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructors
+    // -------------------------------------------------------------------------
+
+    /**
+     * Getter for <code>sloth.schemata.DEFAULT_COLLATION_NAME</code>.
+     */
+    public String getDefaultCollationName() {
+        return (String) get(3);
+    }
+
+    /**
+     * Getter for <code>sloth.schemata.SQL_PATH</code>.
+     */
+    public String getSqlPath() {
+        return (String) get(4);
     }
 }

@@ -46,6 +46,11 @@ public class SlothTable extends AbstractQueryableTable {
      */
     private String tableComment;
 
+    /**
+     * Shard number
+     */
+    private int shardNum = DEFAULT_SHARD;
+
     private SlothTableEngine slothTableEngine;
 
     public SlothTable(String tableName, SlothSchema schema, RelDataType resultType) {
@@ -111,6 +116,14 @@ public class SlothTable extends AbstractQueryableTable {
 
     public void setTableComment(String tableComment) {
         this.tableComment = tableComment;
+    }
+
+    public int getShardNum() {
+        return shardNum;
+    }
+
+    public void setShardNum(int shardNum) {
+        this.shardNum = shardNum;
     }
 
     public String buildTableEnginePath() {

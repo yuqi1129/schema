@@ -2,6 +2,7 @@ package com.yuqi.protocol.connection.mysql;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.meta.tables.pojos.Columns;
+import com.yuqi.protocol.meta.tables.pojos.Tables;
 import com.yuqi.sql.EnhanceSlothColumn;
 import com.yuqi.sql.SlothColumn;
 import com.yuqi.sql.SlothSchema;
@@ -40,12 +41,13 @@ public class TableMeta {
                         SLOTH.TABLES.TABLE_SCHEMA,
                         SLOTH.TABLES.TABLE_NAME,
                         SLOTH.TABLES.TABLE_COMMENT,
-                        SLOTH.TABLES.ENGINE)
+                        SLOTH.TABLES.ENGINE, SLOTH.TABLES.TABLE_SHARD)
                 .values("def",
                         schema,
                         tableName,
                         Objects.isNull(table.getTableComment()) ? "" : table.getTableComment(),
-                        Objects.isNull(table.getEngineName()) ? null : table.getEngineName())
+                        Objects.isNull(table.getEngineName()) ? null : table.getEngineName(),
+                        table.getShardNum())
                 .execute();
 
         //add column
@@ -119,8 +121,22 @@ public class TableMeta {
             }).collect(Collectors.toList());
 
             SlothTable slothTable = new SlothTable(tableName);
+
+            final List<Tables> tables =
+                    dslContext.selectFrom(SLOTH.TABLES)
+                            .where(SLOTH.TABLES.TABLE_NAME.eq(tableName).and(SLOTH.TABLES.TABLE_SCHEMA.eq(schemaName)))
+                            .fetchInto(Tables.class);
+
+            if (tables.size() != 1) {
+                return;
+            }
+            final Tables t = tables.get(0);
+
             slothTable.setColumns(slothColumns);
             slothTable.setSchema(schema);
+            slothTable.setShardNum(t.getTableShard());
+            slothTable.setEngineName(t.getEngine());
+            slothTable.setTableComment(t.getTableComment());
             slothTable.initTableEngine();
             result.add(slothTable);
         });

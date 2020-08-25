@@ -17,11 +17,13 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultCatalog extends CatalogImpl {
 
+    private static final long serialVersionUID = 574299685;
+
     /**
      * The reference instance of <code>DEFAULT_CATALOG</code>
      */
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
-    private static final long serialVersionUID = 574299685;
+
     /**
      * The schema <code>sloth</code>.
      */

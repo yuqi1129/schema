@@ -155,6 +155,7 @@ SqlCreateTable CreateTable() :
 
     String engine = null;
     SqlNode tableComment = null;
+    int shard = 1;
 }
 {
     {
@@ -175,11 +176,15 @@ SqlCreateTable CreateTable() :
         engine = Identifier()
     ]
     [
+        <SHARD> <EQ>
+        shard =  UnsignedIntLiteral()
+    ]
+    [
         <COMMENT> <EQ>
         tableComment =  Literal()
     ]
     {
-        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist, engine, tableComment);
+        return new SqlCreateTable(pos, schemaAndTableName.toString(), sqlNodeList, isNotExist, engine, tableComment, shard);
     }
 }
 

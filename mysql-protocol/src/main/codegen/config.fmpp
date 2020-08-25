@@ -62,7 +62,8 @@ data: {
         "TINYTEXT",
         "MEDIUMTEXT",
         "LONGTEXT",
-        "ENGINE"
+        "ENGINE",
+        "SHARD"
     ]
 
     # List of keywords from "keywords" section that are not reserved.

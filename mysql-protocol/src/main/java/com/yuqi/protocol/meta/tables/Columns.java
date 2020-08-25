@@ -26,91 +26,121 @@ import org.jooq.types.ULong;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Columns extends TableImpl<ColumnsRecord> {
 
+    private static final long serialVersionUID = 1459451202;
+
     /**
      * The reference instance of <code>sloth.columns</code>
      */
     public static final Columns COLUMNS = new Columns();
-    private static final long serialVersionUID = 1459451202;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<ColumnsRecord> getRecordType() {
+        return ColumnsRecord.class;
+    }
+
     /**
      * The column <code>sloth.columns.TABLE_CATALOG</code>.
      */
     public final TableField<ColumnsRecord, String> TABLE_CATALOG = createField(DSL.name("TABLE_CATALOG"), org.jooq.impl.SQLDataType.VARCHAR(512).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.TABLE_SCHEMA</code>.
      */
     public final TableField<ColumnsRecord, String> TABLE_SCHEMA = createField(DSL.name("TABLE_SCHEMA"), org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.TABLE_NAME</code>.
      */
     public final TableField<ColumnsRecord, String> TABLE_NAME = createField(DSL.name("TABLE_NAME"), org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.COLUMN_NAME</code>.
      */
     public final TableField<ColumnsRecord, String> COLUMN_NAME = createField(DSL.name("COLUMN_NAME"), org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.ORDINAL_POSITION</code>.
      */
     public final TableField<ColumnsRecord, ULong> ORDINAL_POSITION = createField(DSL.name("ORDINAL_POSITION"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BIGINTUNSIGNED)), this, "");
+
     /**
      * The column <code>sloth.columns.COLUMN_DEFAULT</code>.
      */
     public final TableField<ColumnsRecord, String> COLUMN_DEFAULT = createField(DSL.name("COLUMN_DEFAULT"), org.jooq.impl.SQLDataType.CLOB, this, "");
+
     /**
      * The column <code>sloth.columns.IS_NULLABLE</code>.
      */
     public final TableField<ColumnsRecord, String> IS_NULLABLE = createField(DSL.name("IS_NULLABLE"), org.jooq.impl.SQLDataType.VARCHAR(3).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.DATA_TYPE</code>.
      */
     public final TableField<ColumnsRecord, String> DATA_TYPE = createField(DSL.name("DATA_TYPE"), org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.CHARACTER_MAXIMUM_LENGTH</code>.
      */
     public final TableField<ColumnsRecord, ULong> CHARACTER_MAXIMUM_LENGTH = createField(DSL.name("CHARACTER_MAXIMUM_LENGTH"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED, this, "");
+
     /**
      * The column <code>sloth.columns.CHARACTER_OCTET_LENGTH</code>.
      */
     public final TableField<ColumnsRecord, ULong> CHARACTER_OCTET_LENGTH = createField(DSL.name("CHARACTER_OCTET_LENGTH"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED, this, "");
+
     /**
      * The column <code>sloth.columns.NUMERIC_PRECISION</code>.
      */
     public final TableField<ColumnsRecord, ULong> NUMERIC_PRECISION = createField(DSL.name("NUMERIC_PRECISION"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED, this, "");
+
     /**
      * The column <code>sloth.columns.NUMERIC_SCALE</code>.
      */
     public final TableField<ColumnsRecord, ULong> NUMERIC_SCALE = createField(DSL.name("NUMERIC_SCALE"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED, this, "");
+
     /**
      * The column <code>sloth.columns.DATETIME_PRECISION</code>.
      */
     public final TableField<ColumnsRecord, ULong> DATETIME_PRECISION = createField(DSL.name("DATETIME_PRECISION"), org.jooq.impl.SQLDataType.BIGINTUNSIGNED, this, "");
+
     /**
      * The column <code>sloth.columns.CHARACTER_SET_NAME</code>.
      */
     public final TableField<ColumnsRecord, String> CHARACTER_SET_NAME = createField(DSL.name("CHARACTER_SET_NAME"), org.jooq.impl.SQLDataType.VARCHAR(32), this, "");
+
     /**
      * The column <code>sloth.columns.COLLATION_NAME</code>.
      */
     public final TableField<ColumnsRecord, String> COLLATION_NAME = createField(DSL.name("COLLATION_NAME"), org.jooq.impl.SQLDataType.VARCHAR(32), this, "");
+
     /**
      * The column <code>sloth.columns.COLUMN_TYPE</code>.
      */
     public final TableField<ColumnsRecord, String> COLUMN_TYPE = createField(DSL.name("COLUMN_TYPE"), org.jooq.impl.SQLDataType.CLOB.nullable(false), this, "");
+
     /**
      * The column <code>sloth.columns.COLUMN_KEY</code>.
      */
     public final TableField<ColumnsRecord, String> COLUMN_KEY = createField(DSL.name("COLUMN_KEY"), org.jooq.impl.SQLDataType.VARCHAR(3).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.EXTRA</code>.
      */
     public final TableField<ColumnsRecord, String> EXTRA = createField(DSL.name("EXTRA"), org.jooq.impl.SQLDataType.VARCHAR(30).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.PRIVILEGES</code>.
      */
     public final TableField<ColumnsRecord, String> PRIVILEGES = createField(DSL.name("PRIVILEGES"), org.jooq.impl.SQLDataType.VARCHAR(80).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.COLUMN_COMMENT</code>.
      */
     public final TableField<ColumnsRecord, String> COLUMN_COMMENT = createField(DSL.name("COLUMN_COMMENT"), org.jooq.impl.SQLDataType.VARCHAR(1024).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.columns.GENERATION_EXPRESSION</code>.
      */
@@ -147,14 +177,6 @@ public class Columns extends TableImpl<ColumnsRecord> {
 
     public <O extends Record> Columns(Table<O> child, ForeignKey<O, ColumnsRecord> key) {
         super(child, key, COLUMNS);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<ColumnsRecord> getRecordType() {
-        return ColumnsRecord.class;
     }
 
     @Override

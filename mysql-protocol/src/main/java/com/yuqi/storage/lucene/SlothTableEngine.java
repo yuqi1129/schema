@@ -74,7 +74,7 @@ public class SlothTableEngine implements LifeCycle {
     }
 
     public void insert(List<List<Value>> values) {
-        int shard = new Random().nextInt(DEFAULT_SHARD);
+        int shard = new Random().nextInt(slothTable.getShardNum());
         final StorageEngine storageEngine = storageEngines.get(shard);
 
         try {

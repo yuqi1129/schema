@@ -82,6 +82,7 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
             slothColumns.add(slothColumn);
         }
 
+        slothTable.setShardNum(sqlCreateTable.getShard());
         slothTable.setColumns(slothColumns);
 
         if (Objects.nonNull(sqlCreateTable.getEngine())) {
@@ -93,7 +94,6 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
         }
 
         slothTable.initTableEngine();
-
         slothSchema.addTable(tableName, slothTable);
 
         final MysqlPackage result =

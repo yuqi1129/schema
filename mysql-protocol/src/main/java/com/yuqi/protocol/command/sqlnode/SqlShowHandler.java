@@ -184,8 +184,9 @@ public class SqlShowHandler implements Handler<SqlShow> {
         if (Objects.isNull(engineName)) {
             engineName = DEFAULT_ENGINE_NAME;
         }
-        builder.append("Engine = ").append(engineName);
+        builder.append("Engine = ").append(engineName).append(" ");
 
+        builder.append("Shard = ").append(slothTable.getShardNum()).append(" ");
         final String tableComment = slothTable.getTableComment();
         if (StringUtils.isNotBlank(tableComment)) {
             builder.append("COMMENT = '").append(tableComment).append("';");

@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables implements Serializable {
 
-    private static final long serialVersionUID = 1084508110;
+    private static final long serialVersionUID = 1547702226;
 
     private String        tableCatalog;
     private String        tableSchema;
@@ -39,6 +39,7 @@ public class Tables implements Serializable {
     private ULong         checksum;
     private String        createOptions;
     private String        tableComment;
+    private Integer       tableShard;
 
     public Tables() {}
 
@@ -64,6 +65,7 @@ public class Tables implements Serializable {
         this.checksum = value.checksum;
         this.createOptions = value.createOptions;
         this.tableComment = value.tableComment;
+        this.tableShard = value.tableShard;
     }
 
     public Tables(
@@ -87,7 +89,8 @@ public class Tables implements Serializable {
         String        tableCollation,
         ULong         checksum,
         String        createOptions,
-        String        tableComment
+        String        tableComment,
+        Integer       tableShard
     ) {
         this.tableCatalog = tableCatalog;
         this.tableSchema = tableSchema;
@@ -110,6 +113,7 @@ public class Tables implements Serializable {
         this.checksum = checksum;
         this.createOptions = createOptions;
         this.tableComment = tableComment;
+        this.tableShard = tableShard;
     }
 
     public String getTableCatalog() {
@@ -280,6 +284,14 @@ public class Tables implements Serializable {
         this.tableComment = tableComment;
     }
 
+    public Integer getTableShard() {
+        return this.tableShard;
+    }
+
+    public void setTableShard(Integer tableShard) {
+        this.tableShard = tableShard;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Tables (");
@@ -305,6 +317,7 @@ public class Tables implements Serializable {
         sb.append(", ").append(checksum);
         sb.append(", ").append(createOptions);
         sb.append(", ").append(tableComment);
+        sb.append(", ").append(tableShard);
 
         sb.append(")");
         return sb.toString();

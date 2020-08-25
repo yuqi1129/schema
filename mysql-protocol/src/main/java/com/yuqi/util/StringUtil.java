@@ -30,6 +30,4 @@ public class StringUtil {
 
         return ImmutablePair.of(db, table);
     }
-
-
 }

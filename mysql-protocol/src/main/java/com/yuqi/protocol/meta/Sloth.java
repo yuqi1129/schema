@@ -21,11 +21,13 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Sloth extends SchemaImpl {
 
+    private static final long serialVersionUID = -514278016;
+
     /**
      * The reference instance of <code>sloth</code>
      */
     public static final Sloth SLOTH = new Sloth();
-    private static final long serialVersionUID = -514278016;
+
     /**
      * The table <code>sloth.columns</code>.
      */

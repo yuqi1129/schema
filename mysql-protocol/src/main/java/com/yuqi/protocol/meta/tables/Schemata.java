@@ -25,27 +25,41 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Schemata extends TableImpl<SchemataRecord> {
 
+    private static final long serialVersionUID = -824009062;
+
     /**
      * The reference instance of <code>sloth.schemata</code>
      */
     public static final Schemata SCHEMATA = new Schemata();
-    private static final long serialVersionUID = -824009062;
+
+    /**
+     * The class holding records for this type
+     */
+    @Override
+    public Class<SchemataRecord> getRecordType() {
+        return SchemataRecord.class;
+    }
+
     /**
      * The column <code>sloth.schemata.CATALOG_NAME</code>.
      */
     public final TableField<SchemataRecord, String> CATALOG_NAME = createField(DSL.name("CATALOG_NAME"), org.jooq.impl.SQLDataType.VARCHAR(512).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.schemata.SCHEMA_NAME</code>.
      */
     public final TableField<SchemataRecord, String> SCHEMA_NAME = createField(DSL.name("SCHEMA_NAME"), org.jooq.impl.SQLDataType.VARCHAR(64).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.schemata.DEFAULT_CHARACTER_SET_NAME</code>.
      */
     public final TableField<SchemataRecord, String> DEFAULT_CHARACTER_SET_NAME = createField(DSL.name("DEFAULT_CHARACTER_SET_NAME"), org.jooq.impl.SQLDataType.VARCHAR(32).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.schemata.DEFAULT_COLLATION_NAME</code>.
      */
     public final TableField<SchemataRecord, String> DEFAULT_COLLATION_NAME = createField(DSL.name("DEFAULT_COLLATION_NAME"), org.jooq.impl.SQLDataType.VARCHAR(32).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+
     /**
      * The column <code>sloth.schemata.SQL_PATH</code>.
      */
@@ -82,14 +96,6 @@ public class Schemata extends TableImpl<SchemataRecord> {
 
     public <O extends Record> Schemata(Table<O> child, ForeignKey<O, SchemataRecord> key) {
         super(child, key, SCHEMATA);
-    }
-
-    /**
-     * The class holding records for this type
-     */
-    @Override
-    public Class<SchemataRecord> getRecordType() {
-        return SchemataRecord.class;
     }
 
     @Override

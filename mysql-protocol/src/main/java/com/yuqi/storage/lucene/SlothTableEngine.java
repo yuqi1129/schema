@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static com.yuqi.sql.SlothTable.DEFAULT_SHARD;
-
 /**
  * @author yuqi
  * @mail yuqi4733@gmail.com
@@ -115,7 +113,7 @@ public class SlothTableEngine implements LifeCycle {
     private void loadData() {
         storageEngines = Lists.newArrayList();
         final String basePath = slothTable.buildTableEnginePath();
-        for (int shard = 0; shard < DEFAULT_SHARD; shard++) {
+        for (int shard = 0; shard < slothTable.getShardNum(); shard++) {
             String shardPath = basePath + "/" + shard;
             StorageEngine storageEngine = new LuceneStorageEngine(shardPath, this);
             storageEngine.init();

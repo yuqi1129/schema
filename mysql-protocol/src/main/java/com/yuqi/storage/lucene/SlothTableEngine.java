@@ -12,6 +12,7 @@ import org.apache.calcite.sql.type.SqlTypeName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
@@ -114,7 +115,7 @@ public class SlothTableEngine implements LifeCycle {
         storageEngines = Lists.newArrayList();
         final String basePath = slothTable.buildTableEnginePath();
         for (int shard = 0; shard < slothTable.getShardNum(); shard++) {
-            String shardPath = basePath + "/" + shard;
+            String shardPath = basePath + File.pathSeparator + shard;
             StorageEngine storageEngine = new LuceneStorageEngine(shardPath, this);
             storageEngine.init();
             storageEngines.add(storageEngine);
@@ -126,7 +127,6 @@ public class SlothTableEngine implements LifeCycle {
             final SqlTypeName sqlTypeName = column.getColumnType().getColumnType();
             columnAndDataType.put(column.getColumnName(),
                     TypeConversionUtils.getBySqlTypeName(sqlTypeName));
-
             columnNames.add(column.getColumnName());
         });
     }

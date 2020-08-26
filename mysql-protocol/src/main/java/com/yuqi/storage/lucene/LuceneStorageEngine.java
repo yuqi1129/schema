@@ -271,6 +271,7 @@ public class LuceneStorageEngine implements StorageEngine {
             return;
         }
 
+        // Can use indexWriter.hasUncommittedChanges()
         if (dataNumUncommited > 0) {
             try {
                 updateIndexWriterAndReader();

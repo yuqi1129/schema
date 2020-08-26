@@ -103,31 +103,17 @@ public class SqlCreateTableHandler implements Handler<SqlCreateTable> {
 
 
     private ErrorMessage checkDbAndTableName(String tableNameAndDB, String db, boolean isNotExist) {
-        final String[] tableAndDb = StringUtil.getDbAndTableName(tableNameAndDB);
+        final Pair<String, String> dbAndTablePair = StringUtil.getDbAndTablePair(tableNameAndDB, db);
 
-        if (tableAndDb.length == 1) {
-            if (Objects.isNull(db)) {
-                return new ErrorMessage(NO_DATABASE_SELECTED.getCode(), NO_DATABASE_SELECTED.getMessage());
-            }
+        final String realDb = dbAndTablePair.getLeft();
+        final String tableName = dbAndTablePair.getRight();
 
-            final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
 
-            if (slothSchema.containsTable(tableNameAndDB)) {
-                if (isNotExist) {
-                    return ErrorMessage.OK_MESSAGE_AND_RETURN;
-                } else {
-                    return new ErrorMessage(TABLE_ALREADY_EXISTS.getCode(),
-                            String.format(TABLE_ALREADY_EXISTS.getMessage(), tableNameAndDB));
-                }
-            }
-
-            return ErrorMessage.OK_MESSAGE;
+        if (Objects.isNull(realDb)) {
+            return new ErrorMessage(NO_DATABASE_SELECTED.getCode(), NO_DATABASE_SELECTED.getMessage());
         }
 
-        final String realDb = tableAndDb[0];
-        final String tableName = tableAndDb[1];
-
-        final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(realDb);
+        final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
         if (Objects.isNull(slothSchema)) {
             return new ErrorMessage(UNKNOWN_DB_NAME.getCode(), String.format(UNKNOWN_DB_NAME.getMessage(), realDb));
         }

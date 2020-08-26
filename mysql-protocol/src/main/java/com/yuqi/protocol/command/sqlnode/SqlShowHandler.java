@@ -42,7 +42,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
     @Override
     public void handle(ConnectionContext connectionContext, SqlShow type) {
         final String command = type.getCommand();
-        //todo
+
         List<List<String>> data;
         String[] columnName = {"Database"};
         final int showType = type.getType();
@@ -76,7 +76,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
             data.add(showCreateTableResult.columnValues);
             columnName = showCreateTableResult.columnNames;
         } else {
-            final MysqlPackage r = PackageUtils.buildErrPackage(
+            MysqlPackage r = PackageUtils.buildErrPackage(
                     SYNTAX_ERROR.getCode(),
                     String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()));
 
@@ -144,9 +144,9 @@ public class SqlShowHandler implements Handler<SqlShow> {
 
         builder.append("CREATE TABLE `").append(slothTable.getTableName()).append("` (\n");
 
+        //column
         final List<SlothColumn> columns = slothTable.getColumns();
         final int length = columns.size();
-
         for (int i = 0; i < length; i++) {
             final SlothColumn column = columns.get(i);
 
@@ -180,6 +180,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
 
         builder.append(") ");
 
+        //table property
         String engineName = slothTable.getEngineName();
         if (Objects.isNull(engineName)) {
             engineName = DEFAULT_ENGINE_NAME;

@@ -24,8 +24,8 @@ public class StringUtil {
             table = tableAndDatabase[0];
             db = dbFromConn;
         } else {
-            table = tableAndDatabase[0];
-            db = tableAndDatabase[1];
+            db = tableAndDatabase[0];
+            table = tableAndDatabase[1];
         }
 
         return ImmutablePair.of(db, table);

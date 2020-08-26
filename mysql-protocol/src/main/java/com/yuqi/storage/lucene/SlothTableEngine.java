@@ -115,7 +115,7 @@ public class SlothTableEngine implements LifeCycle {
         storageEngines = Lists.newArrayList();
         final String basePath = slothTable.buildTableEnginePath();
         for (int shard = 0; shard < slothTable.getShardNum(); shard++) {
-            String shardPath = basePath + File.pathSeparator + shard;
+            String shardPath = basePath + File.separator + shard;
             StorageEngine storageEngine = new LuceneStorageEngine(shardPath, this);
             storageEngine.init();
             storageEngines.add(storageEngine);

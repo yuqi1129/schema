@@ -153,10 +153,10 @@ public class SqlShowHandler implements Handler<SqlShow> {
             final EnhanceSlothColumn columnType = column.getColumnType();
 
             builder.append("  `").append(column.getColumnName()).append("` ");
-            builder.append(columnType.getColumnType()).append(" ");
+            builder.append(columnType.getColumnType().getName().toLowerCase()).append(" ");
 
             if (columnType.isUnsigned()) {
-                builder.append("UNSIGNED ");
+                builder.append("unsigned ");
             }
 
             if (!columnType.isNullable()) {
@@ -164,7 +164,7 @@ public class SqlShowHandler implements Handler<SqlShow> {
             }
 
             if (Objects.nonNull(columnType.getDefalutValue())) {
-                builder.append("DEFALUT ").append(columnType.getDefalutValue()).append(" ");
+                builder.append("DEFAULT ").append(columnType.getDefalutValue()).append(" ");
             }
 
             if (StringUtils.isNotBlank(columnType.getColumnComment())) {
@@ -184,12 +184,12 @@ public class SqlShowHandler implements Handler<SqlShow> {
         if (Objects.isNull(engineName)) {
             engineName = DEFAULT_ENGINE_NAME;
         }
-        builder.append("Engine = ").append(engineName).append(" ");
+        builder.append("ENGINE = ").append(engineName).append(" ");
 
-        builder.append("Shard = ").append(slothTable.getShardNum()).append(" ");
+        builder.append("SHARD = ").append(slothTable.getShardNum()).append(" ");
         final String tableComment = slothTable.getTableComment();
         if (StringUtils.isNotBlank(tableComment)) {
-            builder.append("COMMENT = '").append(tableComment).append("';");
+            builder.append("COMMENT = ").append(tableComment);
         }
 
         return builder.toString();

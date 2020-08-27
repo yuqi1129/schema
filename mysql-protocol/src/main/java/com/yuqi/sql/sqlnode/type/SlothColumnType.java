@@ -77,14 +77,14 @@ public class SlothColumnType extends SqlDataTypeSpec {
         EnhanceSlothColumn enhanceSlothColumn = new EnhanceSlothColumn();
 
         enhanceSlothColumn.setColumName(columnName);
-        enhanceSlothColumn.setColumnComment(comment.toString());
+        enhanceSlothColumn.setColumnComment(Objects.isNull(comment) ? null : comment.toString());
 
         final String sqlTypeNameString = getTypeNameSpec().getTypeName().toString().toUpperCase();
         final SqlTypeName sqlTypeName = SqlTypeName.get(sqlTypeNameString);
 
         enhanceSlothColumn.setColumnType(sqlTypeName);
         enhanceSlothColumn.setUnsigned(unsigned);
-        enhanceSlothColumn.setDefalutValue(defaultValue.toString());
+        enhanceSlothColumn.setDefalutValue(Objects.isNull(defaultValue) ? null : defaultValue.toString());
         enhanceSlothColumn.setNullable(getNullable());
         if (Objects.nonNull(precision)) {
             enhanceSlothColumn.setPrecision(Integer.parseInt(precision.toString()));

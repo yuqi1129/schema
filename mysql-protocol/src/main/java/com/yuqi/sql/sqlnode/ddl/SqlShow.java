@@ -1,5 +1,6 @@
 package com.yuqi.sql.sqlnode.ddl;
 
+import com.yuqi.protocol.enums.ShowEnum;
 import org.apache.calcite.sql.SqlDdl;
 import org.apache.calcite.sql.SqlKind;
 import org.apache.calcite.sql.SqlNode;
@@ -18,18 +19,14 @@ import java.util.List;
  **/
 public class SqlShow extends SqlDdl {
 
-    public static final int SHOW_DATABASES = 0;
-    public static final int SHOW_TABLES = 1;
-    public static final int SHOW_CREATE_TABLE = 2;
-
     private String command;
-    private int type;
+    private ShowEnum type;
 
     public String getCommand() {
         return command;
     }
 
-    public SqlShow(SqlParserPos pos, int type, String command) {
+    public SqlShow(SqlParserPos pos, ShowEnum type, String command) {
         super(SHOW, pos);
         this.type = type;
         this.command = command;
@@ -38,7 +35,7 @@ public class SqlShow extends SqlDdl {
     public static final SqlOperator SHOW =
             new SqlSpecialOperator("SHOW", SqlKind.OTHER_DDL);
 
-    public int getType() {
+    public ShowEnum getType() {
         return type;
     }
 

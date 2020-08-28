@@ -47,6 +47,7 @@ data: {
         "com.yuqi.sql.sqlnode.ddl.SqlUse",
         "com.yuqi.sql.sqlnode.ddl.SqlCreateTable",
         "com.yuqi.sql.sqlnode.type.SlothColumnType",
+        "com.yuqi.protocol.enums.ShowEnum"
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved

@@ -2,6 +2,7 @@ package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
 import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.enums.ShowEnum;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
@@ -39,49 +40,57 @@ public class SqlShowHandler implements Handler<SqlShow> {
     private static final String CREATE_TABLE_RESULT_COLUMN1 = "Table";
     private static final String CREATE_TABLE_RESULT_COLUMN2 = "Create Table";
 
+    private static final String SHOW_DATABASE_RESULT_COLUMN = "Database";
+
     @Override
     public void handle(ConnectionContext connectionContext, SqlShow type) {
         final String command = type.getCommand();
 
         List<List<String>> data;
-        String[] columnName = {"Database"};
-        final int showType = type.getType();
-        if (SqlShow.SHOW_DATABASES == showType) {
-            data = SlothSchemaHolder.INSTANCE.getAllSchemas().stream()
-                    .map(Lists::newArrayList)
-                    .collect(Collectors.toList());
+        String[] columnName = {SHOW_DATABASE_RESULT_COLUMN};
+        final ShowEnum showType = type.getType();
+        switch (showType) {
+            case SHOW_DBS:
+                data = SlothSchemaHolder.INSTANCE.getAllSchemas().stream()
+                        .map(Lists::newArrayList)
+                        .collect(Collectors.toList());
+                break;
 
-        } else if (SqlShow.SHOW_TABLES == showType) {
-            String db = connectionContext.getDb();
-            if (Objects.isNull(db)) {
-                MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
-                        NO_DATABASE_SELECTED.getCode(),
-                        NO_DATABASE_SELECTED.getMessage());
+            case SHOW_TABLBS:
+                final String db = connectionContext.getDb();
+                if (Objects.isNull(db)) {
+                    MysqlPackage mysqlPackage = PackageUtils.buildErrPackage(
+                            NO_DATABASE_SELECTED.getCode(),
+                            NO_DATABASE_SELECTED.getMessage());
 
-                connectionContext.write(mysqlPackage);
+                    connectionContext.write(mysqlPackage);
+                    return;
+                }
+                columnName = new String[] {String.join("_", Lists.newArrayList("Tables", "in", db))};
+
+                final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
+                data = slothSchema.getTables().stream().map(Lists::newArrayList).collect(Collectors.toList());
+
+                break;
+            case SHOW_CREATE:
+                final ShowCreateTableResult showCreateTableResult = getCreateTable(command, connectionContext.getDb());
+                if (showCreateTableResult.hasError) {
+                    connectionContext.write(showCreateTableResult.mysqlPackage);
+                    return;
+                }
+
+                data = Lists.newArrayListWithCapacity(1);
+                data.add(showCreateTableResult.columnValues);
+                columnName = showCreateTableResult.columnNames;
+
+                break;
+            default:
+                MysqlPackage r = PackageUtils.buildErrPackage(
+                        SYNTAX_ERROR.getCode(),
+                        String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()));
+
+                connectionContext.write(r);
                 return;
-            }
-            columnName = new String[] {String.join("_", Lists.newArrayList("Tables", "in", db))};
-
-            final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
-            data = slothSchema.getTables().stream().map(Lists::newArrayList).collect(Collectors.toList());
-        } else if (SqlShow.SHOW_CREATE_TABLE == showType) {
-            final ShowCreateTableResult showCreateTableResult = getCreateTable(command, connectionContext.getDb());
-            if (showCreateTableResult.hasError) {
-                connectionContext.write(showCreateTableResult.mysqlPackage);
-                return;
-            }
-
-            data = Lists.newArrayListWithCapacity(1);
-            data.add(showCreateTableResult.columnValues);
-            columnName = showCreateTableResult.columnNames;
-        } else {
-            MysqlPackage r = PackageUtils.buildErrPackage(
-                    SYNTAX_ERROR.getCode(),
-                    String.format(SYNTAX_ERROR.getMessage(), connectionContext.getQueryString()));
-
-            connectionContext.write(r);
-            return;
         }
 
         final List<Integer> columnTypes = Lists.newArrayList();

@@ -78,10 +78,8 @@ public class ProtocolMainThread implements Runnable {
                     ));
 
                     pipeline.addLast("bytebuf_to_buffer_decoder", new ByteBufToPackageDecoder());
-                    //pipeline.addLast("encoder", new MysqlPackageToByteBufEncoder());
-                    pipeline.addLast("authencatin", new AuthencationHandler());
-
-                    pipeline.addLast("handler", new MysqlPackageHandler());
+                    pipeline.addLast("authencation", new AuthencationHandler());
+                    pipeline.addLast("query_handler", new MysqlPackageHandler());
                 }
             });
 

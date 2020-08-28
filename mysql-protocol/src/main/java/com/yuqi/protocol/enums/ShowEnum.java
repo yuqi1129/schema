@@ -11,17 +11,17 @@ public enum ShowEnum {
     /**
      * show tables;
      */
-    SHOW_TABLBS(1, "tables"),
+    SHOW_TABLBS(0, "tables"),
 
     /**
      * show databases;
      */
-    SHOW_DBS(2, "databases"),
+    SHOW_DBS(1, "databases"),
 
     /**
      * show create table
      */
-    SHOW_CREATE(3, "create");
+    SHOW_CREATE(2, "create");
 
     private final int index;
     private final String startKeyWord;

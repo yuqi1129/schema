@@ -98,7 +98,7 @@ SqlShow SqlShow() :
 {
     SqlIdentifier command = null;
     SqlParserPos pos;
-    int type;
+    ShowEnum type;
 }
 {
     {
@@ -109,19 +109,19 @@ SqlShow SqlShow() :
     (
     <DATABASES>
     {
-        type = 0;
+        type = ShowEnum.SHOW_DBS;
     }
     |
     <TABLES>
     {
-        type = 1;
+        type = ShowEnum.SHOW_TABLBS;
     }
     |
     <CREATE>
     <TABLE>
     command = CompoundIdentifier()
     {
-        type = 2;
+        type = ShowEnum.SHOW_CREATE;
     }
     )
     {

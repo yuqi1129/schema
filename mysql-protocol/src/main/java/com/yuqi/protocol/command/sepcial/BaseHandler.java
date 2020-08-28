@@ -8,6 +8,6 @@ import com.yuqi.protocol.command.sqlnode.Handler;
  * @description your description
  * @time 31/7/20 18:45
  **/
-public abstract class AbstractHandler implements Handler<String> {
+public abstract class BaseHandler implements Handler<String> {
 
 }

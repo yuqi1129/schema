@@ -1,6 +1,7 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
+import com.yuqi.constant.StringConstants;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.enums.ShowEnum;
 import com.yuqi.protocol.pkg.MysqlPackage;
@@ -66,7 +67,8 @@ public class SqlShowHandler implements Handler<SqlShow> {
                     connectionContext.write(mysqlPackage);
                     return;
                 }
-                columnName = new String[] {String.join("_", Lists.newArrayList("Tables", "in", db))};
+                columnName = new String[] {String.join(StringConstants.UNDER_LINE,
+                        Lists.newArrayList("Tables", "in", db))};
 
                 final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
                 data = slothSchema.getTables().stream().map(Lists::newArrayList).collect(Collectors.toList());

@@ -2,6 +2,7 @@ package com.yuqi.protocol.command.sepcial;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.yuqi.constant.StringConstants;
 import com.yuqi.protocol.command.sqlnode.Handler;
 import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.ResultSetHolder;
@@ -30,16 +31,17 @@ public class ExplainHandler implements Handler<String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExplainHandler.class);
     public static final ExplainHandler INSTANCE = new ExplainHandler();
 
+    private static final String EXPLAIN_RESULT_COLUMN = "Plan";
     @Override
     public void handle(ConnectionContext connectionContext, String type) {
 
-        final String query = type.split(" ", 2)[1];
+        final String query = type.split(StringConstants.SPACE, 2)[1];
         final SlothParser slothParser = ParserFactory.getParser(query, connectionContext.getDb());
 
         ByteBuf result;
         try {
             final RelNode relNode = slothParser.getPlan(query);
-            final String planString = "\n" + RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES);
+            final String planString = StringConstants.LINE_SEPARATOR + RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES);
             final List<List<String>> data = Lists.newArrayList();
             data.add(Lists.newArrayList(planString));
 
@@ -48,7 +50,7 @@ public class ExplainHandler implements Handler<String> {
                     .columnType(Lists.newArrayList(MYSQL_TYPE_VAR_STRING))
                     .schema(StringUtils.EMPTY)
                     .data(data)
-                    .columnName(new String[]{"Plan"})
+                    .columnName(new String[]{EXPLAIN_RESULT_COLUMN})
                     .build();
 
             result = PackageUtils.buildResultSet(resultSetHolder);

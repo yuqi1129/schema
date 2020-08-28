@@ -17,9 +17,10 @@ import java.util.List;
  * @description your description
  * @time 31/7/20 18:46
  **/
-public class CurrentDatabaseHandler extends AbstractHandler {
+public class CurrentDatabaseHandler extends BaseHandler {
     public static final CurrentDatabaseHandler INSTANCE = new CurrentDatabaseHandler();
 
+    public static final String CURRENT_DATABASE_RESULT_COLUMN = "database()";
     @Override
     public void handle(ConnectionContext connectionContext, String type) {
         String db = connectionContext.getDb();
@@ -28,7 +29,7 @@ public class CurrentDatabaseHandler extends AbstractHandler {
         data.add(Lists.newArrayList(db));
 
         final ResultSetHolder resultSetHolder = ResultSetHolder.builder()
-                .columnName(new String[] {"database()"})
+                .columnName(new String[] {CURRENT_DATABASE_RESULT_COLUMN})
                 .columnType(Lists.newArrayList(ColumnTypeConstants.MYSQL_TYPE_VAR_STRING))
                 .data(data)
                 .schema(StringUtils.EMPTY)

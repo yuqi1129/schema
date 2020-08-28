@@ -2,6 +2,7 @@ package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.yuqi.constant.StringConstants;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.protocol.connection.ConnectionContext;
@@ -112,7 +113,7 @@ public class SqlInsertHandler implements Handler<SqlInsert> {
         if (Objects.isNull(slothTable)) {
             r = PackageUtils.buildErrPackage(
                     TABLE_NOT_EXISTS.getCode(),
-                    String.format(TABLE_NOT_EXISTS.getMessage(), db + "." + tableName));
+                    String.format(TABLE_NOT_EXISTS.getMessage(), db + StringConstants.DOT + tableName));
             connectionContext.write(r);
             return null;
         }

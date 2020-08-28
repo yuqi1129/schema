@@ -97,13 +97,4 @@ public class SlothSchemaHolder implements LifeCycle {
     public Collection<SlothSchema> getSchemaMap() {
         return schemaMap.values();
     }
-
-    private void addDefaultSchemasAndTables() {
-
-        //first add information schema
-        SlothSchema slothSchema = registerSchema("information_schema");
-
-        //second add inner table in information_schema;
-
-    }
 }

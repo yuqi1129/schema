@@ -1,7 +1,7 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.Lists;
-import com.yuqi.engine.data.value.Value;
+import com.yuqi.engine.SlothRow;
 import org.apache.calcite.rel.type.RelDataType;
 
 import java.util.Iterator;
@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 9/8/20 13:14
  **/
-public class SlothUnionOperator extends AbstractOperator {
-    private List<Operator> input;
+public class SlothUnionOperator extends AbstractOperator<SlothRow> {
+    private List<Operator<SlothRow>> input;
     private boolean unionAll;
 
     private int i = 0;
@@ -24,9 +24,9 @@ public class SlothUnionOperator extends AbstractOperator {
 
     private boolean hasFetchData = false;
     //union
-    private Iterator<List<Value>> valueIt;
+    private Iterator<SlothRow> valueIt;
 
-    public SlothUnionOperator(RelDataType rowTypes, List<Operator> input, boolean unionAll) {
+    public SlothUnionOperator(RelDataType rowTypes, List<Operator<SlothRow>> input, boolean unionAll) {
         super(rowTypes);
         this.input = input;
         this.unionAll = unionAll;
@@ -40,29 +40,29 @@ public class SlothUnionOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
+    public SlothRow next() {
         return unionAll ? handleUnionAll() : handleNormal();
     }
 
-    private List<Value> handleUnionAll() {
+    private SlothRow handleUnionAll() {
         while (i < inputSize) {
-            List<Value> value = input.get(i).next();
-            if (EOF != value) {
+            SlothRow value = input.get(i).next();
+            if (SlothRow.EOF_ROW != value) {
                 return value;
             }
             i++;
         }
 
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
-    private List<Value> handleNormal() {
+    private SlothRow handleNormal() {
         if (!hasFetchData) {
-            List<List<Value>> valueHolder = Lists.newArrayList();
+            List<SlothRow> valueHolder = Lists.newArrayList();
             input.forEach(o -> {
-                List<Value> v;
+                SlothRow v;
 
-                while ((v = o.next()) != EOF) {
+                while ((v = o.next()) != SlothRow.EOF_ROW) {
                     valueHolder.add(v);
                 }
             });
@@ -80,7 +80,7 @@ public class SlothUnionOperator extends AbstractOperator {
             return valueIt.next();
         }
 
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
     @Override

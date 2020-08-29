@@ -1,6 +1,7 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.ImmutableList;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.util.TypeConversionUtils;
@@ -18,11 +19,11 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 4/8/20 18:52
  **/
-public class SlothValueOperator extends AbstractOperator {
+public class SlothValueOperator extends AbstractOperator<SlothRow> {
     private final ImmutableList<ImmutableList<RexLiteral>> values;
 
     //这里需要搞成Literal ???,
-    private Iterator<List<Value>> r;
+    private Iterator<SlothRow> r;
 
     public SlothValueOperator(ImmutableList<ImmutableList<RexLiteral>> values, RelDataType relDataType) {
         super(relDataType);
@@ -32,24 +33,27 @@ public class SlothValueOperator extends AbstractOperator {
     @Override
     public void open() {
         r = values.stream()
-                .map(l -> l.stream()
-                        .map(r -> {
-                                final SqlTypeName sqlTypeName = r.getType().getSqlTypeName();
-                                DataType dataType = TypeConversionUtils.getBySqlTypeName(sqlTypeName);
-                                return new Value(r.getValue2(), dataType);
-                        }).collect(Collectors.toList())
+                .map(l -> {
+                            List<Value> values = l.stream()
+                                    .map(r -> {
+                                        final SqlTypeName sqlTypeName = r.getType().getSqlTypeName();
+                                        DataType dataType = TypeConversionUtils.getBySqlTypeName(sqlTypeName);
+                                        return new Value(r.getValue2(), dataType);
+                                    }).collect(Collectors.toList());
+                            return new SlothRow(values);
+                        }
                 ).collect(Collectors.toList())
                 .iterator();
 
     }
 
     @Override
-    public List<Value> next() {
+    public SlothRow next() {
         if (r.hasNext()) {
             return r.next();
         }
 
-        return null;
+        return SlothRow.EOF_ROW;
     }
 
     @Override

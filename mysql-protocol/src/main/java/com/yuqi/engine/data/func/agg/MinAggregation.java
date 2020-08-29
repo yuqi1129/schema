@@ -44,7 +44,7 @@ public class MinAggregation extends MaxAggregation {
         }
 
         v = originDatas.stream()
-                .map(values -> values.get(index))
+                .map(values -> values.getColumn(index))
                 .collect(Collectors.toList());
 
         if (isDistinct) {

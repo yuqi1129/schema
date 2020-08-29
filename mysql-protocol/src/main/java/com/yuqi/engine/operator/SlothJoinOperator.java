@@ -1,6 +1,7 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.Lists;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.expr.Symbol;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
@@ -23,10 +24,10 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 5/7/20 16:22
  **/
-public class SlothJoinOperator extends AbstractOperator {
+public class SlothJoinOperator extends AbstractOperator<SlothRow> {
 
-    private Operator left;
-    private Operator right;
+    private Operator<SlothRow> left;
+    private Operator<SlothRow> right;
     private RexNode joinCondition;
     private JoinRelType joinType;
 
@@ -36,8 +37,8 @@ public class SlothJoinOperator extends AbstractOperator {
     private boolean hasFetchData = false;
 
     //待排序的中间数据, 目前数据都直接存入内存
-    private List<List<Value>> leftValueHodler;
-    private List<List<Value>> rigthValueHodler;
+    private List<SlothRow> leftValueHodler;
+    private List<SlothRow> rigthValueHodler;
 
     //读index
     private int leftReadIndex = 0;
@@ -52,7 +53,7 @@ public class SlothJoinOperator extends AbstractOperator {
     private List<DataType> leftTypes;
     private List<DataType> rightTypes;
 
-    public SlothJoinOperator(Operator left, Operator right, RexNode joinCondition,
+    public SlothJoinOperator(Operator<SlothRow> left, Operator<SlothRow> right, RexNode joinCondition,
                              JoinRelType joinType, RelDataType rowType) {
         super(rowType);
         this.left = left;
@@ -79,7 +80,7 @@ public class SlothJoinOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
+    public SlothRow next() {
         if (!hasFetchData) {
             init();
         }
@@ -96,41 +97,41 @@ public class SlothJoinOperator extends AbstractOperator {
         }
     }
 
-    private List<Value> handleInnerJoin() {
+    private SlothRow handleInnerJoin() {
         //直nestloop, 也可以sort merge/hash
-        List<Value> leftValue;
+        SlothRow leftValue;
         while (leftReadIndex < leftValueHodler.size()) {
             leftValue = leftValueHodler.get(leftReadIndex);
             while (rightReadIndex < rigthValueHodler.size()) {
-                List<Value> mergeValue = Lists.newArrayList(leftValue);
-                mergeValue.addAll(rigthValueHodler.get(rightReadIndex));
+                List<Value> mergeValue = Lists.newArrayList(leftValue.getAllColumn());
+                mergeValue.addAll(rigthValueHodler.get(rightReadIndex).getAllColumn());
                 joinConditionSymbol.setInput(mergeValue);
                 rightReadIndex++;
                 if (joinConditionSymbol.compute().booleanValue()) {
-                    return mergeValue.stream().map(Value::copy).collect(Collectors.toList());
+                     return new SlothRow(mergeValue.stream().map(Value::copy).collect(Collectors.toList()));
                 }
             }
 
             leftReadIndex++;
             rightReadIndex = 0;
         }
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
 
-    private List<Value> handleLeftJoin() {
-        List<Value> leftValue;
+    private SlothRow handleLeftJoin() {
+        SlothRow leftValue;
         while (leftReadIndex < leftValueHodler.size()) {
             leftValue = leftValueHodler.get(leftReadIndex);
             while (rightReadIndex < rigthValueHodler.size()) {
-                List<Value> mergeValue = Lists.newArrayList(leftValue);
-                mergeValue.addAll(rigthValueHodler.get(rightReadIndex));
+                List<Value> mergeValue = Lists.newArrayList(leftValue.getAllColumn());
+                mergeValue.addAll(rigthValueHodler.get(rightReadIndex).getAllColumn());
 
                 joinConditionSymbol.setInput(mergeValue);
                 rightReadIndex++;
                 if (joinConditionSymbol.compute().booleanValue()) {
                     flag = true;
-                    return mergeValue.stream().map(Value::copy).collect(Collectors.toList());
+                    return new SlothRow(mergeValue.stream().map(Value::copy).collect(Collectors.toList()));
                 }
             }
 
@@ -139,30 +140,33 @@ public class SlothJoinOperator extends AbstractOperator {
 
             if (!flag) {
                 for (DataType dataType : rightTypes) {
-                    leftValue.add(new Value(null, dataType));
+                    leftValue.getAllColumn().add(new Value(null, dataType));
                 }
-                return leftValue.stream().map(Value::copy).collect(Collectors.toList());
+                return new SlothRow(leftValue.getAllColumn()
+                         .stream()
+                         .map(Value::copy)
+                         .collect(Collectors.toList()));
             }
 
             flag = false;
 
         }
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
-    private List<Value> handleRightJoin() {
-        List<Value> rigthValue;
+    private SlothRow handleRightJoin() {
+        SlothRow rigthValue;
         while (rightReadIndex < rigthValueHodler.size()) {
             rigthValue = rigthValueHodler.get(rightReadIndex);
             while (leftReadIndex < leftValueHodler.size()) {
-                List<Value> mergeValue = Lists.newArrayList(leftValueHodler.get(leftReadIndex));
-                mergeValue.addAll(rigthValue);
+                List<Value> mergeValue = Lists.newArrayList(leftValueHodler.get(leftReadIndex).getAllColumn());
+                mergeValue.addAll(rigthValue.getAllColumn());
 
                 joinConditionSymbol.setInput(mergeValue);
                 leftReadIndex++;
                 if (joinConditionSymbol.compute().booleanValue()) {
                     flag = true;
-                    return mergeValue.stream().map(Value::copy).collect(Collectors.toList());
+                    return new SlothRow(mergeValue.stream().map(Value::copy).collect(Collectors.toList()));
                 }
             }
 
@@ -171,36 +175,36 @@ public class SlothJoinOperator extends AbstractOperator {
 
             if (!flag) {
                 List<Value> mergeValues = leftTypes.stream().map(t -> new Value(null, t)).collect(Collectors.toList());
-                mergeValues.addAll(rigthValue);
+                mergeValues.addAll(rigthValue.getAllColumn());
                 flag = false;
-                return mergeValues.stream().map(Value::copy).collect(Collectors.toList());
+                return new SlothRow(mergeValues.stream().map(Value::copy).collect(Collectors.toList()));
             }
 
             flag = false;
 
         }
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
 
-    private List<Value> handleFullJoin() {
+    private SlothRow handleFullJoin() {
         //MySQL do not support full out join
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
 
     private void init() {
-        List<Value> leftValue;
-        List<Value> rightValue;
+        SlothRow leftValue;
+        SlothRow rightValue;
 
         leftValueHodler = Lists.newArrayList();
         rigthValueHodler = Lists.newArrayList();
 
-        while ((leftValue = left.next()) != EOF) {
+        while ((leftValue = left.next()) != SlothRow.EOF_ROW) {
             leftValueHodler.add(leftValue);
         }
 
-        while ((rightValue = right.next()) != EOF) {
+        while ((rightValue = right.next()) != SlothRow.EOF_ROW) {
             rigthValueHodler.add(rightValue);
         }
         //sort;
@@ -244,18 +248,18 @@ public class SlothJoinOperator extends AbstractOperator {
         }
     }
 
-    private void sortData(List<List<Value>> data, List<Integer> joinIndex) {
+    private void sortData(List<SlothRow> data, List<Integer> joinIndex) {
         data.sort((a, b) -> sort(0, joinIndex, a, b));
     }
 
 
-    private int sort(int i, List<Integer> joinIndex, List<Value> a, List<Value> b) {
+    private int sort(int i, List<Integer> joinIndex, SlothRow a, SlothRow b) {
         if (i >= joinIndex.size()) {
             return 0;
         }
         int index = joinIndex.get(i);
 
-        int r = a.get(index).compareTo(b.get(index));
+        int r = a.getColumn(index).compareTo(b.getColumn(index));
         if (r != 0) {
             return r;
         }

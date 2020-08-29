@@ -9,11 +9,11 @@ import org.apache.calcite.rel.RelNode;
  * @description your description
  * @time 27/7/20 20:54
  **/
-public interface SlothRel extends RelNode {
+public interface SlothRel<R> extends RelNode {
 
     //add some implement method
 
-    default Operator implement() {
+    default Operator<R> implement() {
         return null;
     }
 }

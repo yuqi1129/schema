@@ -1,6 +1,7 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.Lists;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.expr.Symbol;
 import com.yuqi.engine.data.func.agg.AbstractAggregation;
 import com.yuqi.engine.data.func.agg.CountAggregation;
@@ -26,9 +27,9 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 5/7/20 16:38
  **/
-public class SlothAggregateOperator extends AbstractOperator {
+public class SlothAggregateOperator extends AbstractOperator<SlothRow> {
 
-    private Operator input;
+    private Operator<SlothRow> input;
     private ImmutableBitSet groupset;
 
     //currently do know the use;
@@ -38,11 +39,11 @@ public class SlothAggregateOperator extends AbstractOperator {
     private List<Integer> groupByIndex;
     private List<Symbol> aggCalls;
 
-    private List<List<Value>> valueHolder = Lists.newArrayList();
+    private List<SlothRow> valueHolder = Lists.newArrayList();
     private boolean hasFetchData = false;
-    private Iterator<List<Value>> valueIterator;
+    private Iterator<SlothRow> valueIterator;
 
-    public SlothAggregateOperator(Operator input, ImmutableBitSet groupset, List<ImmutableBitSet> groupSets,
+    public SlothAggregateOperator(Operator<SlothRow> input, ImmutableBitSet groupset, List<ImmutableBitSet> groupSets,
                                   List<AggregateCall> aggregateCalls, RelDataType rowType) {
 
         super(rowType);
@@ -61,10 +62,10 @@ public class SlothAggregateOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
-        List<Value> v = EOF;
+    public SlothRow next() {
+        SlothRow v = SlothRow.EOF_ROW;
         if (!hasFetchData) {
-            while ((v = input.next()) != EOF) {
+            while ((v = input.next()) != SlothRow.EOF_ROW) {
                 valueHolder.add(v);
             }
 
@@ -90,14 +91,14 @@ public class SlothAggregateOperator extends AbstractOperator {
         //do your work
     }
 
-    private Iterator<List<Value>> getResultWithGroupBy(List<List<Value>> valueHolder) {
+    private Iterator<SlothRow> getResultWithGroupBy(List<SlothRow> valueHolder) {
         List<AbstractAggregation> aggregations = createAggregation();
-        return valueHolder.stream().collect(Collectors.groupingBy(valueList -> {
+        return valueHolder.stream().collect(Collectors.groupingBy(row -> {
             final StringBuilder builder = new StringBuilder();
 
             for (Integer i : groupByIndex) {
                 //TODO 用MD5拼key
-                builder.append(valueList.get(i).stringValue()).append("<------------>");
+                builder.append(row.getColumn(i).stringValue()).append("<------------>");
             }
             return builder.toString();
         })).values().stream().map(l -> {
@@ -109,15 +110,15 @@ public class SlothAggregateOperator extends AbstractOperator {
             List<Value> r = Lists.newArrayList();
             for (Integer i : groupByIndex) {
                 //取第一个数据 做为rowkey
-                r.add(l.get(0).get(i).copy());
+                r.add(l.get(0).getColumn(i).copy());
             }
 
             r.addAll(g);
-            return r;
+            return new SlothRow(r);
         }).iterator();
     }
 
-    private Iterator<List<Value>> getResultWithOutGroupBy(List<List<Value>> valueHolder) {
+    private Iterator<SlothRow> getResultWithOutGroupBy(List<SlothRow> valueHolder) {
         final List<AbstractAggregation> abstractAggregations = createAggregation();
 
         final List<Value> values = abstractAggregations.stream().map(a -> {
@@ -125,8 +126,8 @@ public class SlothAggregateOperator extends AbstractOperator {
             return a.compute();
 
         }).collect(Collectors.toList());
-        final List<List<Value>> r = Lists.newArrayList();
-        r.add(values);
+        final List<SlothRow> r = Lists.newArrayList();
+        r.add(new SlothRow(values));
 
         return r.iterator();
     }

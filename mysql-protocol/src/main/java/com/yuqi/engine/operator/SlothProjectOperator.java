@@ -1,7 +1,7 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.expr.Symbol;
-import com.yuqi.engine.data.value.Value;
 import org.apache.calcite.rel.type.RelDataType;
 
 import java.util.List;
@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 5/7/20 16:04
  **/
-public class SlothProjectOperator extends AbstractOperator {
-    private Operator child;
+public class SlothProjectOperator extends AbstractOperator<SlothRow> {
+    private Operator<SlothRow> child;
     private List<Symbol> projects;
 
-    public SlothProjectOperator(Operator child, List<Symbol> projects, RelDataType rowType) {
+    public SlothProjectOperator(Operator<SlothRow> child, List<Symbol> projects, RelDataType rowType) {
         super(rowType);
         this.child = child;
         this.projects = projects;
@@ -31,14 +31,14 @@ public class SlothProjectOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
-        final List<Value> input = child.next();
-        if (input == EOF) {
-            return EOF;
+    public SlothRow next() {
+        final SlothRow input = child.next();
+        if (input == SlothRow.EOF_ROW) {
+            return SlothRow.EOF_ROW;
         }
 
-        projects.forEach(symbol -> symbol.setInput(input));
-        return projects.stream().map(Symbol::compute).collect(Collectors.toList());
+        projects.forEach(symbol -> symbol.setInput(input.getAllColumn()));
+        return new SlothRow(projects.stream().map(Symbol::compute).collect(Collectors.toList()));
     }
 
     @Override

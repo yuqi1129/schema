@@ -31,7 +31,7 @@ public class CountAggregation extends AbstractAggregation {
         count = 0;
 
         v = originDatas.stream()
-                .map(values -> countStart ? values.get(0) : values.get(index))
+                .map(values -> countStart ? values.getColumn(0) : values.getColumn(index))
                 .collect(Collectors.toList());
 
         if (!countStart && isDistinct) {

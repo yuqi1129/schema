@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothFilterOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -28,8 +29,8 @@ public class SlothFilter extends Filter implements SlothRel {
     }
 
     @Override
-    public Operator implement() {
-        final Operator input = ((SlothRel) getInput()).implement();
+    public Operator<SlothRow> implement() {
+        final Operator<SlothRow> input = ((SlothRel) getInput()).implement();
         RelDataType relDataType = this.getRowType();
         RexNode condition = this.condition;
 

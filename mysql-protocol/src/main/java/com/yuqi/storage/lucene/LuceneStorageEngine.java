@@ -2,6 +2,7 @@ package com.yuqi.storage.lucene;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 import org.apache.lucene.document.Document;
@@ -177,7 +178,7 @@ public class LuceneStorageEngine implements StorageEngine {
         return document;
     }
 
-    private List<Value> documentToRow(Document document) {
+    private SlothRow documentToRow(Document document) {
 
         final Map<String, DataType> columnAndDataType = slothTableEngine.getColumnAndDataType();
         //TODO 可能只select部分列，目前这里是选择全部的列，效率不太好
@@ -213,11 +214,11 @@ public class LuceneStorageEngine implements StorageEngine {
 
         }
 
-        return rs;
+        return new SlothRow(rs);
     }
 
     @Override
-    public Iterator<List<Value>> query(QueryContext queryContext) throws IOException {
+    public Iterator<SlothRow> query(QueryContext queryContext) throws IOException {
 
         final IndexSearcher searcher = new IndexSearcher(indexReader);
         //final IndexSearcher searcher = searcherManager.acquire();

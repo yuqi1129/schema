@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothUnionOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 9/8/20 11:15
  **/
-public class SlothUnion extends Union implements SlothRel {
+public class SlothUnion extends Union implements SlothRel<SlothRow> {
     public SlothUnion(RelOptCluster cluster, RelTraitSet traits,
                       List<RelNode> inputs, boolean all) {
         super(cluster, traits, inputs, all);
@@ -29,9 +30,9 @@ public class SlothUnion extends Union implements SlothRel {
     }
 
     @Override
-    public Operator implement() {
-        final List<Operator> inputs = getInputs().stream()
-                .map(r -> ((SlothRel) r).implement())
+    public Operator<SlothRow> implement() {
+        final List<Operator<SlothRow>> inputs = getInputs().stream()
+                .map(r -> (Operator<SlothRow>) ((SlothRel) r).implement())
                 .collect(Collectors.toList());
 
         return new SlothUnionOperator(getRowType(), inputs, all);

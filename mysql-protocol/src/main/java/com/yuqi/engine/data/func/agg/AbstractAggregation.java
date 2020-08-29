@@ -1,7 +1,7 @@
 package com.yuqi.engine.data.func.agg;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.type.DataType;
-import com.yuqi.engine.data.value.Value;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public abstract class AbstractAggregation implements Aggregation {
     protected DataType resultType;
 
     protected int index;
-    protected List<List<Value>> originDatas;
+    protected List<SlothRow> originDatas;
     protected List<Integer> groupByIndex;
 
     protected boolean showGroupByColumn = false;
@@ -68,7 +68,7 @@ public abstract class AbstractAggregation implements Aggregation {
         return inputType;
     }
 
-    public void setOriginDatas(List<List<Value>> originDatas) {
+    public void setOriginDatas(List<SlothRow> originDatas) {
         this.originDatas = originDatas;
     }
 }

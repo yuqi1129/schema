@@ -4,6 +4,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.yuqi.LifeCycle;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.SlothTable;
@@ -85,8 +86,8 @@ public class SlothTableEngine implements LifeCycle {
         }
     }
 
-    public Iterator<List<Value>> search(QueryContext queryContext) {
-        List<Iterator<List<Value>>> searchIts = Lists.newArrayList();
+    public Iterator<SlothRow> search(QueryContext queryContext) {
+        List<Iterator<SlothRow>> searchIts = Lists.newArrayList();
 
         try {
             for (StorageEngine storageEngine : storageEngines) {

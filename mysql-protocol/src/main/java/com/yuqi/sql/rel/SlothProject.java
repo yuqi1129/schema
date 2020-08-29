@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.expr.Symbol;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothProjectOperator;
@@ -22,7 +23,7 @@ import java.util.List;
  * @description your description
  * @time 27/7/20 21:11
  **/
-public class SlothProject extends Project implements SlothRel {
+public class SlothProject extends Project implements SlothRel<SlothRow> {
     public SlothProject(RelOptCluster cluster, RelTraitSet traits, RelNode input, List<? extends RexNode> projects, RelDataType rowType) {
         super(cluster, traits, input, projects, rowType);
     }
@@ -39,8 +40,8 @@ public class SlothProject extends Project implements SlothRel {
 
 
     @Override
-    public Operator implement() {
-        final Operator child = ((SlothRel) input).implement();
+    public Operator<SlothRow> implement() {
+        final Operator<SlothRow> child = ((SlothRel) input).implement();
 
         //todo
         final List<Symbol> symbols = RexShuttleUtils.rexToSymbox(this.exps);

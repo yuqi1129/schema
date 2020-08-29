@@ -1,8 +1,8 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.Sets;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.type.DataType;
-import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.SlothSchemaHolder;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.storage.lucene.QueryContext;
@@ -22,7 +22,7 @@ import java.util.List;
  * @description your description
  * @time 5/7/20 15:46
  **/
-public class SlothTableScanOperator extends AbstractOperator {
+public class SlothTableScanOperator extends AbstractOperator<SlothRow> {
 
     private RelOptTable table;
 
@@ -35,7 +35,7 @@ public class SlothTableScanOperator extends AbstractOperator {
     private RelDataType outputType;
 
     //MOCK
-    private Iterator<List<Value>> iterator;
+    private Iterator<SlothRow> iterator;
     private List<DataType> dataTypes;
 
     public SlothTableScanOperator(RelOptTable table, RelDataType originType,
@@ -62,12 +62,12 @@ public class SlothTableScanOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
+    public SlothRow next() {
         while (iterator.hasNext()) {
             return iterator.next();
         }
 
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
     @Override

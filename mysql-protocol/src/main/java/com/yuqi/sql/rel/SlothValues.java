@@ -1,6 +1,7 @@
 package com.yuqi.sql.rel;
 
 import com.google.common.collect.ImmutableList;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothValueOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -18,7 +19,7 @@ import org.apache.calcite.rex.RexLiteral;
  * @description your description
  * @time 27/7/20 21:15
  **/
-public class SlothValues extends Values implements SlothRel {
+public class SlothValues extends Values implements SlothRel<SlothRow> {
 
     public SlothValues(RelOptCluster cluster, RelDataType rowType, ImmutableList<ImmutableList<RexLiteral>> tuples, RelTraitSet traits) {
         super(cluster, rowType, tuples, traits);
@@ -36,7 +37,7 @@ public class SlothValues extends Values implements SlothRel {
 
 
     @Override
-    public Operator implement() {
+    public Operator<SlothRow> implement() {
         return new SlothValueOperator(tuples, rowType);
     }
 }

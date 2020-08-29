@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothAggregateOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -19,7 +20,7 @@ import java.util.List;
  * @description your description
  * @time 7/8/20 14:20
  **/
-public class SlothAggregate extends Aggregate implements SlothRel {
+public class SlothAggregate extends Aggregate implements SlothRel<SlothRow> {
     public SlothAggregate(RelOptCluster cluster, RelTraitSet traitSet, List<RelHint> hints, RelNode input,
                           ImmutableBitSet groupSet, List<ImmutableBitSet> groupSets, List<AggregateCall> aggCalls) {
         super(cluster, traitSet, hints, input, groupSet, groupSets, aggCalls);
@@ -32,8 +33,8 @@ public class SlothAggregate extends Aggregate implements SlothRel {
     }
 
     @Override
-    public Operator implement() {
-        final Operator input = ((SlothRel) getInput()).implement();
+    public Operator<SlothRow> implement() {
+        final Operator<SlothRow> input = ((SlothRel) getInput()).implement();
 
         //select id from person group by id
         //select distict id from person;

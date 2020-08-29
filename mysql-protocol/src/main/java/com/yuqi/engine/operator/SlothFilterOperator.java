@@ -1,12 +1,10 @@
 package com.yuqi.engine.operator;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.expr.Symbol;
-import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.rex.RexToSymbolShuttle;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rex.RexNode;
-
-import java.util.List;
 
 
 /**
@@ -15,14 +13,14 @@ import java.util.List;
  * @description your description
  * @time 5/7/20 16:15
  **/
-public class SlothFilterOperator extends AbstractOperator {
+public class SlothFilterOperator extends AbstractOperator<SlothRow> {
 
     private RexNode filterCondtion;
-    private Operator input;
+    private Operator<SlothRow> input;
 
     private Symbol filter;
 
-    public SlothFilterOperator(RexNode filterCondtion, Operator input, RelDataType relDataType) {
+    public SlothFilterOperator(RexNode filterCondtion, Operator<SlothRow> input, RelDataType relDataType) {
         super(relDataType);
         this.filterCondtion = filterCondtion;
         this.input = input;
@@ -35,17 +33,17 @@ public class SlothFilterOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
-        List<Value> r;
+    public SlothRow next() {
+        SlothRow r;
 
-        while ((r = input.next()) != EOF) {
-            filter.setInput(r);
+        while ((r = input.next()) != SlothRow.EOF_ROW) {
+            filter.setInput(r.getAllColumn());
             if (filter.compute().booleanValue()) {
                 return r;
             }
         }
 
-        return EOF;
+        return SlothRow.EOF_ROW;
     }
 
     @Override

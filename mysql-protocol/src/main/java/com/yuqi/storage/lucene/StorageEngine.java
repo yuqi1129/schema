@@ -1,6 +1,7 @@
 package com.yuqi.storage.lucene;
 
 import com.yuqi.LifeCycle;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.value.Value;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public interface StorageEngine extends LifeCycle {
      *
      * @param queryContext
      */
-    Iterator<List<Value>> query(QueryContext queryContext) throws IOException;
+    Iterator<SlothRow> query(QueryContext queryContext) throws IOException;
 
 
     /**

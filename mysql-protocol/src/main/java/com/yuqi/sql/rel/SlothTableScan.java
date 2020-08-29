@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothTableScanOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -21,7 +22,7 @@ import java.util.Objects;
  * @description your description
  * @time 28/7/20 20:22
  **/
-public class SlothTableScan extends TableScan implements SlothRel {
+public class SlothTableScan extends TableScan implements SlothRel<SlothRow> {
 
     /**
      * Project push to tables scan
@@ -71,7 +72,7 @@ public class SlothTableScan extends TableScan implements SlothRel {
     }
 
     @Override
-    public Operator implement() {
+    public Operator<SlothRow> implement() {
         //TODO 这里需要统一type 转化
         return new SlothTableScanOperator(this.table, this.rowType, outputType, projects, condition);
     }

@@ -1,7 +1,6 @@
 package com.yuqi.engine.operator;
 
 import com.yuqi.engine.data.type.DataType;
-import com.yuqi.engine.data.value.Value;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * @description your description
  * @time 5/7/20 15:38
  **/
-public interface Operator {
+public interface Operator<R> {
 
     /**
      * Open operator, do some init work
@@ -20,9 +19,11 @@ public interface Operator {
 
     /**
      * Get next row, next has another value to identify the value type
+     *
+     * R is the row type
      * @return
      */
-    List<Value> next();
+    R next();
 
     /**
      * do close work, eg, you can close resource/network

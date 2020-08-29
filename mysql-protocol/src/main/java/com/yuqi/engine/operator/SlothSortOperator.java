@@ -1,7 +1,7 @@
 package com.yuqi.engine.operator;
 
 import com.google.common.collect.Lists;
-import com.yuqi.engine.data.value.Value;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.sql.rex.RexToSymbolShuttle;
 import org.apache.calcite.rel.RelFieldCollation;
 import org.apache.calcite.rel.type.RelDataType;
@@ -17,14 +17,14 @@ import java.util.List;
  * @description your description
  * @time 6/8/20 18:56
  **/
-public class SlothSortOperator extends AbstractOperator {
+public class SlothSortOperator extends AbstractOperator<SlothRow> {
     private final List<RelFieldCollation> sort;
     private RexNode offset;
     private RexNode limit;
 
-    private Operator input;
-    private List<List<Value>> sortHolder = Lists.newArrayList();
-    private Iterator<List<Value>> sortIterator;
+    private Operator<SlothRow> input;
+    private List<SlothRow> sortHolder = Lists.newArrayList();
+    private Iterator<SlothRow> sortIterator;
 
     private int offsetValue;
     private int limitValue;
@@ -33,7 +33,7 @@ public class SlothSortOperator extends AbstractOperator {
     private int hasFetchNumberOfData = 0;
 
     public SlothSortOperator(List<RelFieldCollation> sort, RexNode offset, RexNode limit,
-                             Operator input, RelDataType relDataType) {
+                             Operator<SlothRow> input, RelDataType relDataType) {
         super(relDataType);
 
         this.sort = sort;
@@ -53,35 +53,35 @@ public class SlothSortOperator extends AbstractOperator {
     }
 
     @Override
-    public List<Value> next() {
+    public SlothRow next() {
         if (limitValue != -1 && hasFetchNumberOfData >= limitValue) {
-            return EOF;
+            return SlothRow.EOF_ROW;
         }
 
-        List<Value> data = EOF;
+        SlothRow data = SlothRow.EOF_ROW;
         if (CollectionUtils.isEmpty(sort)) {
             int o = 0;
             if (!haveFetchData) {
                 if (offsetValue > 0) {
-                    while (o < offsetValue && input.next() != EOF) {
+                    while (o < offsetValue && input.next() != SlothRow.EOF_ROW) {
                         o++;
                     }
 
                     if (o < offsetValue) {
-                        return EOF;
+                        return SlothRow.EOF_ROW;
                     }
                 }
                 haveFetchData = true;
             }
             data = input.next();
 
-            if (limitValue != -1 && data != EOF) {
+            if (limitValue != -1 && data != SlothRow.EOF_ROW) {
                 hasFetchNumberOfData++;
             }
             return data;
         } else {
             if (!haveFetchData) {
-                while ((data = input.next()) != EOF) {
+                while ((data = input.next()) != SlothRow.EOF_ROW) {
                     sortHolder.add(data);
                 }
 
@@ -98,7 +98,7 @@ public class SlothSortOperator extends AbstractOperator {
 
                     //说明offset 超过了实际总数据值
                     if (o != offsetValue) {
-                        return EOF;
+                        return SlothRow.EOF_ROW;
                     }
                 }
             }
@@ -119,11 +119,11 @@ public class SlothSortOperator extends AbstractOperator {
 
 
     //直接内存排序, 如果数据量过大，可以考虑归并排
-    private void sortData(List<List<Value>> data) {
+    private void sortData(List<SlothRow> data) {
         data.sort((a, b) -> sort(0, a, b));
     }
 
-    private int sort(int i, List<Value> a, List<Value> b) {
+    private int sort(int i, SlothRow a, SlothRow b) {
         if (i >= sort.size()) {
             return 0;
         }
@@ -132,7 +132,7 @@ public class SlothSortOperator extends AbstractOperator {
         int index = relFieldCollation.getFieldIndex();
         RelFieldCollation.Direction direction = relFieldCollation.getDirection();
 
-        int r = a.get(index).compareTo(b.get(index));
+        int r = a.getColumn(index).compareTo(b.getColumn(index));
         if (r != 0) {
             return direction == RelFieldCollation.Direction.ASCENDING ? r : -r;
         }

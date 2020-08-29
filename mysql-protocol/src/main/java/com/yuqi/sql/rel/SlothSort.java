@@ -1,5 +1,6 @@
 package com.yuqi.sql.rel;
 
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothSortOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -19,7 +20,7 @@ import java.util.List;
  * @description your description
  * @time 4/8/20 20:14
  **/
-public class SlothSort extends Sort implements SlothRel {
+public class SlothSort extends Sort implements SlothRel<SlothRow> {
 
     public SlothSort(RelOptCluster cluster, RelTraitSet traits, RelNode child, RelCollation collation) {
         super(cluster, traits, child, collation);
@@ -35,11 +36,11 @@ public class SlothSort extends Sort implements SlothRel {
     }
 
     @Override
-    public Operator implement() {
+    public Operator<SlothRow> implement() {
 
         //Sort has bug
         //result of sql 'select id, name from person order by id + 1' has three column
-        Operator input = ((SlothRel) getInput()).implement();
+        Operator<SlothRow> input = ((SlothRel) getInput()).implement();
         final List<RelFieldCollation> sortKeys = this.collation.getFieldCollations();
         final RelDataType relDataType = getRowType();
         return new SlothSortOperator(sortKeys, offset, fetch, input, relDataType);

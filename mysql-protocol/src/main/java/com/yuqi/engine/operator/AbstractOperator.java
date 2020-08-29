@@ -1,7 +1,6 @@
 package com.yuqi.engine.operator;
 
 import com.yuqi.engine.data.type.DataType;
-import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.io.IO;
 import com.yuqi.sql.util.TypeConversionUtils;
 import org.apache.calcite.rel.type.RelDataType;
@@ -15,10 +14,7 @@ import java.util.stream.Collectors;
  * @description your description
  * @time 8/8/20 17:08
  **/
-public abstract class AbstractOperator implements Operator, IO {
-
-    public static final List<Value> EOF = null;
-
+public abstract class AbstractOperator<R> implements Operator<R>, IO {
     protected RelDataType rowTypes;
 
     public AbstractOperator(RelDataType rowTypes) {

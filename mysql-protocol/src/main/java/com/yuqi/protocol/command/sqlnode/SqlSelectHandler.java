@@ -1,6 +1,7 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
@@ -44,7 +45,7 @@ public class SqlSelectHandler implements Handler<SqlNode> {
                 connectionContext.getDb());
         final RelNode relNode = slothParser.getPlan(type);
 
-        final Operator operator = ((SlothRel) relNode).implement();
+        final Operator<SlothRow> operator = ((SlothRel) relNode).implement();
 
         //now start to start execute;
         final List<List<Object>> result = executeOperator(operator);
@@ -78,13 +79,13 @@ public class SqlSelectHandler implements Handler<SqlNode> {
      * @param operator
      * @return
      */
-    private List<List<Object>> executeOperator(Operator operator) {
+    private List<List<Object>> executeOperator(Operator<SlothRow> operator) {
         final List<List<Object>> result = Lists.newArrayList();
         operator.open();
 
-        List<Value> tmp;
-        while ((tmp = operator.next()) != null) {
-            result.add(tmp.stream().map(Value::getValueByType).collect(Collectors.toList()));
+        SlothRow tmp;
+        while ((tmp = operator.next()) != SlothRow.EOF_ROW) {
+            result.add(tmp.getAllColumn().stream().map(Value::getValueByType).collect(Collectors.toList()));
         }
 
         return result;

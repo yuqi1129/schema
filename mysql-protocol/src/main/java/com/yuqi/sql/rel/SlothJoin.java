@@ -2,6 +2,7 @@ package com.yuqi.sql.rel;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.engine.operator.SlothJoinOperator;
 import org.apache.calcite.plan.RelOptCluster;
@@ -42,8 +43,8 @@ public class SlothJoin extends Join implements SlothRel {
 
     @Override
     public Operator implement() {
-        final Operator left = ((SlothRel) getLeft()).implement();
-        final Operator right = ((SlothRel) getRight()).implement();
+        final Operator<SlothRow> left = ((SlothRel) getLeft()).implement();
+        final Operator<SlothRow> right = ((SlothRel) getRight()).implement();
         final RexNode jontCondition = getCondition();
         final RelDataType rowType = getRowType();
 

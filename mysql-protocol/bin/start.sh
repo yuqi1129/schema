@@ -84,8 +84,10 @@ start() {
    else
       echo "classpath="${CLASSPATH}
       echo "Starting $APP_MAINCLASS ..."
-      JAVA_CMD="nohup $JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH $APP_MAINCLASS >/dev/null 2>&1 &"
-      su - $RUNNING_USER -c "$JAVA_CMD"
+      #JAVA_CMD="nohup $JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH $APP_MAINCLASS >/dev/null 2>&1 &"
+      #su - $RUNNING_USER -c "$JAVA_CMD"
+      nohup $JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH $APP_MAINCLASS >/dev/null 2>&1 &
+
       checkpid
       if [ $psid -ne 0 ]; then
          echo "(pid=$psid) [OK]"
@@ -113,7 +115,8 @@ stop() {
 
    if [ $psid -ne 0 ]; then
       echo -n "Stopping $APP_MAINCLASS ...(pid=$psid) "
-      su - $RUNNING_USER -c "kill -9 $psid"
+#      su - $RUNNING_USER -c "kill -9 $psid"
+      kill -9 $psid
       if [ $? -eq 0 ]; then
          echo "[OK]"
       else
@@ -188,6 +191,8 @@ case "$1" in
    'info')
      info
      ;;
+   *)
+    echo "Usage: $0 {start|stop|restart|status|info}"
+    exit 1
+    ;;
 esac
-     echo "Usage: $0 {start|stop|restart|status|info}"
-     exit 1

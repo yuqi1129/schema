@@ -105,7 +105,14 @@ mvn clean package
 
 #### 2.3. 启动
 
-直接在IDE中起动`FrontEndMain`即可
+##### 2.3.1 本地调试
+
+在IDE中找到`FrontEndMain`, 直接启动main函数即可
+
+##### 2.3.2 服务部署
+打包项目后， 解压mysql-protocol-1.0-SNAPSHOT-RELEASE.tar.gz, 执行:
+- `bin/start.sh start` 启动
+- `bin/start.sh stop` 停止
 
 
 ### 3.连接 

@@ -44,8 +44,14 @@ public class ServerGreeting extends AbstractReaderAndWriter {
      */
     private short serverCapability;
 
-    private byte serverLanguage;
+    /**
+    *  see https://dev.mysql.com/doc/internals/en/character-set.html#packet-Protocol::CharacterSet
+     */
+    private byte charSet;
 
+    /**
+     * see https://dev.mysql.com/doc/internals/en/status-flags.html#packet-Protocol::StatusFlags
+     */
     private short serverStatus;
 
     /**
@@ -53,7 +59,10 @@ public class ServerGreeting extends AbstractReaderAndWriter {
      */
     private short extendServerCapabilities;
 
-    private byte authencationPluginLenth;
+    /**
+     * see AUTHENCATION_PLUGIN
+     */
+    private byte authencationPluginLength;
 
     /**
      * padding * 10
@@ -61,10 +70,13 @@ public class ServerGreeting extends AbstractReaderAndWriter {
     private byte padding = 0x00;
 
     /**
-     * length 12
+     * length 13
      */
     private byte[] saltTwo;
 
+    /**
+     * AUTHENCATION_PLUGIN
+     */
     private String authencationPlugin;
 
 
@@ -86,7 +98,7 @@ public class ServerGreeting extends AbstractReaderAndWriter {
 
         IOUtils.writeShort(serverCapability, byteBuf);
 
-        IOUtils.writeByte(serverLanguage, byteBuf);
+        IOUtils.writeByte(charSet, byteBuf);
 
         IOUtils.writeShort(serverStatus, byteBuf);
 
@@ -97,7 +109,7 @@ public class ServerGreeting extends AbstractReaderAndWriter {
         int serverStatus = getServerCapality();
 
         if ((mergeCapacility & CLIENT_PLUGIN_AUTH) != 0) {
-            IOUtils.writeByte(authencationPluginLenth, byteBuf);
+            IOUtils.writeByte(authencationPluginLength, byteBuf);
         } else {
             IOUtils.writeByte(padding, byteBuf);
         }
@@ -108,7 +120,7 @@ public class ServerGreeting extends AbstractReaderAndWriter {
         }
 
         if ((mergeCapacility & CLIENT_SECURE_CONNECTION) != 0) {
-            int len = Math.max(13, authencationPluginLenth - 8);
+            int len = Math.max(13, authencationPluginLength - 8);
             for (int i = 0;  i < len; i++) {
                 IOUtils.writeByte(saltTwo[i], byteBuf);
             }

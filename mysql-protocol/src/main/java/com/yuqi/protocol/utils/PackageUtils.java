@@ -60,10 +60,9 @@ public class PackageUtils {
                 .serverCapability((short) (serverCapability & 0x0000ffff))
                 .extendServerCapabilities((short) ((serverCapability >> 16) & 0x0000ffff))
                 //see https://dev.mysql.com/doc/internals/en/character-set.html#packet-Protocol::CharacterSet
-                .serverLanguage((byte) 33)
-                //see https://dev.mysql.com/doc/internals/en/status-flags.html#packet-Protocol::StatusFlags
+                .charSet((byte) 33)
                 .serverStatus((short) 2)
-                .authencationPluginLenth((byte) AUTHENCATION_PLUGIN.length())
+                .authencationPluginLength((byte) AUTHENCATION_PLUGIN.length())
                 .saltTwo(salt2)
                 .authencationPlugin(AUTHENCATION_PLUGIN)
                 .build();

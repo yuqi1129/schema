@@ -25,14 +25,22 @@ import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CO
  **/
 @Data
 public class LoginRequest extends AbstractReaderAndWriter {
+    /**
+     * Capability see https://dev.mysql.com/doc/internals/en/capability-flags.html
+     */
     private int clientCapability;
 
-    private int extendClientCapability;
-
+    /**
+     * Package max size
+     */
     private int maxPackageLength;
+
 
     private byte charSet;
 
+    /**
+     * Padding
+     */
     private String unused;
 
     private String userName;

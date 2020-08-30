@@ -25,6 +25,7 @@ import org.apache.calcite.sql.fun.SqlStdOperatorTable;
 import org.apache.calcite.sql.parser.SqlParser;
 import org.apache.calcite.sql.parser.impl.SqlSchemaParserImpl;
 import org.apache.calcite.sql.util.ChainedSqlOperatorTable;
+import org.apache.calcite.sql.validate.SqlConformanceEnum;
 import org.apache.calcite.sql.validate.SqlValidator;
 import org.apache.calcite.sql.validate.SqlValidatorUtil;
 import org.slf4j.Logger;
@@ -115,6 +116,7 @@ public class ParserFactory {
                 .setQuotedCasing(Casing.UNCHANGED)
                 .setUnquotedCasing(Casing.UNCHANGED)
                 .setCaseSensitive(false)
+                .setConformance(SqlConformanceEnum.MYSQL_5)
                 .setParserFactory(SqlSchemaParserImpl.FACTORY);
 
 

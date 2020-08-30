@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import static com.yuqi.engine.data.type.DataTypes.BOOLEAN;
 import static com.yuqi.engine.data.type.DataTypes.BYTE;
+import static com.yuqi.engine.data.type.DataTypes.DATE;
 import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
 import static com.yuqi.engine.data.type.DataTypes.FLOAT;
 import static com.yuqi.engine.data.type.DataTypes.INTEGER;
@@ -45,7 +46,7 @@ public class TypeConversionUtils {
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.CHAR, STRING);
 
         //存储层用long, 但是在表层、展示示需要用实际类型
-        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.DATE, LONG);
+        SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.DATE, DATE);
         SQL_TYPE_TO_DATA_TYPE.put(SqlTypeName.TIMESTAMP, LONG);
     }
 

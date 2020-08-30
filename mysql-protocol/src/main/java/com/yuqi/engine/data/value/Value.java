@@ -3,12 +3,16 @@ package com.yuqi.engine.data.value;
 
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.type.DataTypes;
+import com.yuqi.util.TimeUtils;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.Objects;
 
 import static com.yuqi.engine.data.type.DataTypes.BOOLEAN;
 import static com.yuqi.engine.data.type.DataTypes.BYTE;
+import static com.yuqi.engine.data.type.DataTypes.DATE;
+import static com.yuqi.engine.data.type.DataTypes.DATE_TIME_TYPES;
 import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
 import static com.yuqi.engine.data.type.DataTypes.FLOAT;
 import static com.yuqi.engine.data.type.DataTypes.INTEGER;
@@ -230,6 +234,25 @@ public class Value implements Comparable<Value> {
         return false;
     }
 
+    public Date dateValue() {
+        if (isNull()) {
+            return null;
+        }
+
+        final Class cl = value.getClass();
+
+        if (cl == Long.class) {
+            return new Date((long) value);
+        }
+
+        if (cl == String.class) {
+            final Long t = TimeUtils.getDate((String) value);
+            return t == null ? null : new Date(t);
+        }
+
+        return null;
+    }
+
     public String stringValue() {
 
         if (isNull()) {
@@ -238,6 +261,11 @@ public class Value implements Comparable<Value> {
 
         if (value instanceof String) {
             return (String) value;
+        }
+
+        if (getType() == DATE) {
+            Date date = dateValue();
+            return TimeUtils.formatDate(date);
         }
 
         return value.toString();
@@ -268,6 +296,8 @@ public class Value implements Comparable<Value> {
             return floatValue();
         } else if (dataType == BOOLEAN) {
             return booleanValue();
+        } else if (dataType == DATE) {
+            return dateValue();
         } else {
             return stringValue();
         }
@@ -279,10 +309,18 @@ public class Value implements Comparable<Value> {
             return 1;
         }
 
+        final DataType thisType = this.getType();
+        final DataType thatType = o.dataType;
+
         //TODO 暂时不考虑boolean类型
-        if (DataTypes.INTEGER_TYPES.contains(o.getType()) && DataTypes.INTEGER_TYPES.contains(this.getType())) {
+        if (DataTypes.INTEGER_TYPES.contains(thisType) && DataTypes.INTEGER_TYPES.contains(thatType)) {
             return Long.compare(longValue(), o.longValue());
         }
+
+        if (DATE_TIME_TYPES.contains(thisType) || DATE_TIME_TYPES.contains(thatType)) {
+            return this.stringValue().compareTo(o.stringValue());
+        }
+
 
         if (STRING == o.dataType && STRING == this.dataType) {
             return this.stringValue().compareTo(o.stringValue());

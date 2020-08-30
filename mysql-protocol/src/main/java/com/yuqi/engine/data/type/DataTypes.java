@@ -32,6 +32,7 @@ public final class DataTypes {
     public static final ShortType SHORT = ShortType.INSTANCE;
     public static final IntegerType INTEGER = IntegerType.INSTANCE;
     public static final LongType LONG = LongType.INSTANCE;
+    public static final DateType DATE = DateType.INSTANCE;
 
     public static final TimestampType TIMESTAMPZ = TimestampType.INSTANCE_WITH_TZ;
     public static final TimestampType TIMESTAMP = TimestampType.INSTANCE_WITHOUT_TZ;
@@ -77,6 +78,10 @@ public final class DataTypes {
             FLOAT,
             DOUBLE);
 
+    public static final Set<DataType> DATE_TIME_TYPES = Sets.newHashSet(
+            DATE,
+            TIMESTAMP
+    );
 
     private static final Set<Integer> NUMBER_CONVERSIONS = Stream.concat(
         Stream.of(BOOLEAN, STRING, TIMESTAMPZ, TIMESTAMP),

@@ -28,6 +28,7 @@ public abstract class DataType<T> implements Comparable<DataType<T>>, Streamer<T
         INTEGER,
         INTERVAL,
         TIMESTAMP_WITH_TIME_ZONE,
+        DATE,
         TIMESTAMP,
         LONG,
         FLOAT,

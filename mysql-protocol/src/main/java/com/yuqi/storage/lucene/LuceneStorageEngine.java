@@ -29,12 +29,14 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static com.yuqi.engine.data.type.DataTypes.BYTE;
+import static com.yuqi.engine.data.type.DataTypes.DATE;
 import static com.yuqi.engine.data.type.DataTypes.DOUBLE;
 import static com.yuqi.engine.data.type.DataTypes.FLOAT;
 import static com.yuqi.engine.data.type.DataTypes.INTEGER;
@@ -167,6 +169,21 @@ public class LuceneStorageEngine implements StorageEngine {
                 //String values do not need to add store field
                 String content = value.isNull() ? "NULL" : value.stringValue();
                 document.add(new StringField(columnName, content, Field.Store.YES));
+            } else if (DATE.equals(dataType)) {
+                long content;
+                if (value.isNull()) {
+                    content = Long.MIN_VALUE;
+                } else {
+                    Date date = (Date) value.getValueByType();
+                    if (Objects.isNull(date)) {
+                        content = Long.MIN_VALUE;
+                    } else {
+                        content = date.getTime();
+                    }
+                }
+                document.add(new LongPoint(columnName, content));
+                document.add(new StoredField(columnName, content));
+
             } else {
                 //maybe time/datetime/timestamp
                 long content = value.isNull() ? Long.MIN_VALUE : value.longValue();
@@ -206,6 +223,9 @@ public class LuceneStorageEngine implements StorageEngine {
             } else if (dataType == DOUBLE) {
                 Double numericValue = (Double) field.numericValue();
                 v = new Value(Double.MIN_VALUE == numericValue ? null : numericValue, dataType);
+            } else if (dataType == DATE) {
+                Long numericValue = (Long) field.numericValue();
+                v = new Value(Long.MIN_VALUE == numericValue ? null : numericValue, dataType);
             } else {
                 Long numericValue = (Long) field.numericValue();
                 v = new Value(Long.MIN_VALUE == numericValue ? null : numericValue, dataType);

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author yuqi
@@ -41,6 +42,17 @@ public class SlothSchema extends AbstractSchema {
     }
 
     public boolean dropTable(String tableName) {
+        SlothTable slothTable = (SlothTable) tables.get(tableName);
+        //是否要考虑同步问题
+        if (Objects.isNull(slothTable)) {
+            return true;
+        }
+
+        //物理删除数据
+        slothTable.getSlothTableEngine().close();
+        slothTable.getSlothTableEngine().removeData();
+
+        //schem删除
         tables.remove(tableName);
         calciteSchema.removeTable(tableName);
 
@@ -62,6 +74,9 @@ public class SlothSchema extends AbstractSchema {
         calciteSchema.add(tableName, slothTable);
     }
 
+    public void dropTableInSchema() {
+        tables.keySet().forEach(this::dropTable);
+    }
 
     public Collection<Table> getAllTable() {
         return tables.values();

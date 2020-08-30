@@ -33,6 +33,10 @@ public class TableMeta {
     }
 
     public void addTable(String schema, SlothTable table) {
+        if (!mysqlConnection.isOk()) {
+            return;
+        }
+
         final String tableName = table.getTableName();
         //add table
         final DSLContext dslContext = mysqlConnection.getDslContext();
@@ -87,6 +91,10 @@ public class TableMeta {
 
 
     public void deleteTable(String schema, String table) {
+        if (!mysqlConnection.isOk()) {
+            return;
+        }
+
         final DSLContext dslContext = mysqlConnection.getDslContext();
 
         //delete from tables;
@@ -101,6 +109,10 @@ public class TableMeta {
     }
 
     public List<SlothTable> getAllTableInDb(SlothSchema schema) {
+        if (!mysqlConnection.isOk()) {
+            return Lists.newArrayList();
+        }
+
         final String schemaName = schema.getSchemaName();
         final DSLContext dslContext = mysqlConnection.getDslContext();
         final List<Columns> columns = dslContext.selectFrom(SLOTH.COLUMNS)

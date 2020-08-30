@@ -18,7 +18,6 @@ import java.util.Objects;
  * @time 18/8/20 14:44
  **/
 public class MysqlConnection {
-    public static final Logger LOG = LoggerFactory.getLogger(MysqlConnection.class);
 
     public static final MysqlConnection INSTANCE = new MysqlConnection();
     public static final Logger LOGGER = LoggerFactory.getLogger(MysqlConnection.class);
@@ -48,7 +47,7 @@ public class MysqlConnection {
             LOGGER.error("Can't load mysql driver for:", e);
             throw new RuntimeException(e);
         } catch (RuntimeException e1) {
-            LOG.error("init meta database failed, mark meta database is fail, then all db/table you create could not be store");
+            LOGGER.error("init meta database failed, mark meta database is fail, then all db/table you create could not be store");
             isOk = false;
         }
     }
@@ -68,6 +67,10 @@ public class MysqlConnection {
     }
 
     public boolean isOk() {
+        if (!isOk) {
+            LOGGER.warn("Meta database is abnormal, pay attention...");
+        }
+
         return isOk;
     }
 

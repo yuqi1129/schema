@@ -10,6 +10,7 @@ import com.yuqi.engine.data.value.Value;
 import com.yuqi.sql.SlothTable;
 import com.yuqi.sql.util.TypeConversionUtils;
 import org.apache.calcite.sql.type.SqlTypeName;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +110,7 @@ public class SlothTableEngine implements LifeCycle {
 
     @Override
     public void close() {
-
+        storageEngines.forEach(LifeCycle::close);
     }
 
     private void loadData() {
@@ -120,6 +121,20 @@ public class SlothTableEngine implements LifeCycle {
             StorageEngine storageEngine = new LuceneStorageEngine(shardPath, this);
             storageEngine.init();
             storageEngines.add(storageEngine);
+        }
+    }
+
+    public void removeData() {
+        final String basePath = slothTable.buildTableEnginePath();
+        try {
+            for (int shard = 0; shard < slothTable.getShardNum(); shard++) {
+                String shardPath = basePath + File.separator + shard;
+                LOGGER.info("try to delete path '{}'", shardPath);
+                FileUtils.deleteDirectory(new File(shardPath));
+                LOGGER.info("delete path '{}' succeed", shardPath);
+            }
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 

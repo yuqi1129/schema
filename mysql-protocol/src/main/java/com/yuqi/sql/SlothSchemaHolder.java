@@ -30,11 +30,6 @@ public class SlothSchemaHolder implements LifeCycle {
 
     @Override
     public void init() {
-
-        if (!SchemaMeta.INSTANCE.schemaIsOk()) {
-            return;
-        }
-
         Set<String> schemes = SchemaMeta.INSTANCE.allSchema();
         for (String schema : schemes) {
             SlothSchema slothSchema = registerSchema(schema);
@@ -68,17 +63,16 @@ public class SlothSchemaHolder implements LifeCycle {
     }
 
     public boolean removeSchema(String schemaName) {
-        schemaMap.remove(schemaName);
+        SlothSchema schema = SlothSchemaHolder.INSTANCE.getSlothSchema(schemaName);
+        schema.dropTableInSchema();
 
+        schemaMap.remove(schemaName);
         //remove data in schema
         ParserFactory.getCatalogReader().getRootSchema()
                 .removeSubSchema(schemaName);
 
         //remove data in db;
-        if (SchemaMeta.INSTANCE.schemaIsOk()) {
-            SchemaMeta.INSTANCE.dropSchema(schemaName);
-        }
-
+        SchemaMeta.INSTANCE.dropSchema(schemaName);
         return true;
     }
 

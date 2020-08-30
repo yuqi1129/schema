@@ -1,5 +1,6 @@
 package com.yuqi.protocol.connection.mysql;
 
+import com.google.common.collect.Sets;
 import com.yuqi.protocol.meta.tables.pojos.Schemata;
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
@@ -32,6 +33,10 @@ public class SchemaMeta {
     }
 
     public Set<String> allSchema() {
+         if (!mysqlConnection.isOk()) {
+             return Sets.newHashSet();
+         }
+
          final DSLContext dslContext = mysqlConnection.getDslContext();
          List<Schemata> schemataList = dslContext.selectFrom(SLOTH.SCHEMATA)
                  .fetchInto(Schemata.class);
@@ -41,6 +46,10 @@ public class SchemaMeta {
 
 
     public void dropSchema(String schema) {
+        if (!mysqlConnection.isOk()) {
+            return;
+        }
+
         final DSLContext dslContext = mysqlConnection.getDslContext();
         final int r = dslContext.deleteFrom(SLOTH.SCHEMATA)
                 .where(SLOTH.SCHEMATA.SCHEMA_NAME.eq(schema))
@@ -52,6 +61,9 @@ public class SchemaMeta {
     }
 
     public void addSchema(String schema) {
+        if (!mysqlConnection.isOk()) {
+            return;
+        }
 
         //TODO remove dsl and use mybatis, or you can use spring to implement this
         final DSLContext dslContext = mysqlConnection.getDslContext();

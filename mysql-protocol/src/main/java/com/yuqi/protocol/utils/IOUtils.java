@@ -244,6 +244,12 @@ public class IOUtils {
         }
     }
 
+    public static String readFixLengthString(ByteBuf buf, int length) {
+        byte[] bytes = new byte[length];
+        buf.readBytes(bytes);
+        return new String(bytes);
+    }
+
     public static ByteBuf copyByteBuf(ByteBuf buf) {
         ByteBuf byteBuf = PooledByteBufAllocator.DEFAULT.buffer(128);
 

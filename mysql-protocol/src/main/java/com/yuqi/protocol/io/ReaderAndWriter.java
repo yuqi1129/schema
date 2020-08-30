@@ -21,7 +21,7 @@ public interface ReaderAndWriter extends Serializable {
 
 
     /**
-     * Write content to BytBuf
+     * Write content to {@link ByteBuf}
      * @param byteBuf
      */
     default void write(ByteBuf byteBuf) {

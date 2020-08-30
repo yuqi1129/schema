@@ -132,7 +132,15 @@ public class ServerGreeting extends AbstractReaderAndWriter {
 
     }
 
-    //TODO, try to restore value, this have bug
+
+
+    /**
+     * TODO, try to restore value, this have bug
+     *
+     * @param lowByte
+     * @param highByte
+     * @return
+     */
     private int getServerCapacility(byte[] lowByte, byte[] highByte) {
         int res = 0;
 

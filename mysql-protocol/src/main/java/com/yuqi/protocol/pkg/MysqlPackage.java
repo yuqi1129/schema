@@ -23,7 +23,7 @@ public class MysqlPackage implements ReaderAndWriter {
     private byte seqNumber;
 
     /**
-     *
+     * Package contennt
      */
     private AbstractReaderAndWriter abstractReaderAndWriterPackage;
 

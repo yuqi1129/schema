@@ -23,7 +23,7 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //???
-        Channel channel = ctx.channel();
+        final Channel channel = ctx.channel();
 
         boolean hasAlreadyAuthencaition =
                 NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().containsKey(channel)
@@ -36,14 +36,18 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
 
         } else {
             //do authentcaion
-            boolean res = doAuthencation((MysqlPackage) msg);
+            final LoginRequest loginRequest = (LoginRequest) ((MysqlPackage) msg)
+                    .getAbstractReaderAndWriterPackage();
+            boolean res = doAuthencation(loginRequest);
 
             AbstractReaderAndWriter abstractReaderAndWriterPackage;
             MysqlPackage mySQLPackage = new MysqlPackage();
 
             ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(256);
             if (res) {
-                NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().put(channel, new ConnectionContext(ctx));
+                ConnectionContext connectionContext = new ConnectionContext(ctx);
+                connectionContext.setDb(loginRequest.getDatabase());
+                NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().put(channel, connectionContext);
                 abstractReaderAndWriterPackage = OkPackage.builder()
                         .header((byte) 0x00)
                         .serverStatus(0x0002)
@@ -75,9 +79,9 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private boolean doAuthencation(MysqlPackage mySQLPackage) {
-        final String userName = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getUserName();
-        final String passwordHash = ((LoginRequest) mySQLPackage.getAbstractReaderAndWriterPackage()).getPasswordHash();
+    private boolean doAuthencation(LoginRequest loginRequest) {
+        final String userName = loginRequest.getUserName();
+        final String passwordHash = loginRequest.getAuthResponse();
 
         return compareUsernameAndPassword(userName, passwordHash);
     }

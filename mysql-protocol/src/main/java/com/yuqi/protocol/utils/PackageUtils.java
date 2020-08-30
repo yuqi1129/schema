@@ -25,6 +25,7 @@ import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_INTERACTI
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_LONG_FLAG;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_LONG_PASSWORD;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_ODBC;
+import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PROTOCOL_41;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CONNECTION;
 import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_TRANSACTIONS;
@@ -38,30 +39,39 @@ import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_TRANSACTI
 public class PackageUtils {
 
     public static byte[] salt1 = {1, 1, 1, 1, 1, 1, 1, 1};
-    public static byte[] salt2 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    public static final String AUTHENCATION_PLUGIN = "mysql_native_password";
+    private static final int SERVER_VERSION = 0x0a;
+    private static final String MYSQL_SERVER_VERSION = "5.7.22";
+    public static byte[] salt2 = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+
     public static ServerGreeting buildInitAuthencatinPackage() {
 
         int serverCapability = getServerCapality();
+        byte[] sereverCapacility = IOUtils.getBytes(serverCapability);
+        byte[] lower = new byte[] {sereverCapacility[0], sereverCapacility[1]};
+        byte[] higher = new byte[] {sereverCapacility[2], sereverCapacility[3]};
+
         ServerGreeting greetingPackage = ServerGreeting.builder()
                 .serverThreadId((int) Thread.currentThread().getId())
                 .saltOne(salt1)
-                .protocalVeriosn((byte) 10)
-                .serverVeriosnInfo("5.7.22")
+                .protocalVeriosn((byte) SERVER_VERSION)
+                .serverVeriosnInfo(MYSQL_SERVER_VERSION)
                 //origin is 0xff, cause only disable-ssl mysql -h127.0.0.1 -P3016 -uroot -p123456 --ssl-mode=disabled can connect
                 .serverCapability((short) (serverCapability & 0x0000ffff))
-                //编码方式, 后面主键完善
-                .serverLanguage((byte) 33)
-                .serverStatus((short) 2)
                 .extendServerCapabilities((short) ((serverCapability >> 16) & 0x0000ffff))
-                .authencationPluginLenth((byte) 0x15)
+                //see https://dev.mysql.com/doc/internals/en/character-set.html#packet-Protocol::CharacterSet
+                .serverLanguage((byte) 33)
+                //see https://dev.mysql.com/doc/internals/en/status-flags.html#packet-Protocol::StatusFlags
+                .serverStatus((short) 2)
+                .authencationPluginLenth((byte) AUTHENCATION_PLUGIN.length())
                 .saltTwo(salt2)
-                .authencationPlugin("mysql_native_password")
+                .authencationPlugin(AUTHENCATION_PLUGIN)
                 .build();
 
         return greetingPackage;
     }
 
-    private static int getServerCapality() {
+    public static int getServerCapality() {
         int flags = 0;
 
         flags |= CLIENT_LONG_PASSWORD;
@@ -75,6 +85,7 @@ public class PackageUtils {
         flags |= CLIENT_IGNORE_SIGPIPE;
         flags |= CLIENT_TRANSACTIONS;
         flags |= CLIENT_SECURE_CONNECTION;
+        flags |= CLIENT_PLUGIN_AUTH;
         return flags;
     }
 

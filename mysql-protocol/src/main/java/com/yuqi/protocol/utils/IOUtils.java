@@ -261,4 +261,18 @@ public class IOUtils {
 
         return byteBuf;
     }
+
+    /**
+     * 小端
+     */
+    public static byte[] getBytes(int v) {
+        byte[] result = new byte[4];
+        for (int i = 0; i < 4; i++) {
+            result[i] = (byte) (v & 0xff);
+            v = v >> 8;
+        }
+
+        return result;
+    }
+
 }

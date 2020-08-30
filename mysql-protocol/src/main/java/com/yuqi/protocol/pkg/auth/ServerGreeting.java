@@ -5,6 +5,10 @@ import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Builder;
 
+import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH;
+import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CONNECTION;
+import static com.yuqi.protocol.utils.PackageUtils.getServerCapality;
+
 
 /**
  * @author yuqi
@@ -35,13 +39,18 @@ public class ServerGreeting extends AbstractReaderAndWriter {
      */
     private byte[] saltOne;
 
-
+    /**
+     * Serveer Capability low 2 byte
+     */
     private short serverCapability;
 
     private byte serverLanguage;
 
     private short serverStatus;
 
+    /**
+     * Server Capability high 2 byte
+     */
     private short extendServerCapabilities;
 
     private byte authencationPluginLenth;
@@ -69,38 +78,57 @@ public class ServerGreeting extends AbstractReaderAndWriter {
         IOUtils.writeByte(protocalVeriosn, byteBuf);
         IOUtils.writeString(serverVeriosnInfo, byteBuf);
         IOUtils.writeInteger4((int) Thread.currentThread().getId(), byteBuf);
-
         IOUtils.writeBytes(saltOne, byteBuf);
+
+        //filler, see https://dev.mysql.com/doc/internals/en/connection-phase-packets.html#Payload
+        // but, in fact, client can't recognize this,
+        //IOUtils.writeByte((byte) 0x00, byteBuf);
 
         IOUtils.writeShort(serverCapability, byteBuf);
 
         IOUtils.writeByte(serverLanguage, byteBuf);
+
         IOUtils.writeShort(serverStatus, byteBuf);
 
         IOUtils.writeShort(extendServerCapabilities, byteBuf);
 
-//        int mergeCapacility = (extendServerCapabilities << 16) + serverCapability;
-//        if ((mergeCapacility & CLIENT_PLUGIN_AUTH) != 0) {
-//            IOUtils.writeByte(authencationPluginLenth, byteBuf);
-//        } else {
-//            IOUtils.writeByte((byte) 0, byteBuf);
-//        }
+        //int mergeCapacility = getServerCapacility(serverCapability, extendServerCapabilities);
+        int mergeCapacility = getServerCapality();
+        int serverStatus = getServerCapality();
 
-        IOUtils.writeByte((byte) 0, byteBuf);
+        if ((mergeCapacility & CLIENT_PLUGIN_AUTH) != 0) {
+            IOUtils.writeByte(authencationPluginLenth, byteBuf);
+        } else {
+            IOUtils.writeByte(padding, byteBuf);
+        }
 
         //10个字节的填充
         for (int i = 0; i < 10; i++) {
             IOUtils.writeByte(padding, byteBuf);
         }
 
-//        if ((mergeCapacility & CLIENT_SECURE_CONNECTION) != 0) {
-//            IOUtils.writeBytes(saltTwo, byteBuf);
-//        }
+        if ((mergeCapacility & CLIENT_SECURE_CONNECTION) != 0) {
+            int len = Math.max(13, authencationPluginLenth - 8);
+            for (int i = 0;  i < len; i++) {
+                IOUtils.writeByte(saltTwo[i], byteBuf);
+            }
+        }
 
-        IOUtils.writeBytes(saltTwo, byteBuf);
+        if ((mergeCapacility & CLIENT_PLUGIN_AUTH) != 0) {
+            IOUtils.writeString(authencationPlugin, byteBuf);
+        }
 
-//        if ((mergeCapacility & CLIENT_PLUGIN_AUTH) != 0) {
-//            IOUtils.writeString(authencationPlugin, byteBuf);
-//        }
+    }
+
+    //TODO, try to restore value, this have bug
+    private int getServerCapacility(byte[] lowByte, byte[] highByte) {
+        int res = 0;
+
+        res += lowByte[0];
+        res += ((lowByte[1] & Integer.MAX_VALUE) << 8);
+        res += ((highByte[0] & Integer.MAX_VALUE) << 16);
+        res += ((highByte[1] & Integer.MAX_VALUE) << 24);
+
+        return res;
     }
 }

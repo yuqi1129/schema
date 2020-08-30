@@ -48,7 +48,7 @@ public class LoginRequest extends AbstractReaderAndWriter {
     @Override
     public void read(ByteBuf byteBuf) {
         this.clientCapability = IOUtils.readInteger(byteBuf, 4);
-        this.extendClientCapability = IOUtils.readInteger(byteBuf, 4);
+        this.maxPackageLength = IOUtils.readInteger(byteBuf, 4);
         this.charSet = IOUtils.readByte(byteBuf);
 
         //23 byte is useless

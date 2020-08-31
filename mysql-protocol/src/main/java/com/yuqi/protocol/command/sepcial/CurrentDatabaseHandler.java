@@ -2,7 +2,7 @@ package com.yuqi.protocol.command.sepcial;
 
 
 import com.google.common.collect.Lists;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.constants.ColumnTypeConstants;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;

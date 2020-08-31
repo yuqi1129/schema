@@ -1,7 +1,7 @@
 package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.result.ErrorMessage;
 import com.yuqi.protocol.utils.PackageUtils;

@@ -6,7 +6,7 @@ package com.yuqi.protocol.constants;
  * @description your description
  * @time 8/7/20 19:56
  **/
-public class ServerCapabilityFlags {
+public class CapabilityFlags {
 
     public static final int CLIENT_LONG_PASSWORD = 0x00000001;
 
@@ -57,7 +57,4 @@ public class ServerCapabilityFlags {
     public static final int CLIENT_SESSION_TRACK = 0x00800000;
 
     public static final int CLIENT_DEPRECATE_EOF = 0x01000000;
-
-
-
 }

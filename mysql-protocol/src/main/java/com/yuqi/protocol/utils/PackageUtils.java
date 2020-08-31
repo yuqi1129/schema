@@ -16,19 +16,19 @@ import io.netty.buffer.PooledByteBufAllocator;
 
 import java.util.List;
 
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_CONNECT_WITH_DB;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_FOUND_ROWS;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_IGNORE_SIGPIPE;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_IGNORE_SPACE;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_INTERACTIVE;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_LONG_FLAG;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_LONG_PASSWORD;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_ODBC;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_PLUGIN_AUTH;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_PROTOCOL_41;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_SECURE_CONNECTION;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_TRANSACTIONS;
 import static com.yuqi.protocol.constants.ErrorCodeAndMessageEnum.SYNTAX_ERROR;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_CONNECT_WITH_DB;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_FOUND_ROWS;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_IGNORE_SIGPIPE;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_IGNORE_SPACE;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_INTERACTIVE;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_LONG_FLAG;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_LONG_PASSWORD;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_ODBC;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PROTOCOL_41;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CONNECTION;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_TRANSACTIONS;
 
 /**
  * @author yuqi

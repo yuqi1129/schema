@@ -8,11 +8,11 @@ import lombok.Data;
 
 import java.util.Map;
 
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_CONNECT_ATTRS;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_CONNECT_WITH_DB;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CONNECTION;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_CONNECT_ATTRS;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_CONNECT_WITH_DB;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_PLUGIN_AUTH;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_PLUGIN_AUTH_LENENC_CLIENT_DATA;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_SECURE_CONNECTION;
 
 /**
  * @author yuqi

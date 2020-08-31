@@ -1,6 +1,5 @@
 package com.yuqi.protocol.connection.netty;
 
-import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.constants.ErrorCodeAndMessageEnum;
 import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.pkg.MysqlPackage;

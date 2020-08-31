@@ -4,7 +4,7 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.yuqi.constant.StringConstants;
 import com.yuqi.protocol.command.sqlnode.Handler;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;

@@ -1,6 +1,6 @@
 package com.yuqi.protocol.command.sqlnode;
 
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 
 import java.lang.reflect.ParameterizedType;
 

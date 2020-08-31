@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 24/8/20 22:43
  **/

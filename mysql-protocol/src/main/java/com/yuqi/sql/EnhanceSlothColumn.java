@@ -4,7 +4,7 @@ import org.apache.calcite.sql.type.SqlTypeName;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 24/8/20 19:29
  **/

@@ -2,7 +2,7 @@ package com.yuqi.protocol.command.sqlnode;
 
 import com.google.common.collect.Lists;
 import com.yuqi.constant.StringConstants;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.enums.ShowEnum;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.ResultSetHolder;

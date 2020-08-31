@@ -15,7 +15,7 @@ import static com.yuqi.util.ThreadPoolUtil.FLUSH_POOL;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 20/8/20 17:14
  **/

@@ -19,7 +19,7 @@ import static com.yuqi.protocol.meta.Sloth.SLOTH;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 19/8/20 10:36
  **/

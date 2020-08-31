@@ -5,7 +5,7 @@ import com.yuqi.engine.SlothRow;
 import com.yuqi.engine.data.value.Value;
 import com.yuqi.engine.operator.Operator;
 import com.yuqi.protocol.command.sepcial.SpecialSelectHolder;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.constants.ColumnTypeConstants;
 import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;

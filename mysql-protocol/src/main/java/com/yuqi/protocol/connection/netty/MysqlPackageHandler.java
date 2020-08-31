@@ -3,7 +3,6 @@ package com.yuqi.protocol.connection.netty;
 import com.yuqi.protocol.command.CommandHandler;
 import com.yuqi.protocol.command.QueryCommandHandler;
 import com.yuqi.protocol.command.UseDatabaseCommandHandler;
-import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.request.Command;
 import io.netty.channel.ChannelHandlerContext;

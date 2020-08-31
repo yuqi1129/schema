@@ -1,6 +1,6 @@
 package com.yuqi.protocol.command;
 
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchemaHolder;

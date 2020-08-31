@@ -1,7 +1,6 @@
 package com.yuqi.protocol.connection.netty;
 
 import com.google.common.collect.Maps;
-import com.yuqi.protocol.connection.ConnectionContext;
 import com.yuqi.protocol.pkg.auth.ServerGreeting;
 import com.yuqi.protocol.utils.IOUtils;
 import com.yuqi.protocol.utils.PackageUtils;

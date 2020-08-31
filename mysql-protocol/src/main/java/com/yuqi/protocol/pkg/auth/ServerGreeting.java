@@ -5,8 +5,8 @@ import com.yuqi.protocol.utils.IOUtils;
 import io.netty.buffer.ByteBuf;
 import lombok.Builder;
 
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_PLUGIN_AUTH;
-import static com.yuqi.protocol.constants.ServerCapabilityFlags.CLIENT_SECURE_CONNECTION;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_PLUGIN_AUTH;
+import static com.yuqi.protocol.constants.CapabilityFlags.CLIENT_SECURE_CONNECTION;
 import static com.yuqi.protocol.utils.PackageUtils.getServerCapality;
 
 

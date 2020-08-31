@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.yuqi.constant.StringConstants;
 import com.yuqi.engine.data.type.DataType;
 import com.yuqi.engine.data.value.Value;
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.SlothSchema;

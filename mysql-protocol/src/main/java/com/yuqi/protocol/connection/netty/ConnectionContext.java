@@ -1,4 +1,4 @@
-package com.yuqi.protocol.connection;
+package com.yuqi.protocol.connection.netty;
 
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;

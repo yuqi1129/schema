@@ -1,6 +1,6 @@
 package com.yuqi.protocol.command;
 
-import com.yuqi.protocol.connection.ConnectionContext;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 
 /**
  * @author yuqi

@@ -85,7 +85,14 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
         return compareUsernameAndPassword(userName, passwordHash);
     }
 
+    /**
+     * See https://jin-yang.github.io/post/mysql-protocol.html
+     * @param userName
+     * @param password
+     * @return
+     */
     private boolean compareUsernameAndPassword(String userName, String password) {
+
         //todo
         return true;
     }

@@ -94,8 +94,8 @@ CREATE TABLE `columns` (
 启动数据库，并替换MySQL相应的配置, 请参考`MysqlConnection`
 
 **说明:**
-如果没有配置MySQL存储元数据, 所有的db, table 数据均存放在内存之中，无法
-在重启后恢复
+**如果没有配置MySQL用来存储元数据, 所有的db、table数据均存放在内存之中，无法
+在重启后恢复**
 
 #### 2.2. 编译项目
 

@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-#!/bin/sh
+#!/bin/bash
 #该脚本为Linux下启动java程序的通用脚本。既可以作为开机自启动service脚本被调用，
 #也可以作为启动java程序的独立脚本来使用。
 #
@@ -82,7 +82,7 @@ start() {
       echo "warn: $APP_MAINCLASS already started! (pid=$psid)"
       echo "================================"
    else
-      echo "classpath="${CLASSPATH}
+      #echo "classpath="${CLASSPATH}
       echo "Starting $APP_MAINCLASS ..."
       #JAVA_CMD="nohup $JAVA_HOME/bin/java $JAVA_OPTS -classpath $CLASSPATH $APP_MAINCLASS >/dev/null 2>&1 &"
       #su - $RUNNING_USER -c "$JAVA_CMD"

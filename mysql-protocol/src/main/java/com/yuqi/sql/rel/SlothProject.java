@@ -41,7 +41,7 @@ public class SlothProject extends Project implements SlothRel<SlothRow> {
 
     @Override
     public Operator<SlothRow> implement() {
-        final Operator<SlothRow> child = ((SlothRel) input).implement();
+        final Operator<SlothRow> child = ((SlothRel<SlothRow>) input).implement();
 
         //todo
         final List<Symbol> symbols = RexShuttleUtils.rexToSymbox(this.exps);

@@ -24,7 +24,7 @@ import java.util.Set;
  * @description your description
  * @time 3/8/20 19:19
  **/
-public class SlothJoin extends Join implements SlothRel {
+public class SlothJoin extends Join implements SlothRel<SlothRow> {
 
     //TODO konw something about join hint
     public SlothJoin(RelOptCluster cluster, RelTraitSet traitSet, List<RelHint> hints, RelNode left, RelNode right,
@@ -43,8 +43,8 @@ public class SlothJoin extends Join implements SlothRel {
 
     @Override
     public Operator implement() {
-        final Operator<SlothRow> left = ((SlothRel) getLeft()).implement();
-        final Operator<SlothRow> right = ((SlothRel) getRight()).implement();
+        final Operator<SlothRow> left = ((SlothRel<SlothRow>) getLeft()).implement();
+        final Operator<SlothRow> right = ((SlothRel<SlothRow>) getRight()).implement();
         final RexNode jontCondition = getCondition();
         final RelDataType rowType = getRowType();
 

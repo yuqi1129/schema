@@ -17,7 +17,7 @@ import org.apache.calcite.rex.RexNode;
  * @description your description
  * @time 3/8/20 19:17
  **/
-public class SlothFilter extends Filter implements SlothRel {
+public class SlothFilter extends Filter implements SlothRel<SlothRow> {
 
     public SlothFilter(RelOptCluster cluster, RelTraitSet traits, RelNode child, RexNode condition) {
         super(cluster, traits, child, condition);
@@ -30,7 +30,7 @@ public class SlothFilter extends Filter implements SlothRel {
 
     @Override
     public Operator<SlothRow> implement() {
-        final Operator<SlothRow> input = ((SlothRel) getInput()).implement();
+        final Operator<SlothRow> input = ((SlothRel<SlothRow>) getInput()).implement();
         RelDataType relDataType = this.getRowType();
         RexNode condition = this.condition;
 

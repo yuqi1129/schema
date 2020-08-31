@@ -40,7 +40,7 @@ public class SlothSort extends Sort implements SlothRel<SlothRow> {
 
         //Sort has bug
         //result of sql 'select id, name from person order by id + 1' has three column
-        Operator<SlothRow> input = ((SlothRel) getInput()).implement();
+        Operator<SlothRow> input = ((SlothRel<SlothRow>) getInput()).implement();
         final List<RelFieldCollation> sortKeys = this.collation.getFieldCollations();
         final RelDataType relDataType = getRowType();
         return new SlothSortOperator(sortKeys, offset, fetch, input, relDataType);

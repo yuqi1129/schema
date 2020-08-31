@@ -27,10 +27,8 @@ public class SlothRow implements Row<Value> {
         this.rowValue = rowValue;
     }
 
-
     @Override
     public int columnSize() {
-
         return rowValue.size();
     }
 

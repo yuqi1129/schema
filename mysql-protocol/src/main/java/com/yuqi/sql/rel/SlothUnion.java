@@ -32,7 +32,7 @@ public class SlothUnion extends Union implements SlothRel<SlothRow> {
     @Override
     public Operator<SlothRow> implement() {
         final List<Operator<SlothRow>> inputs = getInputs().stream()
-                .map(r -> (Operator<SlothRow>) ((SlothRel) r).implement())
+                .map(r -> ((SlothRel<SlothRow>) r).implement())
                 .collect(Collectors.toList());
 
         return new SlothUnionOperator(getRowType(), inputs, all);

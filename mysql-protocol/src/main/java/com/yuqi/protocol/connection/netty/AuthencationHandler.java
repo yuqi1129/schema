@@ -1,16 +1,17 @@
 package com.yuqi.protocol.connection.netty;
 
+import com.yuqi.protocol.command.sqlnode.SqlUseHandler;
 import com.yuqi.protocol.constants.ErrorCodeAndMessageEnum;
-import com.yuqi.protocol.pkg.AbstractReaderAndWriter;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.pkg.auth.LoginRequest;
 import com.yuqi.protocol.pkg.response.ErrPackage;
-import com.yuqi.protocol.pkg.response.OkPackage;
+import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+
+import java.util.Objects;
 
 /**
  * @author yuqi
@@ -39,40 +40,39 @@ public class AuthencationHandler extends ChannelInboundHandlerAdapter {
                     .getAbstractReaderAndWriterPackage();
             boolean res = doAuthencation(loginRequest);
 
-            AbstractReaderAndWriter abstractReaderAndWriterPackage;
-            MysqlPackage mySQLPackage = new MysqlPackage();
+            MysqlPackage mysqlPackage;
 
-            ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(256);
             if (res) {
-                ConnectionContext connectionContext = new ConnectionContext(ctx);
-                connectionContext.setDb(loginRequest.getDatabase());
+                final ConnectionContext connectionContext = new ConnectionContext(ctx);
                 NettyConnectionHandler.INSTANCE.getAlreadyAuthenChannels().put(channel, connectionContext);
-                abstractReaderAndWriterPackage = OkPackage.builder()
-                        .header((byte) 0x00)
-                        .serverStatus(0x0002)
-                        .affectedRows(0)
-                        .lastInsertId(0)
-                        //.info("Welecome to mock server")
-                        .build();
+
+                final String dbName = loginRequest.getDatabase();
+                if (Objects.nonNull(dbName)) {
+                    //直接set, 如果db不存在的话，后面会关闭连接
+                    connectionContext.setDb(loginRequest.getDatabase());
+                    mysqlPackage = SqlUseHandler.INSTANCE.useDb(
+                            connectionContext, loginRequest.getDatabase());
+                } else {
+                    mysqlPackage = PackageUtils.buildOkMySqlPackage(0, 2, 0);
+                }
             } else {
-                abstractReaderAndWriterPackage = ErrPackage.builder()
-                        .header((byte) 0xff)
-                        .errorCode((short) ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getCode())
-                        .errorMessage(ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getMessage()).build();
+                mysqlPackage = PackageUtils.buildErrPackage(
+                        ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getCode(),
+                        ErrorCodeAndMessageEnum.PASSWORD_OR_USER_IS_WRONG.getMessage()
+                );
             }
 
-            mySQLPackage.setAbstractReaderAndWriterPackage(abstractReaderAndWriterPackage);
             //在认证过程中
             //server----->client 0x00
             //client----->server 0x01
             //server----->client 0x02
             //此处是第三条认证消息
-            mySQLPackage.setSeqNumber((byte) 0x02);
-            mySQLPackage.write(buf);
-            ctx.writeAndFlush(buf);
+            mysqlPackage.setSeqNumber((byte) 0x02);
+            final ByteBuf byteBuf = PackageUtils.packageToBuf(mysqlPackage);
+            ctx.writeAndFlush(byteBuf);
 
-            if (!res) {
-                //错误的话，直接关闭
+            if (!res || mysqlPackage.getAbstractReaderAndWriterPackage() instanceof ErrPackage) {
+                //认证错误或者Db不存在的话，直接关闭
                 ctx.channel().close();
             }
         }

@@ -24,20 +24,20 @@ public class SqlUseHandler implements Handler<SqlUse> {
     @Override
     public void handle(ConnectionContext connectionContext, SqlUse type) {
         final String db = type.getDb();
+        final MysqlPackage mysqlPackage = useDb(connectionContext, db);
+        connectionContext.write(mysqlPackage);
+    }
 
+    public MysqlPackage useDb(ConnectionContext connectionContext, String db) {
         //check if schema contains db name;
         final SlothSchema slothSchema = SlothSchemaHolder.INSTANCE.getSlothSchema(db);
         if (Objects.isNull(slothSchema)) {
-            final MysqlPackage error = PackageUtils.buildErrPackage(
+            return PackageUtils.buildErrPackage(
                     UNKNOWN_DB_NAME.getCode(),
                     String.format(UNKNOWN_DB_NAME.getMessage(), db));
-            connectionContext.write(error);
-            return;
         }
 
         connectionContext.setDb(db);
-        final MysqlPackage result =
-                PackageUtils.buildOkMySqlPackage(0, 1, 0);
-        connectionContext.write(result);
+        return PackageUtils.buildOkMySqlPackage(0, 1, 0);
     }
 }

@@ -19,8 +19,12 @@ import java.util.Objects;
  **/
 public class MysqlConnection {
 
-    public static final MysqlConnection INSTANCE = new MysqlConnection();
+    /**
+     * MysqlConnection constructor use LOGGER, so logger should be first
+     * declared and initialized
+     */
     public static final Logger LOGGER = LoggerFactory.getLogger(MysqlConnection.class);
+    public static final MysqlConnection INSTANCE = new MysqlConnection();
 
     private boolean isOk = true;
 

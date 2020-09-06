@@ -283,3 +283,39 @@ SqlTypeNameSpec SlothSpecailType(Span s) :
     }
 }
 
+SqlSet SetValue() :
+{
+   boolean isGlobal = true;
+   String key;
+   String value;
+   SqlIdentifier idf;
+   SqlNode v;
+   SqlParserPos pos;
+}
+{
+    //todo
+    {
+        pos = getPos();
+    }
+   <SET>
+   (
+       <SESSION>
+       {
+       isGlobal = false;
+       }
+       |
+       <GLOBAL>
+   )?
+   idf = SimpleIdentifier()
+   {
+       key =  idf.toString();
+   }
+   <EQ>
+   v = Literal()
+   {
+       value = v.toString();
+   }
+   {
+       return new SqlSet(pos, isGlobal, key, value);
+   }
+}

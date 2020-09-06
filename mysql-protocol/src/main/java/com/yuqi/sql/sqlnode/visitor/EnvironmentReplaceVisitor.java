@@ -1,6 +1,7 @@
 package com.yuqi.sql.sqlnode.visitor;
 
 import com.google.common.collect.Lists;
+import com.yuqi.protocol.connection.netty.ConnectionContext;
 import com.yuqi.sql.env.SlothEnvironmentValueHolder;
 import org.apache.calcite.sql.SqlIdentifier;
 import org.apache.calcite.sql.SqlLiteral;
@@ -19,8 +20,15 @@ import java.util.Objects;
  **/
 public class EnvironmentReplaceVisitor extends SqlShuttle {
 
-    public static final EnvironmentReplaceVisitor INSTANCE
-            = new EnvironmentReplaceVisitor();
+    private ConnectionContext connectionContext;
+
+    public EnvironmentReplaceVisitor(ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
+    }
+
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
 
     @Override
     public SqlNode visit(SqlIdentifier id) {
@@ -28,10 +36,13 @@ public class EnvironmentReplaceVisitor extends SqlShuttle {
 
         if (name.startsWith("@@")) {
             final String key = name.substring(2);
-            final String value = SlothEnvironmentValueHolder.INSTACNE.propertyValue(key);
 
+            String value = connectionContext.getProperties().get(key);
             if (Objects.isNull(value)) {
-                throw new UnsupportedOperationException("Can't suppport environment value '" + key + "'");
+                value = SlothEnvironmentValueHolder.INSTACNE.propertyValue(key);
+                if (Objects.isNull(value)) {
+                    throw new UnsupportedOperationException("Can't suppport environment value '" + key + "'");
+                }
             }
 
             final SqlLiteral environmentValue =

@@ -9,10 +9,12 @@ import com.yuqi.protocol.pkg.ResultSetHolder;
 import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
+import com.yuqi.sql.sqlnode.visitor.EnvironmentReplaceVisitor;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.plan.RelOptUtil;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlExplainLevel;
+import org.apache.calcite.sql.SqlNode;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +42,8 @@ public class ExplainHandler implements Handler<String> {
 
         ByteBuf result;
         try {
-            final RelNode relNode = slothParser.getPlan(query);
+            final SqlNode sqlNode = slothParser.getSqlNode(query);
+            final RelNode relNode = slothParser.getPlan(sqlNode.accept(new EnvironmentReplaceVisitor(connectionContext)));
             final String planString = StringConstants.LINE_SEPARATOR + RelOptUtil.toString(relNode, SqlExplainLevel.ALL_ATTRIBUTES);
             final List<List<String>> data = Lists.newArrayList();
             data.add(Lists.newArrayList(planString));

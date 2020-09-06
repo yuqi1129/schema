@@ -47,7 +47,8 @@ data: {
         "com.yuqi.sql.sqlnode.ddl.SqlUse",
         "com.yuqi.sql.sqlnode.ddl.SqlCreateTable",
         "com.yuqi.sql.sqlnode.type.SlothColumnType",
-        "com.yuqi.protocol.enums.ShowEnum"
+        "com.yuqi.protocol.enums.ShowEnum",
+        "com.yuqi.sql.sqlnode.ddl.SqlSet"
     ]
 
     # List of new keywords. Example: "DATABASES", "TABLES". If the keyword is not a reserved
@@ -405,7 +406,8 @@ data: {
             "Drop()",
             "SqlShow()",
             "SqlUseCommand()",
-            "CreateTable()"
+            "CreateTable()",
+            "SetValue()"
     ]
 
     # List of methods for parsing custom literals.

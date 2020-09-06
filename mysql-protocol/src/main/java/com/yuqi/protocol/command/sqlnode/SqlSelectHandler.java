@@ -44,7 +44,7 @@ public class SqlSelectHandler implements Handler<SqlNode> {
 
         SlothParser slothParser = ParserFactory.getParser(connectionContext.getQueryString(),
                 connectionContext.getDb());
-        type = type.accept(EnvironmentReplaceVisitor.INSTANCE);
+        type = type.accept(new EnvironmentReplaceVisitor(connectionContext));
         final RelNode relNode = slothParser.getPlan(type);
 
         final Operator<SlothRow> operator = ((SlothRel) relNode).implement();

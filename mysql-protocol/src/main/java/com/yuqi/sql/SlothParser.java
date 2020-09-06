@@ -2,7 +2,6 @@ package com.yuqi.sql;
 
 import com.google.common.collect.ImmutableList;
 import com.yuqi.sql.rule.SlothRules;
-import com.yuqi.sql.sqlnode.visitor.EnvironmentReplaceVisitor;
 import com.yuqi.sql.trait.SlothConvention;
 import org.apache.calcite.plan.RelOptCluster;
 import org.apache.calcite.plan.RelOptPlanner;
@@ -103,8 +102,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
 
     public RelNode getPlan(String sql) throws SqlParseException {
         final SqlNode sqlNode = sqlParser.parseQuery(sql);
-
-        return getPlan(sqlNode.accept(EnvironmentReplaceVisitor.INSTANCE));
+        return getPlan(sqlNode);
     }
 
     protected RelRoot trimUnusedFields(RelRoot root, SqlToRelConverter converter) {

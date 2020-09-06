@@ -1,12 +1,13 @@
 package com.yuqi.protocol.connection.netty;
 
+import com.google.common.collect.Maps;
 import com.yuqi.protocol.pkg.MysqlPackage;
 import com.yuqi.protocol.utils.PackageUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 
-import java.util.Properties;
+import java.util.Map;
 
 /**
  * @author yuqi
@@ -29,8 +30,7 @@ public class ConnectionContext {
     /**
      * Store the property
      */
-    private Properties properties = new Properties();
-
+    private Map<String, String> properties = Maps.newHashMap();
     /**
      * Store the current query string
      */
@@ -48,11 +48,11 @@ public class ConnectionContext {
         this.db = db;
     }
 
-    public Properties getProperties() {
+    public Map<String, String> getProperties() {
         return properties;
     }
 
-    public void setProperties(Properties properties) {
+    public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }
 

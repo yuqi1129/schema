@@ -4596,6 +4596,18 @@ void IdentifierSegment(List<String> names, List<SqlParserPos> positions) :
             pos = getPos();
         }
     |
+        //add by yuqi
+        <ENV_IDENTIFIER> {
+            /**
+            id = SqlParserUtil.strip(image, null, null, null,
+                    unquotedCasing);
+            */
+            id = SqlParserUtil.strip(getToken(0).image, null, null, null,
+                                unquotedCasing);
+            //id = unquotedIdentifier();
+            pos = getPos();
+        }
+    |
         <QUOTED_IDENTIFIER> {
             id = SqlParserUtil.strip(getToken(0).image, DQ, DQ, DQDQ,
                 quotedCasing);
@@ -7758,6 +7770,10 @@ MORE :
     >
 |
     < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+
+    //add by yuqi
+|   < ENV_IDENTIFIER: "@" "@" <IDENTIFIER> >
+
 |
     < UNICODE_QUOTED_IDENTIFIER: "U" "&" <QUOTED_IDENTIFIER> >
 |

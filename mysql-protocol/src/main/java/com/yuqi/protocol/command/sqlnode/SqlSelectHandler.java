@@ -12,6 +12,7 @@ import com.yuqi.protocol.utils.PackageUtils;
 import com.yuqi.sql.ParserFactory;
 import com.yuqi.sql.SlothParser;
 import com.yuqi.sql.rel.SlothRel;
+import com.yuqi.sql.sqlnode.visitor.EnvironmentReplaceVisitor;
 import io.netty.buffer.ByteBuf;
 import org.apache.calcite.rel.RelNode;
 import org.apache.calcite.sql.SqlNode;
@@ -43,6 +44,7 @@ public class SqlSelectHandler implements Handler<SqlNode> {
 
         SlothParser slothParser = ParserFactory.getParser(connectionContext.getQueryString(),
                 connectionContext.getDb());
+        type = type.accept(EnvironmentReplaceVisitor.INSTANCE);
         final RelNode relNode = slothParser.getPlan(type);
 
         final Operator<SlothRow> operator = ((SlothRel) relNode).implement();

@@ -16,6 +16,9 @@
         <module>test-schema</module>
         <module>hive-schema</module>
         <module>mysql-protocol</module>
+        <module>mysql-storage</module>
+        <module>simple-raft</module>
+        <module>executor</module>
     </modules>
 
 <properties>

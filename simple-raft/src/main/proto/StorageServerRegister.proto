@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+option java_package = "com.yuqi.schema.raft.generated";
+option java_outer_classname = "StorageServerRegisterProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+
+message StorageServerRegisterRequest {
+  //todo, we can register table/partition message
+  optional string hostname_and_port = 1;
+}
+
+message StorageServerRegisterReponse {
+  optional int32 code = 1;
+}
+
+service StorageServerRegisterService {
+  rpc registerStorageServer(StorageServerRegisterRequest)
+      returns(StorageServerRegisterReponse);
+}

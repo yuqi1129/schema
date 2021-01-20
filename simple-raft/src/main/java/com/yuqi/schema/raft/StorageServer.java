@@ -9,6 +9,8 @@ package com.yuqi.schema.raft;
 public class StorageServer {
   public static void main(String[] args) {
     StorageServer storageServer = new StorageServer();
+
+
     storageServer.registerRpcServer();
   }
 

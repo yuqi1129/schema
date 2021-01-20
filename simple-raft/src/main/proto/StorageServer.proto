@@ -1,5 +1,6 @@
-syntax = "proto2";
+syntax = "proto3";
 
+//option java_multiple_files = true;
 option java_package = "com.yuqi.schema.raft.generated";
 option java_outer_classname = "StorageServerProtos";
 option java_generic_services = true;
@@ -8,11 +9,11 @@ option optimize_for = SPEED;
 
 
 message CreateTableRequest {
-  required string table_name = 1;
+  string table_name = 1;
 }
 
 message CreateTableResponse {
-  required int32 code = 1;
+  int32 code = 1;
 }
 
 service StorageServerService {

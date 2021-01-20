@@ -1,8 +1,8 @@
 package com.yuqi.schema.executor;
 
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
 import com.yuqi.schema.raft.generated.StorageServerRegisterProtos;
+import com.yuqi.schema.raft.generated.StorageServerRegisterServiceGrpc;
+import io.grpc.stub.StreamObserver;
 
 import java.util.Set;
 
@@ -12,7 +12,8 @@ import java.util.Set;
  * @description your description
  * @time 19/1/21 下午8:38
  **/
-public class StorageServerRegister extends StorageServerRegisterProtos.StorageServerRegisterService {
+public class StorageServerRegister extends StorageServerRegisterServiceGrpc
+    .StorageServerRegisterServiceImplBase {
   private Set<String> storageService;
 
   public StorageServerRegister(Set<String> storageService) {
@@ -24,15 +25,21 @@ public class StorageServerRegister extends StorageServerRegisterProtos.StorageSe
   }
 
   @Override
-  public void registerStorageServer(RpcController controller, StorageServerRegisterProtos.StorageServerRegisterRequest request,
-                                    RpcCallback<StorageServerRegisterProtos.StorageServerRegisterReponse> done) {
-
+  public void registerStorageServer(StorageServerRegisterProtos.StorageServerRegisterRequest request,
+                                    StreamObserver<StorageServerRegisterProtos.StorageServerRegisterReponse> responseObserver) {
+    //super.registerStorageServer(request, responseObserver);
     String hostAndPort = request.getHostnameAndPort();
     storageService.add(hostAndPort);
     //check valid
     if (isValid(hostAndPort)) {
       //todo
     }
+
+    StorageServerRegisterProtos.StorageServerRegisterReponse.Builder builder =
+        StorageServerRegisterProtos.StorageServerRegisterReponse.newBuilder();
+    builder.setCode(1);
+    responseObserver.onNext(builder.build());
+
   }
 
   private boolean isValid(String hostName) {

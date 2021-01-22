@@ -1,10 +1,9 @@
 package com.yuqi.schema.executor;
 
+import com.yuqi.schema.raft.conn.HostAndPort;
 import com.yuqi.schema.raft.generated.StorageServerRegisterProtos;
 import com.yuqi.schema.raft.generated.StorageServerRegisterServiceGrpc;
 import io.grpc.stub.StreamObserver;
-
-import java.util.Set;
 
 /**
  * @author yuqi
@@ -14,35 +13,23 @@ import java.util.Set;
  **/
 public class StorageServerRegister extends StorageServerRegisterServiceGrpc
     .StorageServerRegisterServiceImplBase {
-  private Set<String> storageService;
+  private ExecutionServer executionServer;
 
-  public StorageServerRegister(Set<String> storageService) {
-    this.storageService = storageService;
-  }
-
-  public Set<String> getStorageService() {
-    return storageService;
+  public StorageServerRegister(ExecutionServer storageService) {
+    this.executionServer = storageService;
   }
 
   @Override
   public void registerStorageServer(StorageServerRegisterProtos.StorageServerRegisterRequest request,
                                     StreamObserver<StorageServerRegisterProtos.StorageServerRegisterReponse> responseObserver) {
-    //super.registerStorageServer(request, responseObserver);
-    String hostAndPort = request.getHostnameAndPort();
-    storageService.add(hostAndPort);
-    //check valid
-    if (isValid(hostAndPort)) {
-      //todo
-    }
+
+    final String host = request.getHostname();
+    final int port = request.getPort();
+    executionServer.getHostSets().add(new HostAndPort(host, port));
 
     StorageServerRegisterProtos.StorageServerRegisterReponse.Builder builder =
         StorageServerRegisterProtos.StorageServerRegisterReponse.newBuilder();
-    builder.setCode(1);
+    builder.setCode(0);
     responseObserver.onNext(builder.build());
-
-  }
-
-  private boolean isValid(String hostName) {
-    return true;
   }
 }

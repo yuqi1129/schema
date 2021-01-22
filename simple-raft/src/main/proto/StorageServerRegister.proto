@@ -1,4 +1,4 @@
-syntax = "proto2";
+syntax = "proto3";
 
 //option java_multiple_files = true;
 option java_package = "com.yuqi.schema.raft.generated";
@@ -10,11 +10,12 @@ option optimize_for = SPEED;
 
 message StorageServerRegisterRequest {
   //todo, we can register table/partition message
-  optional string hostname_and_port = 1;
+  string hostname = 1;
+  int32 port = 2;
 }
 
 message StorageServerRegisterReponse {
-  optional int32 code = 1;
+  int32 code = 1;
 }
 
 service StorageServerRegisterService {

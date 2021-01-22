@@ -1,8 +1,8 @@
 package com.yuqi.schema.raft;
 
-import com.google.protobuf.RpcCallback;
-import com.google.protobuf.RpcController;
-import com.yuqi.schema.raft.generated.StorageServerProtos;
+import com.yuqi.schema.raft.generated.StorageServerRegisterProtos;
+import com.yuqi.schema.raft.generated.StorageServerRegisterServiceGrpc;
+import io.grpc.stub.StreamObserver;
 
 /**
  * @author yuqi
@@ -10,16 +10,12 @@ import com.yuqi.schema.raft.generated.StorageServerProtos;
  * @description your description
  * @time 19/1/21 下午8:29
  **/
-public class StorageServerService extends StorageServerProtos.StorageServerService {
-
+public class StorageServerService extends StorageServerRegisterServiceGrpc.StorageServerRegisterServiceImplBase {
   @Override
-  public void createTable(RpcController controller, StorageServerProtos.CreateTableRequest request,
-                          RpcCallback<StorageServerProtos.CreateTableResponse> done) {
-    StorageServerProtos.CreateTableResponse.Builder responseBuilder =
-        StorageServerProtos.CreateTableResponse.newBuilder();
-
-    //success
-    responseBuilder.setCode(0);
-    done.run(responseBuilder.build());
+  public void registerStorageServer(StorageServerRegisterProtos.StorageServerRegisterRequest request,
+                                    StreamObserver<StorageServerRegisterProtos.StorageServerRegisterReponse> responseObserver) {
+    StorageServerRegisterProtos.StorageServerRegisterReponse r =
+        StorageServerRegisterProtos.StorageServerRegisterReponse.newBuilder().setCode(0).build();
+    responseObserver.onNext(r);
   }
 }

@@ -1,6 +1,6 @@
 package com.yuqi.schema.executor;
 
-import com.yuqi.schema.raft.GrpcClient;
+import com.yuqi.schema.raft.grpc.GrpcClient;
 
 /**
  * @author yuqi

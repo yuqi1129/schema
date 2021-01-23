@@ -1,12 +1,12 @@
 package com.yuqi.schema.raft;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import com.yuqi.schema.raft.grpc.GrpcServer;
+import io.grpc.BindableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author yuqi
@@ -14,26 +14,22 @@ import java.util.concurrent.Executors;
  * @description your description
  * @time 19/1/21 下午7:51
  **/
-public class StorageServer implements AutoCloseable, Startable {
+public class StorageServer extends GrpcServer implements AutoCloseable, Startable {
   public static final Logger LOGGER = LoggerFactory.getLogger(StorageServer.class);
-  private final static ExecutorService SERVICE_PRC_POOL = Executors.newSingleThreadExecutor();
-  private int storagePort;
   private String exectionServerAddr;
   private int exectionServerPort;
-  private Server server;
   private ExecutionServerRpcClient rpcClient;
   public StorageServer(int storagePort, String exectionServerAddr, int exectionServerPort) {
-    this.storagePort = storagePort;
+    super(storagePort);
     this.exectionServerAddr = exectionServerAddr;
     this.exectionServerPort = exectionServerPort;
   }
 
   @Override
   public void start() {
-    //SERVICE_PRC_POOL.submit(this::startRpc);
     startRpc();
     //start and register to execution;
-    initExecutioClient();
+    initExecutionClient();
     //maybe should be register peroidiacally
     registerToExecutionServer();
 
@@ -41,40 +37,27 @@ public class StorageServer implements AutoCloseable, Startable {
     block();
   }
 
-  private void startRpc() {
-    try {
-      server = ServerBuilder.forPort(storagePort)
-          .addService(new StorageServerService())
-          .build().start();
-    } catch (Exception e) {
-      LOGGER.error("Start StorageServer meet error: ", e);
-    }
-  }
-
-  private void initExecutioClient() {
+  private void initExecutionClient() {
     if (rpcClient == null) {
       rpcClient = new ExecutionServerRpcClient(exectionServerAddr, exectionServerPort);
     }
     rpcClient.start();
   }
 
+  @Override
+  public List<BindableService> getService() {
+    return Collections.singletonList(new StorageServerService());
+  }
+
   private void registerToExecutionServer() {
     String localHost = "127.0.0.1";
-    rpcClient.registerLocation(localHost, storagePort);
+    rpcClient.registerLocation(localHost, port);
   }
 
   @Override
   public void close() throws Exception {
     if (!server.isShutdown()) {
       server.shutdownNow();
-    }
-  }
-
-  public void block() {
-    try {
-      Thread.sleep(Long.MAX_VALUE);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
     }
   }
 }

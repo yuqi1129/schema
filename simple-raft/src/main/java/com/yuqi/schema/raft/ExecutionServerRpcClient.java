@@ -1,6 +1,7 @@
 package com.yuqi.schema.raft;
 
 import com.yuqi.schema.raft.generated.StorageServerRegisterProtos;
+import com.yuqi.schema.raft.grpc.GrpcClient;
 
 /**
  * @author yuqi

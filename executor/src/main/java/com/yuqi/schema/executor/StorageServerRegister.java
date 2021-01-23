@@ -31,5 +31,6 @@ public class StorageServerRegister extends StorageServerRegisterServiceGrpc
         StorageServerRegisterProtos.StorageServerRegisterReponse.newBuilder();
     builder.setCode(0);
     responseObserver.onNext(builder.build());
+    responseObserver.onCompleted();
   }
 }

@@ -39,11 +39,6 @@ public class GrpcClient implements AutoCloseable, Startable {
 
   @Override
   public void start() {
-    managedChannel = ManagedChannelBuilder.forAddress(host, port)
-        .usePlaintext()
-        .build();
-
-
     if (useSSL) {
       try {
         managedChannel = NettyChannelBuilder

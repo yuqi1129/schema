@@ -18,7 +18,7 @@
         <module>mysql-protocol</module>
         <module>mysql-storage</module>
         <module>simple-raft</module>
-        <module>executor</module>
+        <module>register</module>
     </modules>
 
 <properties>

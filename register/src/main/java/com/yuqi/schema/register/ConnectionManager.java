@@ -1,4 +1,4 @@
-package com.yuqi.schema.executor;
+package com.yuqi.schema.register;
 
 /**
  * @author yuqi

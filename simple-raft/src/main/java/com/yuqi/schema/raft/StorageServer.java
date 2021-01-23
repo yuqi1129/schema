@@ -1,6 +1,7 @@
 package com.yuqi.schema.raft;
 
 import com.yuqi.schema.raft.grpc.GrpcServer;
+import com.yuqi.schema.raft.grpc.RegisterAndHeartBeatRpcClient;
 import io.grpc.BindableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,7 @@ public class StorageServer extends GrpcServer implements AutoCloseable, Startabl
   public static final Logger LOGGER = LoggerFactory.getLogger(StorageServer.class);
   private String exectionServerAddr;
   private int exectionServerPort;
-  private ExecutionServerRpcClient rpcClient;
+  private RegisterAndHeartBeatRpcClient rpcClient;
   public StorageServer(int storagePort, String exectionServerAddr, int exectionServerPort) {
     super(storagePort);
     this.exectionServerAddr = exectionServerAddr;
@@ -39,14 +40,15 @@ public class StorageServer extends GrpcServer implements AutoCloseable, Startabl
 
   private void initExecutionClient() {
     if (rpcClient == null) {
-      rpcClient = new ExecutionServerRpcClient(exectionServerAddr, exectionServerPort);
+      rpcClient = new RegisterAndHeartBeatRpcClient(exectionServerAddr, exectionServerPort);
     }
     rpcClient.start();
   }
 
   @Override
   public List<BindableService> getService() {
-    return Collections.singletonList(new StorageServerService());
+    return Collections.emptyList();
+    //return Collections.singletonList(new RegisterAndHeartBeatService());
   }
 
   private void registerToExecutionServer() {

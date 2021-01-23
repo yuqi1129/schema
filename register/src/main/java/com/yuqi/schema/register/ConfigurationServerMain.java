@@ -1,4 +1,4 @@
-package com.yuqi.schema.executor;
+package com.yuqi.schema.register;
 
 /**
  * @author yuqi
@@ -6,11 +6,11 @@ package com.yuqi.schema.executor;
  * @description your description
  * @time 22/1/21 下午8:01
  **/
-public class ExecutionServerMain {
+public class ConfigurationServerMain {
   public static void main(String[] args) {
     //some parameter
     int port = 3100;
-    ExecutionServer executionServer = new ExecutionServer(port);
-    executionServer.start();
+    ConfigurationCenter configurationCenter = new ConfigurationCenter(port);
+    configurationCenter.start();
   }
 }

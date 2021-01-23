@@ -1,7 +1,6 @@
 package com.yuqi.schema.raft.grpc;
 
 import com.yuqi.schema.raft.Startable;
-import com.yuqi.schema.raft.generated.StorageServerRegisterServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.netty.GrpcSslContexts;
@@ -27,7 +26,6 @@ public class GrpcClient implements AutoCloseable, Startable {
   protected boolean useSSL = false;
 
   protected ManagedChannel managedChannel;
-  protected StorageServerRegisterServiceGrpc.StorageServerRegisterServiceBlockingStub stub;
   public GrpcClient(String host, int port) {
     this.host = host;
     this.port = port;
@@ -55,8 +53,6 @@ public class GrpcClient implements AutoCloseable, Startable {
           .usePlaintext()
           .build();
     }
-
-    stub = StorageServerRegisterServiceGrpc.newBlockingStub(managedChannel);
   }
 
   @Override

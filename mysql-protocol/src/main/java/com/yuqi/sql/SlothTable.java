@@ -6,9 +6,12 @@ import com.yuqi.storage.lucene.SlothTableEngine;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
+import org.apache.calcite.plan.RelOptCluster;
+import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.SchemaPlus;
+import org.apache.calcite.schema.Statistic;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.util.List;
@@ -165,8 +168,18 @@ public class SlothTable extends AbstractQueryableTable {
         return resultType;
     }
 
+  /**
+   * You cant set table staticstic here
+   * such as RelCollation and statatisc will be use in {@link
+   * org.apache.calcite.rel.logical.LogicalTableScan#create(RelOptCluster, RelOptTable, List)}
+   * @return
+   */
+  @Override
+  public Statistic getStatistic() {
+    return super.getStatistic();
+  }
 
-    //TODO 高优, 这里需要找一下原因， 没有 SlothTableScanConverterRule RULE的话，直接会报错
+  //TODO 高优, 这里需要找一下原因， 没有 SlothTableScanConverterRule RULE的话，直接会报错
     // 直接toRel有问题， 在直接select * from table的情况下
 //    @Override
 //    public RelNode toRel(RelOptTable.ToRelContext context, RelOptTable relOptTable) {

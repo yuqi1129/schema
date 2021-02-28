@@ -95,8 +95,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
         relRoot = trimUnusedFields(relRoot, sqlToRelConverter);
         relNode = sqlToRelConverter.flattenTypes(relRoot.rel, true);
         relNode = sqlToRelConverter.decorrelate(sqlNode, relNode);
-
-        relNode.getTraitSet().plus(SlothConvention.INSTANCE);
         return optimize(relNode);
     }
 

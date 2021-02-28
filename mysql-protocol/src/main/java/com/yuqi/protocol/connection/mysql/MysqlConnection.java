@@ -48,8 +48,11 @@ public class MysqlConnection {
 
             dslContext = PostgresDSL.using(connection, SQLDialect.MYSQL);
         } catch (ClassNotFoundException e) {
-            LOGGER.error("Can't load mysql driver for:", e);
-            throw new RuntimeException(e);
+          LOGGER.error("Can't load mysql driver for:", e);
+          throw new RuntimeException(e);
+        } catch (NullPointerException e) {
+          LOGGER.error("This means your jdbc driver is 5.x and mysql server is 8.x, you need update your jdbc connector");
+          throw new RuntimeException(e);
         } catch (RuntimeException e1) {
             LOGGER.error("init meta database failed, mark meta database is fail, then all db/table you create could not be store");
             isOk = false;

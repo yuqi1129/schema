@@ -6,8 +6,6 @@ import com.yuqi.storage.lucene.SlothTableEngine;
 import org.apache.calcite.adapter.java.AbstractQueryableTable;
 import org.apache.calcite.linq4j.QueryProvider;
 import org.apache.calcite.linq4j.Queryable;
-import org.apache.calcite.plan.RelOptCluster;
-import org.apache.calcite.plan.RelOptTable;
 import org.apache.calcite.rel.type.RelDataType;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.schema.SchemaPlus;
@@ -170,7 +168,7 @@ public class SlothTable extends AbstractQueryableTable {
 
   /**
    * You cant set table staticstic here
-   * such as RelCollation and statatisc will be use in {@link
+   * such as RelCollation and statatisc will be use in
    * org.apache.calcite.rel.logical.LogicalTableScan#create(RelOptCluster, RelOptTable, List)}
    * @return
    */

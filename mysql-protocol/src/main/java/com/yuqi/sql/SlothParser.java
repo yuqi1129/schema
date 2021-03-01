@@ -139,7 +139,8 @@ public class SlothParser implements RelOptTable.ViewExpander {
         relNode = hepPlannerBefore.findBestExp();
 
         //cbo
-        relOptPlanner.setRoot(relNode);
+        // Here: reqiredTraitSet is the RelTraitSet you want, basicly you should at
+        // least assure the convention you want.
         RelTraitSet reqiredTraitSet = relNode.getTraitSet()
                 .replace(SlothConvention.INSTANCE)
                 //TODO FIX relcollation bug
@@ -179,6 +180,7 @@ public class SlothParser implements RelOptTable.ViewExpander {
 
         final HepPlanner hepPlanner = new HepPlanner(builder.build());
 
+        //Why remove the join rule here
         hepPlanner.removeRule(CoreRules.JOIN_COMMUTE);
         hepPlanner.removeRule(CoreRules.JOIN_ASSOCIATE);
         return hepPlanner;

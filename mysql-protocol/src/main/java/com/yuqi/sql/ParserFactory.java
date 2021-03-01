@@ -74,6 +74,11 @@ public class ParserFactory {
         final VolcanoPlanner volcanoPlanner = new VolcanoPlanner();
         volcanoPlanner.addRelTraitDef(ConventionTraitDef.INSTANCE);
         volcanoPlanner.setExecutor(RexUtil.EXECUTOR);
+
+        /**
+         * See {VolcanoPlanner#getCost(
+         * RelNode, RelMetadataQuery)}
+         */
         volcanoPlanner.setNoneConventionHasInfiniteCost(false);
 
         registerRules(volcanoPlanner);
@@ -102,6 +107,14 @@ public class ParserFactory {
         relOptPlanner.addRule(CoreRules.PROJECT_TABLE_SCAN);
         relOptPlanner.addRule(CoreRules.PROJECT_INTERPRETER_TABLE_SCAN);
         relOptPlanner.addRule(CoreRules.FILTER_REDUCE_EXPRESSIONS);
+
+        //TODO 尝试添加适配SlothConvention JoinToMultiJoinRule, 然后在
+        /**
+         * {@link org.apache.calcite.rel.rules.JoinToMultiJoinRule}
+         * {@link org.apache.calcite.rel.rules.MultiJoinOptimizeBushyRule}
+         * {@link org.apache.calcite.rel.rules.LoptOptimizeJoinRule}
+         */
+        relOptPlanner.addRule(CoreRules.JOIN_COMMUTE);
 
         //Currently when introduce with relcollation rule, SortRemoveRule has bug
         //sort remove this rule temporarily

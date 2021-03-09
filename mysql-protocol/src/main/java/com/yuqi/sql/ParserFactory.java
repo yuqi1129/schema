@@ -3,6 +3,7 @@ package com.yuqi.sql;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.yuqi.sql.rule.SlothRules;
+import com.yuqi.sql.rule.cbo.SlothPhysicalJoinChooseRule;
 import org.apache.calcite.avatica.util.Casing;
 import org.apache.calcite.avatica.util.Quoting;
 import org.apache.calcite.config.CalciteConnectionConfigImpl;
@@ -87,6 +88,9 @@ public class ParserFactory {
             volcanoPlanner.addRule(relOptRule);
         }
 
+        volcanoPlanner.addRule(SlothPhysicalJoinChooseRule.INSTANCE);
+
+
         //默认情况下plan有convertion 这个traitset,只需要加下需要加的traitset即可
         volcanoPlanner.addRelTraitDef(RelCollationTraitDef.INSTANCE);
         return volcanoPlanner;
@@ -115,6 +119,7 @@ public class ParserFactory {
          * {@link org.apache.calcite.rel.rules.LoptOptimizeJoinRule}
          */
         relOptPlanner.addRule(CoreRules.JOIN_COMMUTE);
+        //relOptPlanner.addRule(SlothPhysicalJoinChooseRule.INSTANCE);
 
         //Currently when introduce with relcollation rule, SortRemoveRule has bug
         //sort remove this rule temporarily

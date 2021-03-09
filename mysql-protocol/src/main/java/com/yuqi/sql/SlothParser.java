@@ -146,7 +146,6 @@ public class SlothParser implements RelOptTable.ViewExpander {
                 //TODO FIX relcollation bug
                 .plus(RelCollations.EMPTY)
                 .simplify();
-
         RelNode relNode1 = relNode.getTraitSet().equals(reqiredTraitSet)
                 ? relNode : relOptPlanner.changeTraits(relNode, reqiredTraitSet);
 

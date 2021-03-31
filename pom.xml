@@ -25,7 +25,7 @@
     <!--        34-->
     <netty.version>4.1.42.Final</netty.version>
     <lombok.version>1.18.10</lombok.version>
-    <guava.verion>27.1-jre</guava.verion>
+    <guava.verion>29.0-jre</guava.verion>
     <kryo.version>4.0.0</kryo.version>
     <apache.common-lang3.verson>3.9</apache.common-lang3.verson>
     <calcite.version>1.24.0</calcite.version>

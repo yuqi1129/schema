@@ -30,7 +30,7 @@
     <apache.common-lang3.verson>3.9</apache.common-lang3.verson>
     <calcite.version>1.24.0</calcite.version>
     <calcite.elasticsearch.version>1.21.0</calcite.elasticsearch.version>
-    <elasticsearch.version>7.0.1</elasticsearch.version>
+    <elasticsearch.version>7.11.2</elasticsearch.version>
     <common-io.version>2.6</common-io.version>
     <jackson.version>2.10.0</jackson.version>
     <lombok.version>1.16.6</lombok.version>

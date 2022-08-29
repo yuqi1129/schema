@@ -36,7 +36,7 @@
     <lombok.version>1.16.6</lombok.version>
     <checkstyle.version>2.17</checkstyle.version>
     <common-collection.version>4.3</common-collection.version>
-    <mysql-driver.version>5.1.39</mysql-driver.version>
+    <mysql-driver.version>8.0.28</mysql-driver.version>
     <common-csv.version>1.8</common-csv.version>
     <junit.version>4.12</junit.version>
     <derby.version>10.14.2.0</derby.version>

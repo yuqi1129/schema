@@ -7,7 +7,7 @@ import org.apache.calcite.plan.RelOptRuleOperand;
 
 /**
  * @author yuqi
- * @mail yuqi5@xiaomi.com
+ * @mail yuqi4733@gmail.com
  * @description your description
  * @time 8/3/21 下午8:54
  **/

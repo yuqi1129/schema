@@ -18,6 +18,7 @@ import org.apache.calcite.plan.volcano.VolcanoPlanner;
 import org.apache.calcite.prepare.CalciteCatalogReader;
 import org.apache.calcite.rel.RelCollationTraitDef;
 import org.apache.calcite.rel.rules.CoreRules;
+import org.apache.calcite.rel.rules.JoinPushThroughJoinRule;
 import org.apache.calcite.rel.type.RelDataTypeFactory;
 import org.apache.calcite.rex.RexUtil;
 import org.apache.calcite.sql.SqlNode;
@@ -119,6 +120,17 @@ public class ParserFactory {
          * {@link org.apache.calcite.rel.rules.LoptOptimizeJoinRule}
          */
         relOptPlanner.addRule(CoreRules.JOIN_COMMUTE);
+        relOptPlanner.addRule(CoreRules.JOIN_ASSOCIATE);
+
+        relOptPlanner.addRule(CoreRules.JOIN_TO_MULTI_JOIN);
+
+        //this two we can only need one
+        relOptPlanner.addRule(CoreRules.MULTI_JOIN_OPTIMIZE_BUSHY);
+        relOptPlanner.addRule(CoreRules.MULTI_JOIN_OPTIMIZE);
+
+        relOptPlanner.addRule(JoinPushThroughJoinRule.LEFT);
+        relOptPlanner.addRule(JoinPushThroughJoinRule.RIGHT);
+
         //relOptPlanner.addRule(SlothPhysicalJoinChooseRule.INSTANCE);
 
         //Currently when introduce with relcollation rule, SortRemoveRule has bug

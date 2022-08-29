@@ -85,4 +85,9 @@ public class SlothTableScan extends TableScan implements SlothRel<SlothRow> {
 
         return super.deriveRowType();
     }
+
+    @Override
+    public double estimateRowCount(RelMetadataQuery mq) {
+        return this.getTable().getRowCount();
+    }
 }

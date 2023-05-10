@@ -1,9 +1,6 @@
 package com.yuqi.storage.block;
 
 import com.yuqi.engine.io.IO;
-import com.yuqi.storage.util.UnsafeUtils;
-import sun.misc.Unsafe;
-
 import java.util.BitSet;
 
 /**
@@ -14,7 +11,7 @@ import java.util.BitSet;
  **/
 public abstract class AbstractBlock<T> implements IO {
 
-    public static final Unsafe UNSAFE = UnsafeUtils.getUnsafe();
+//    public static final Unsafe UNSAFE = UnsafeUtils.getUnsafe();
     //todo
     protected long base;
     protected int size;
@@ -27,7 +24,7 @@ public abstract class AbstractBlock<T> implements IO {
 
     public AbstractBlock(int size) {
         this.size = size;
-        base = UNSAFE.allocateMemory(size);
+//        base = UNSAFE.allocateMemory(size);
         currentSize = 0;
 
         nullBitSet = new BitSet(size);
@@ -38,7 +35,7 @@ public abstract class AbstractBlock<T> implements IO {
     public abstract void add(T v);
 
     public void free() {
-        UNSAFE.freeMemory(base);
+//        UNSAFE.freeMemory(base);
     }
 
     /**

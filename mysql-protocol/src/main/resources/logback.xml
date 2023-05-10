@@ -69,7 +69,7 @@ configuration 子节点为 appender、logger、root
     <!--这里如果是info，spring、mybatis等框架则不会输出：TRACE < DEBUG < INFO <  WARN < ERROR-->
     <!--root是所有logger的祖先，均继承root，如果某一个自定义的logger没有指定level，就会寻找
     父logger看有没有指定级别，直到找到root。-->
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="stdout"/>
         <appender-ref ref="infoFile"/>
         <appender-ref ref="errorFile"/>

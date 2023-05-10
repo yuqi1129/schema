@@ -2,7 +2,6 @@ package com.yuqi.schema.common.util;
 
 import com.google.common.collect.ImmutableMap;
 import org.apache.calcite.avatica.util.ArrayImpl;
-import org.apache.calcite.runtime.GeoFunctions;
 import org.apache.calcite.sql.type.SqlTypeName;
 
 import java.math.BigDecimal;
@@ -52,7 +51,7 @@ public class JavaTypeToSqlTypeConversion {
                     .put(Time.class, SqlTypeName.TIME)
                     .put(BigDecimal.class, SqlTypeName.DECIMAL)
 
-                    .put(GeoFunctions.Geom.class, SqlTypeName.GEOMETRY)
+//                    .put(GeoFunctions.Geom.class, SqlTypeName.GEOMETRY)
 
                     .put(ResultSet.class, SqlTypeName.CURSOR)
                     //.put(ColumnList.class, SqlTypeName.COLUMN_LIST)

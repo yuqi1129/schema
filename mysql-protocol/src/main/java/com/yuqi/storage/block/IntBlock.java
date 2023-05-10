@@ -28,7 +28,7 @@ public class IntBlock extends AbstractBlock<Integer> {
             return;
         }
 
-        UNSAFE.putInt(base + currentSize * INT_SIZE, v);
+//        UNSAFE.putInt(base + currentSize * INT_SIZE, v);
         currentSize++;
     }
 
@@ -38,6 +38,7 @@ public class IntBlock extends AbstractBlock<Integer> {
             return null;
         }
 
-        return UNSAFE.getInt(base + pos * INT_SIZE);
+//        return UNSAFE.getInt(base + pos * INT_SIZE);
+        return 0;
     }
 }

@@ -2,7 +2,7 @@ package com.yuqi.storage.engine;
 
 import org.apache.calcite.schema.Table;
 
-import javax.annotation.PostConstruct;
+//import javax.annotation.PostConstruct;
 
 /**
  * @author yuqi
@@ -18,7 +18,7 @@ public class TableStorgeEngine {
     private Table table;
 
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         //load data to restore blockEngine and realtime Engine
     }

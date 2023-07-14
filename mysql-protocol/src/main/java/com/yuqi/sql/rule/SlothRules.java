@@ -15,7 +15,6 @@ import org.apache.calcite.plan.RelOptRule;
 import org.apache.calcite.plan.volcano.AbstractConverter;
 import org.apache.calcite.rel.rules.CoreRules;
 import org.apache.calcite.rel.rules.DateRangeRules;
-import org.apache.calcite.rel.rules.JoinPushThroughJoinRule;
 import org.apache.calcite.rel.rules.PruneEmptyRules;
 
 import java.util.List;
@@ -74,8 +73,8 @@ public class SlothRules {
             CoreRules.PROJECT_WINDOW_TRANSPOSE,
             CoreRules.MATCH,
             //CoreRules.JOIN_COMMUTE,
-            JoinPushThroughJoinRule.RIGHT,
-            JoinPushThroughJoinRule.LEFT,
+//            JoinPushThroughJoinRule.RIGHT,
+//            JoinPushThroughJoinRule.LEFT,
             CoreRules.SORT_PROJECT_TRANSPOSE,
             CoreRules.SORT_JOIN_TRANSPOSE,
             CoreRules.SORT_REMOVE_CONSTANT_KEYS,
